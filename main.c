@@ -42,10 +42,28 @@ int main() {
 
 	// Compute j-invariant
 	fq_t j;
+	fq_init(j, F);
 	SW_j_invariant(&j, &E);
 	printf("j-invariant of E: ");
 	fq_print_pretty(j, F);
 	printf("\n");
 
+	//fq_t x, y;
+	//fq_init(x, F);
+	//fq_init(y, F);
+
+	//fq_set_si(x, 1, F);
+
+	//memcpy(&y, &x, sizeof(fq_t));
+	//fq_print_pretty(y, F);
+	//printf("\n");
+
+	//fq_clear(x, F);
+	//fq_print_pretty(y, F);
+	//printf("\n");
+
+
+
 	return 0;
 }
+
