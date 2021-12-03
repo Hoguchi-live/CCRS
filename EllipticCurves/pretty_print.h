@@ -9,6 +9,7 @@
 
 #include "models.h"
 
-void SW_print(SW_curve *);
+void SW_curve_print(SW_curve *);
 
 #endif
+

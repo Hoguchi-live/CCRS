@@ -15,17 +15,11 @@ int main() {
 	// Elliptic curve parameters
 	char p_str[] = "0x13";
 	slong d = 2;
-	char a_str[] = "0x1";
-	char b_str[] = "0x7";
 
-	fmpz_t p_fmpz, a_fmpz, b_fmpz;
+	fmpz_t p_fmpz;
 	fmpz_init(p_fmpz);
-	fmpz_init(a_fmpz);
-	fmpz_init(b_fmpz);
 
 	fmpz_set_str(p_fmpz, p_str, 0);
-	fmpz_set_str(a_fmpz, a_str, 0);
-	fmpz_set_str(b_fmpz, b_str, 0);
 
 	// Finite field context
 	fq_ctx_t F;
@@ -34,11 +28,11 @@ int main() {
 
 	// Base curve
 	SW_curve E;
-	SW_init(&E, F);
-	SW_set(&E, &F, a_fmpz, b_fmpz);
+	SW_curve_init(&E, &F);
+	SW_curve_set_si(&E, &F, 1, 7);
 
 	// Print base curve
-	SW_print(&E);
+	SW_curve_print(&E);
 
 	// Compute j-invariant
 	fq_t j;
@@ -48,21 +42,15 @@ int main() {
 	fq_print_pretty(j, F);
 	printf("\n");
 
-	//fq_t x, y;
-	//fq_init(x, F);
-	//fq_init(y, F);
+	// Test points
+	SW_point P;
+	SW_point_init(&P, &F);
+	SW_point_set_si(&P, 0, 1, 0, &E);
 
-	//fq_set_si(x, 1, F);
-
-	//memcpy(&y, &x, sizeof(fq_t));
-	//fq_print_pretty(y, F);
-	//printf("\n");
-
-	//fq_clear(x, F);
-	//fq_print_pretty(y, F);
-	//printf("\n");
-
-
+	// clear
+	SW_point_clear(&P);
+	SW_curve_clear(&E);
+	fq_ctx_clear(F);
 
 	return 0;
 }

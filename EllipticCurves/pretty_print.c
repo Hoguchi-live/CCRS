@@ -1,6 +1,6 @@
 #include "pretty_print.h"
 
-void SW_print(SW_curve *E) {
+void SW_curve_print(SW_curve *E) {
 
 	fmpz_t p;
 	long d;
@@ -16,3 +16,4 @@ void SW_print(SW_curve *E) {
 	fmpz_print(p);
 	printf(" and d = %ld\n", d);
 }
+

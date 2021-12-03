@@ -1,6 +1,7 @@
-#ifndef _ARITHMETIC_H_
-#define _ARITHMETIC_H_
+#ifndef _FINITE_FIELD_H_
+#define _FINITE_FIELD_H_
 
 #include "models.h"
 
 #endif
+
