@@ -10,6 +10,6 @@
 #include "models.h"
 
 void SW_curve_print(SW_curve *);
+void SW_point_print(SW_point *);
 
 #endif
-

@@ -15,5 +15,18 @@ void SW_curve_print(SW_curve *E) {
 	printf(" in short Weierstrass form over F_p^d with p = ");
 	fmpz_print(p);
 	printf(" and d = %ld\n", d);
+
+	fmpz_clear(p);
 }
 
+void SW_point_print(SW_point *P) {
+
+	printf("Point [");
+	fq_print_pretty(P->x, *(P->E->F));
+	printf(", ");
+	fq_print_pretty(P->y, *(P->E->F));
+	printf(", ");
+	fq_print_pretty(P->z, *(P->E->F));
+	printf("] on ");
+	SW_curve_print(P->E);
+}

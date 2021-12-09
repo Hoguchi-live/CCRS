@@ -17,6 +17,11 @@ typedef struct SW_point {
 	SW_curve *E;	// base curve
 } SW_point;
 
+typedef struct MG_curve{
+
+	const fq_ctx_t *F;
+	fq_t A, B;
+} MG_curve;
+
 
 #endif
-

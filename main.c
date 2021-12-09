@@ -46,6 +46,11 @@ int main() {
 	SW_point P;
 	SW_point_init(&P, &F);
 	SW_point_set_si(&P, 0, 1, 0, &E);
+	SW_point_print(&P);
+
+	bool *is_valid;
+	SW_point_valid(is_valid, &P);
+	printf("Point P is valid? %d\n", *is_valid);
 
 	// clear
 	SW_point_clear(&P);
@@ -54,4 +59,3 @@ int main() {
 
 	return 0;
 }
-
