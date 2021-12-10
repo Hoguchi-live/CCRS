@@ -9,9 +9,9 @@
 
 // Elliptic curves
 void SW_j_invariant(fq_t *, SW_curve *);
+void MG_j_invariant(fq_t *, MG_curve *);
 
 // Points on elliptic curves
 void SW_point_valid(bool *, SW_point *);
 
 #endif
-

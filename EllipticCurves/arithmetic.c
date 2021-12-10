@@ -38,8 +38,38 @@ void SW_j_invariant(fq_t *output, SW_curve *E) {
 	fq_clear(tmp1, *(E->F));
 	fq_clear(tmp2, *(E->F));
 	fq_clear(tmp3, *(E->F));
-
 	fq_clear(delta, *(E->F));
+	fq_clear(j_invariant, *(E->F));
+}
+
+
+void MG_j_invariant(fq_t *output, MG_curve *E) {
+
+	fq_t tmp1, tmp2;				// temporary registers
+	fq_t j_invariant;	 		// discriminant, j-invariant
+
+	fq_init(tmp1, *(E->F));
+	fq_init(tmp2, *(E->F));
+	fq_init(j_invariant, *(E->F));
+
+	// numerator
+	fq_pow_ui(tmp1, E->A, 2, *(E->F));
+	fq_add_si(tmp1, tmp1, -3, *(E->F));
+	fq_pow(tmp1, tmp1, 3);
+	fq_mul_ui(tmp1, tmp1, 256, *(E->F));
+
+	// denominator
+	fq_pow_ui(tmp2, E->A, 2, *(E->F));
+	fq_sub_ui(tmp2, tmp2, 4, *(E->F));
+
+	fq_div(j_invariant, tmp1, tmp2, *(E->F));
+
+	// set output
+	fq_set(*output, j_invariant, *(E->F));
+
+	// clear memory
+	fq_clear(tmp1, *(E->F));
+	fq_clear(tmp2, *(E->F));
 	fq_clear(j_invariant, *(E->F));
 }
 

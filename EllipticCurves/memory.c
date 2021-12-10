@@ -4,7 +4,10 @@
 #include "memory.h"
 #include "models.h"
 
-// Elliptic curve
+/*
+   Short Weierstrass elliptic curve
+*/
+
 void SW_curve_init(SW_curve *E, const fq_ctx_t *F) {
 
 	fq_init(E->a, *F);
@@ -13,7 +16,6 @@ void SW_curve_init(SW_curve *E, const fq_ctx_t *F) {
 
 void SW_curve_set(SW_curve *E, const fq_ctx_t *F, const fq_t a, const fq_t b) {
 
-	// TODO: fmpz -> fq
 	E->F = F;
 	fq_set(E->a, a, *F);
 	fq_set(E->b, b, *F);
@@ -79,3 +81,39 @@ void SW_point_clear(SW_point *P) {
 	fq_clear(P->z, *(P->E->F));
 }
 
+
+/*
+   Montgomery elliptic curve
+*/
+
+void MG_curve_init(MG_curve *E, const fq_ctx_t *F) {
+
+	fq_init(E->A, *F);
+	fq_init(E->B, *F);
+}
+
+void MG_curve_set(MG_curve *E, const fq_ctx_t *F, const fq_t A, const fq_t B) {
+
+	E->F = F;
+	fq_set(E->A, A, *F);
+	fq_set(E->B, B, *F);
+}
+
+void MG_curve_set_si(MG_curve *E, const fq_ctx_t *F, const ulong A, const ulong B) {
+
+	fq_t AA, BB;
+
+	fq_init(AA, *F);
+	fq_init(BB, *F);
+
+	fq_set_si(AA, A, *F);
+	fq_set_si(BB, B, *F);
+
+	MG_curve_set(E, F, AA, BB);
+}
+
+void MG_curve_clear(MG_curve *E) {
+
+	fq_clear(E->A, *(E->F));
+	fq_clear(E->B, *(E->F));
+}
