@@ -1,19 +1,21 @@
-#include <stdio.h>
-#include <stdlib.h>
-
+/// @file memory.c
 #include "memory.h"
 #include "models.h"
 
-/*
-   Short Weierstrass elliptic curve
+/**
+  Initializes E for use, with context F, and setting its coefficients to zero.
+  A corresponding call to SW_curve_clear() must be made after finishing with the SW_curve to free the memory used by the curve.
 */
-
 void SW_curve_init(SW_curve *E, const fq_ctx_t *F) {
 
 	fq_init(E->a, *F);
 	fq_init(E->b, *F);
 }
 
+/**
+ Sets E to elliptic curve over F in Weierstrass form with coefficients a and b.
+ Curve parameters are given as elements of F.
+*/
 void SW_curve_set(SW_curve *E, const fq_ctx_t *F, const fq_t a, const fq_t b) {
 
 	E->F = F;
@@ -21,7 +23,11 @@ void SW_curve_set(SW_curve *E, const fq_ctx_t *F, const fq_t a, const fq_t b) {
 	fq_set(E->b, b, *F);
 }
 
-void SW_curve_set_si(SW_curve *E, const fq_ctx_t *F, const ulong a, const ulong b) {
+/**
+ See SW_curve_set().
+ Parameters are given as signed integers.
+*/
+void SW_curve_set_si(SW_curve *E, const fq_ctx_t *F, const slong a, const slong b) {
 
 	fq_t aa, bb;
 
@@ -30,6 +36,23 @@ void SW_curve_set_si(SW_curve *E, const fq_ctx_t *F, const ulong a, const ulong 
 
 	fq_set_si(aa, a, *F);
 	fq_set_si(bb, b, *F);
+
+	SW_curve_set(E, F, aa, bb);
+}
+
+/**
+ See SW_curve_set().
+ Parameters are given as unsigned integers.
+*/
+void SW_curve_set_su(SW_curve *E, const fq_ctx_t *F, const ulong a, const ulong b) {
+
+	fq_t aa, bb;
+
+	fq_init(aa, *F);
+	fq_init(bb, *F);
+
+	fq_set_ui(aa, a, *F);
+	fq_set_ui(bb, b, *F);
 
 	SW_curve_set(E, F, aa, bb);
 }
@@ -117,3 +140,4 @@ void MG_curve_clear(MG_curve *E) {
 	fq_clear(E->A, *(E->F));
 	fq_clear(E->B, *(E->F));
 }
+

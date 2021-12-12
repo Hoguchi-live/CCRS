@@ -1,0 +1,36 @@
+\hypertarget{memory_8h_source}{}\doxysection{memory.\+h}
+\label{memory_8h_source}\index{EllipticCurves/memory.h@{EllipticCurves/memory.h}}
+\mbox{\hyperlink{memory_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef \_MEMORY\_H\_}}
+\DoxyCodeLine{2 \textcolor{preprocessor}{\#define \_MEMORY\_H\_}}
+\DoxyCodeLine{3 }
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{models_8h}{models.h}}"{}}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <gmp.h>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <flint/fmpz.h>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <flint/fq.h>}}
+\DoxyCodeLine{11 }
+\DoxyCodeLine{12 \textcolor{comment}{// Short Weierstrass curves}}
+\DoxyCodeLine{13 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_a4a8df87478af54461b39bcdc5d924cee}{SW\_curve\_init}}(\mbox{\hyperlink{struct_s_w__curve}{SW\_curve}} *, \textcolor{keyword}{const} fq\_ctx\_t *);}
+\DoxyCodeLine{14 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_a9c5a09424f3b031556f5f250c594f771}{SW\_curve\_set}}(\mbox{\hyperlink{struct_s_w__curve}{SW\_curve}} *, \textcolor{keyword}{const} fq\_ctx\_t *, \textcolor{keyword}{const} fq\_t, \textcolor{keyword}{const} fq\_t);}
+\DoxyCodeLine{15 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_af268122d0f9b9a87e51acea2794dda01}{SW\_curve\_set\_si}}(\mbox{\hyperlink{struct_s_w__curve}{SW\_curve}} *, \textcolor{keyword}{const} fq\_ctx\_t *, \textcolor{keyword}{const} ulong, \textcolor{keyword}{const} ulong);}
+\DoxyCodeLine{16 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_a1c6f64647151debbb4ba25059c034d5b}{SW\_curve\_clear}}(\mbox{\hyperlink{struct_s_w__curve}{SW\_curve}} *);}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{18 \textcolor{comment}{// Short Weierstrass points}}
+\DoxyCodeLine{19 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_abca5dbfcbf3117e906f761b2363678a8}{SW\_point\_init}}(\mbox{\hyperlink{struct_s_w__point}{SW\_point}} *, \textcolor{keyword}{const} fq\_ctx\_t *);}
+\DoxyCodeLine{20 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_aa284ff563823ae53fc423af505d255dc}{SW\_point\_set}}(\mbox{\hyperlink{struct_s_w__point}{SW\_point}} *, \textcolor{keyword}{const} fq\_t, \textcolor{keyword}{const} fq\_t, \textcolor{keyword}{const} fq\_t, \mbox{\hyperlink{struct_s_w__curve}{SW\_curve}} *);}
+\DoxyCodeLine{21 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_ab53e5bc83fcf01432b8216cfdf10bbfc}{SW\_point\_set\_si}}(\mbox{\hyperlink{struct_s_w__point}{SW\_point}} *, \textcolor{keyword}{const} ulong, \textcolor{keyword}{const} ulong, \textcolor{keyword}{const} ulong, \mbox{\hyperlink{struct_s_w__curve}{SW\_curve}} *);}
+\DoxyCodeLine{22 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_aa0e134f9ee9e8844f28f4ca6e6782064}{SW\_point\_clear}}(\mbox{\hyperlink{struct_s_w__point}{SW\_point}} *);}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{comment}{// Montgomery curves}}
+\DoxyCodeLine{25 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_a31495ae0dd0668f49bd1938da3fbec03}{MG\_curve\_init}}(\mbox{\hyperlink{struct_m_g__curve}{MG\_curve}} *, \textcolor{keyword}{const} fq\_ctx\_t *);}
+\DoxyCodeLine{26 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_a831fb39f75cba4ce01d7b81deeff541d}{MG\_curve\_set}}(\mbox{\hyperlink{struct_m_g__curve}{MG\_curve}} *, \textcolor{keyword}{const} fq\_ctx\_t *, \textcolor{keyword}{const} fq\_t, \textcolor{keyword}{const} fq\_t);}
+\DoxyCodeLine{27 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_ac72072d541bc6a1f3e0520d926207a1f}{MG\_curve\_set\_si}}(\mbox{\hyperlink{struct_m_g__curve}{MG\_curve}} *, \textcolor{keyword}{const} fq\_ctx\_t *, \textcolor{keyword}{const} ulong, \textcolor{keyword}{const} ulong);}
+\DoxyCodeLine{28 \textcolor{keywordtype}{void} \mbox{\hyperlink{memory_8h_ae51518b80b4873f1a6d00d48a1e22749}{MG\_curve\_clear}}(\mbox{\hyperlink{struct_m_g__curve}{MG\_curve}} *);}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

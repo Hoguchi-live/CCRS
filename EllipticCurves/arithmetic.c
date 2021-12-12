@@ -106,3 +106,4 @@ void SW_point_valid(bool *output, SW_point *P) {
 
 	*output = fq_is_zero(res, *F);
 }
+

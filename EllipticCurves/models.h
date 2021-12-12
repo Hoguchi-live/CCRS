@@ -1,6 +1,9 @@
 #ifndef _MODELS_H_
 #define _MODELS_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <gmp.h>
 #include <flint/fmpz.h>
 #include <flint/fq.h>
@@ -25,3 +28,4 @@ typedef struct MG_curve{
 
 
 #endif
+

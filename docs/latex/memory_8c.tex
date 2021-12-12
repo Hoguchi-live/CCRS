@@ -1,0 +1,106 @@
+\hypertarget{memory_8c}{}\doxysection{Elliptic\+Curves/memory.c File Reference}
+\label{memory_8c}\index{EllipticCurves/memory.c@{EllipticCurves/memory.c}}
+{\ttfamily \#include \char`\"{}memory.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}models.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{memory_8c_a9e1c4236daaaa572fbc3094a66d75d42}{SW\+\_\+curve\+\_\+init}} (\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$E, const fq\+\_\+ctx\+\_\+t $\ast$F)
+\item 
+void \mbox{\hyperlink{memory_8c_aa4b8dcfb5b21c61c6d193ff171e60ae0}{SW\+\_\+curve\+\_\+set}} (\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$E, const fq\+\_\+ctx\+\_\+t $\ast$F, const fq\+\_\+t a, const fq\+\_\+t b)
+\item 
+void \mbox{\hyperlink{memory_8c_a8c59dab9a74f101d7b5fd83ab45da19b}{SW\+\_\+curve\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$E, const fq\+\_\+ctx\+\_\+t $\ast$F, const ulong a, const ulong b)
+\item 
+void \mbox{\hyperlink{memory_8c_a89874f846e6b2db6c102825e58cdaa05}{SW\+\_\+curve\+\_\+clear}} (\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$E)
+\item 
+void \mbox{\hyperlink{memory_8c_aadc4b829c8d8fc26e4719bd56bf271fa}{SW\+\_\+point\+\_\+init}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$P, const fq\+\_\+ctx\+\_\+t $\ast$F)
+\item 
+void \mbox{\hyperlink{memory_8c_a864f201b486aa829a414d9de18a8c0bc}{SW\+\_\+point\+\_\+set}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$P, const fq\+\_\+t x, const fq\+\_\+t y, const fq\+\_\+t z, \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$E)
+\item 
+void \mbox{\hyperlink{memory_8c_a80b5e311daeaa04bd71cf9a932b2a8eb}{SW\+\_\+point\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$P, const ulong x, const ulong y, const ulong z, \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$E)
+\item 
+void \mbox{\hyperlink{memory_8c_a2d46e7dbfc93a007f160987179249a24}{SW\+\_\+point\+\_\+clear}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$P)
+\item 
+void \mbox{\hyperlink{memory_8c_ad991066d49444aa12875a110c4c214db}{MG\+\_\+curve\+\_\+init}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$E, const fq\+\_\+ctx\+\_\+t $\ast$F)
+\item 
+void \mbox{\hyperlink{memory_8c_ac492e2fed6628ec8c00f3ef2f74d89a8}{MG\+\_\+curve\+\_\+set}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$E, const fq\+\_\+ctx\+\_\+t $\ast$F, const fq\+\_\+t A, const fq\+\_\+t B)
+\item 
+void \mbox{\hyperlink{memory_8c_a0d7e26bcf59c1a824971aa3c29697e9a}{MG\+\_\+curve\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$E, const fq\+\_\+ctx\+\_\+t $\ast$F, const ulong A, const ulong B)
+\item 
+void \mbox{\hyperlink{memory_8c_a50a096495a35f501ad48cb67a414115f}{MG\+\_\+curve\+\_\+clear}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$E)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{memory_8c_a50a096495a35f501ad48cb67a414115f}\label{memory_8c_a50a096495a35f501ad48cb67a414115f}} 
+\index{memory.c@{memory.c}!MG\_curve\_clear@{MG\_curve\_clear}}
+\index{MG\_curve\_clear@{MG\_curve\_clear}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_clear()}{MG\_curve\_clear()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_ad991066d49444aa12875a110c4c214db}\label{memory_8c_ad991066d49444aa12875a110c4c214db}} 
+\index{memory.c@{memory.c}!MG\_curve\_init@{MG\_curve\_init}}
+\index{MG\_curve\_init@{MG\_curve\_init}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_init()}{MG\_curve\_init()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_ac492e2fed6628ec8c00f3ef2f74d89a8}\label{memory_8c_ac492e2fed6628ec8c00f3ef2f74d89a8}} 
+\index{memory.c@{memory.c}!MG\_curve\_set@{MG\_curve\_set}}
+\index{MG\_curve\_set@{MG\_curve\_set}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_set()}{MG\_curve\_set()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F,  }\item[{const fq\+\_\+t}]{A,  }\item[{const fq\+\_\+t}]{B }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_a0d7e26bcf59c1a824971aa3c29697e9a}\label{memory_8c_a0d7e26bcf59c1a824971aa3c29697e9a}} 
+\index{memory.c@{memory.c}!MG\_curve\_set\_si@{MG\_curve\_set\_si}}
+\index{MG\_curve\_set\_si@{MG\_curve\_set\_si}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_set\_si()}{MG\_curve\_set\_si()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+set\+\_\+si (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F,  }\item[{const ulong}]{A,  }\item[{const ulong}]{B }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_a89874f846e6b2db6c102825e58cdaa05}\label{memory_8c_a89874f846e6b2db6c102825e58cdaa05}} 
+\index{memory.c@{memory.c}!SW\_curve\_clear@{SW\_curve\_clear}}
+\index{SW\_curve\_clear@{SW\_curve\_clear}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_curve\_clear()}{SW\_curve\_clear()}}
+{\footnotesize\ttfamily void SW\+\_\+curve\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_a9e1c4236daaaa572fbc3094a66d75d42}\label{memory_8c_a9e1c4236daaaa572fbc3094a66d75d42}} 
+\index{memory.c@{memory.c}!SW\_curve\_init@{SW\_curve\_init}}
+\index{SW\_curve\_init@{SW\_curve\_init}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_curve\_init()}{SW\_curve\_init()}}
+{\footnotesize\ttfamily void SW\+\_\+curve\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F }\end{DoxyParamCaption})}
+
+Initializes E for use, with context F, and setting its coefficients to zero. A corresponding call to \mbox{\hyperlink{memory_8c_a89874f846e6b2db6c102825e58cdaa05}{SW\+\_\+curve\+\_\+clear()}} must be made after finishing with the \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} to free the memory used by the curve. \mbox{\Hypertarget{memory_8c_aa4b8dcfb5b21c61c6d193ff171e60ae0}\label{memory_8c_aa4b8dcfb5b21c61c6d193ff171e60ae0}} 
+\index{memory.c@{memory.c}!SW\_curve\_set@{SW\_curve\_set}}
+\index{SW\_curve\_set@{SW\_curve\_set}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_curve\_set()}{SW\_curve\_set()}}
+{\footnotesize\ttfamily void SW\+\_\+curve\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F,  }\item[{const fq\+\_\+t}]{a,  }\item[{const fq\+\_\+t}]{b }\end{DoxyParamCaption})}
+
+Sets E to elliptic curve $Y^2=X^3+aX^2+b$. \mbox{\Hypertarget{memory_8c_a8c59dab9a74f101d7b5fd83ab45da19b}\label{memory_8c_a8c59dab9a74f101d7b5fd83ab45da19b}} 
+\index{memory.c@{memory.c}!SW\_curve\_set\_si@{SW\_curve\_set\_si}}
+\index{SW\_curve\_set\_si@{SW\_curve\_set\_si}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_curve\_set\_si()}{SW\_curve\_set\_si()}}
+{\footnotesize\ttfamily void SW\+\_\+curve\+\_\+set\+\_\+si (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F,  }\item[{const ulong}]{a,  }\item[{const ulong}]{b }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_a2d46e7dbfc93a007f160987179249a24}\label{memory_8c_a2d46e7dbfc93a007f160987179249a24}} 
+\index{memory.c@{memory.c}!SW\_point\_clear@{SW\_point\_clear}}
+\index{SW\_point\_clear@{SW\_point\_clear}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_point\_clear()}{SW\_point\_clear()}}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_aadc4b829c8d8fc26e4719bd56bf271fa}\label{memory_8c_aadc4b829c8d8fc26e4719bd56bf271fa}} 
+\index{memory.c@{memory.c}!SW\_point\_init@{SW\_point\_init}}
+\index{SW\_point\_init@{SW\_point\_init}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_point\_init()}{SW\_point\_init()}}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{P,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_a864f201b486aa829a414d9de18a8c0bc}\label{memory_8c_a864f201b486aa829a414d9de18a8c0bc}} 
+\index{memory.c@{memory.c}!SW\_point\_set@{SW\_point\_set}}
+\index{SW\_point\_set@{SW\_point\_set}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_point\_set()}{SW\_point\_set()}}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{P,  }\item[{const fq\+\_\+t}]{x,  }\item[{const fq\+\_\+t}]{y,  }\item[{const fq\+\_\+t}]{z,  }\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8c_a80b5e311daeaa04bd71cf9a932b2a8eb}\label{memory_8c_a80b5e311daeaa04bd71cf9a932b2a8eb}} 
+\index{memory.c@{memory.c}!SW\_point\_set\_si@{SW\_point\_set\_si}}
+\index{SW\_point\_set\_si@{SW\_point\_set\_si}!memory.c@{memory.c}}
+\doxysubsubsection{\texorpdfstring{SW\_point\_set\_si()}{SW\_point\_set\_si()}}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+set\+\_\+si (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{P,  }\item[{const ulong}]{x,  }\item[{const ulong}]{y,  }\item[{const ulong}]{z,  }\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E }\end{DoxyParamCaption})}
+

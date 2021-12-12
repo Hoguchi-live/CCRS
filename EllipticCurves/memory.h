@@ -12,7 +12,8 @@
 // Short Weierstrass curves
 void SW_curve_init(SW_curve *, const fq_ctx_t *);
 void SW_curve_set(SW_curve *, const fq_ctx_t *, const fq_t, const fq_t);
-void SW_curve_set_si(SW_curve *, const fq_ctx_t *, const ulong, const ulong);
+void SW_curve_set_si(SW_curve *, const fq_ctx_t *, const slong, const slong);
+void SW_curve_set_ui(SW_curve *, const fq_ctx_t *, const ulong, const ulong);
 void SW_curve_clear(SW_curve *);
 
 // Short Weierstrass points
@@ -28,3 +29,4 @@ void MG_curve_set_si(MG_curve *, const fq_ctx_t *, const ulong, const ulong);
 void MG_curve_clear(MG_curve *);
 
 #endif
+
