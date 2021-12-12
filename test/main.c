@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "EllipticCurves/models.h"
-#include "EllipticCurves/memory.h"
-#include "EllipticCurves/arithmetic.h"
-#include "EllipticCurves/pretty_print.h"
+#include "../src/EllipticCurves/models.h"
+#include "../src/EllipticCurves/memory.h"
+#include "../src/EllipticCurves/arithmetic.h"
+#include "../src/EllipticCurves/pretty_print.h"
 
 #include <gmp.h>
 #include <flint/fmpz.h>
@@ -59,3 +59,4 @@ int main() {
 
 	return 0;
 }
+
