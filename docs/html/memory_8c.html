@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CRS: EllipticCurves/memory.c File Reference</title>
+<title>CRS: src/EllipticCurves/memory.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_c500d5bd4174bcfc3132d1a417d8e1f2.html">EllipticCurves</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_97be7e3b2e8c3a17ca81f31233de3221.html">EllipticCurves</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -81,8 +81,10 @@ Functions</h2></td></tr>
 <tr class="separator:a9e1c4236daaaa572fbc3094a66d75d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4b8dcfb5b21c61c6d193ff171e60ae0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8c.html#aa4b8dcfb5b21c61c6d193ff171e60ae0">SW_curve_set</a> (<a class="el" href="struct_s_w__curve.html">SW_curve</a> *E, const fq_ctx_t *F, const fq_t a, const fq_t b)</td></tr>
 <tr class="separator:aa4b8dcfb5b21c61c6d193ff171e60ae0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c59dab9a74f101d7b5fd83ab45da19b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8c.html#a8c59dab9a74f101d7b5fd83ab45da19b">SW_curve_set_si</a> (<a class="el" href="struct_s_w__curve.html">SW_curve</a> *E, const fq_ctx_t *F, const ulong a, const ulong b)</td></tr>
-<tr class="separator:a8c59dab9a74f101d7b5fd83ab45da19b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74120ea1dd0bbb089ac6de621409841f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8c.html#a74120ea1dd0bbb089ac6de621409841f">SW_curve_set_si</a> (<a class="el" href="struct_s_w__curve.html">SW_curve</a> *E, const fq_ctx_t *F, const slong a, const slong b)</td></tr>
+<tr class="separator:a74120ea1dd0bbb089ac6de621409841f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2423d68e77fcffa2ffd6ac17885bc123"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8c.html#a2423d68e77fcffa2ffd6ac17885bc123">SW_curve_set_su</a> (<a class="el" href="struct_s_w__curve.html">SW_curve</a> *E, const fq_ctx_t *F, const ulong a, const ulong b)</td></tr>
+<tr class="separator:a2423d68e77fcffa2ffd6ac17885bc123"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89874f846e6b2db6c102825e58cdaa05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8c.html#a89874f846e6b2db6c102825e58cdaa05">SW_curve_clear</a> (<a class="el" href="struct_s_w__curve.html">SW_curve</a> *E)</td></tr>
 <tr class="separator:a89874f846e6b2db6c102825e58cdaa05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadc4b829c8d8fc26e4719bd56bf271fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8c.html#aadc4b829c8d8fc26e4719bd56bf271fa">SW_point_init</a> (<a class="el" href="struct_s_w__point.html">SW_point</a> *P, const fq_ctx_t *F)</td></tr>
@@ -244,6 +246,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Clears the given curve, releasing any memory used. It must be reinitialised in order to be used again. </p>
 
 </div>
 </div>
@@ -313,18 +316,59 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Sets E to elliptic curve <img class="formulaInl" alt="$Y^2=X^3+aX^2+b$" src="form_0.png"/>. </p>
+<p >Sets E to elliptic curve over F in Weierstrass form with coefficients a and b. Curve parameters are given as elements of F. </p>
 
 </div>
 </div>
-<a id="a8c59dab9a74f101d7b5fd83ab45da19b" name="a8c59dab9a74f101d7b5fd83ab45da19b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c59dab9a74f101d7b5fd83ab45da19b">&#9670;&nbsp;</a></span>SW_curve_set_si()</h2>
+<a id="a74120ea1dd0bbb089ac6de621409841f" name="a74120ea1dd0bbb089ac6de621409841f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74120ea1dd0bbb089ac6de621409841f">&#9670;&nbsp;</a></span>SW_curve_set_si()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void SW_curve_set_si </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_s_w__curve.html">SW_curve</a> *&#160;</td>
+          <td class="paramname"><em>E</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const fq_ctx_t *&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const slong&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const slong&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >See <a class="el" href="memory_8c.html#aa4b8dcfb5b21c61c6d193ff171e60ae0">SW_curve_set()</a>. Curve coefficients are given as signed integers. </p>
+
+</div>
+</div>
+<a id="a2423d68e77fcffa2ffd6ac17885bc123" name="a2423d68e77fcffa2ffd6ac17885bc123"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2423d68e77fcffa2ffd6ac17885bc123">&#9670;&nbsp;</a></span>SW_curve_set_su()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SW_curve_set_su </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_s_w__curve.html">SW_curve</a> *&#160;</td>
           <td class="paramname"><em>E</em>, </td>
@@ -354,6 +398,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >See <a class="el" href="memory_8c.html#aa4b8dcfb5b21c61c6d193ff171e60ae0">SW_curve_set()</a>. Curve coefficients are given as unsigned integers. </p>
 
 </div>
 </div>
@@ -372,6 +417,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Clears the given point, releasing any memory used. It must be reinitialised in order to be used again. </p>
 
 </div>
 </div>
@@ -400,6 +446,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Initializes P for use, with context F, and setting its coefficients to zero. A corresponding call to <a class="el" href="memory_8c.html#a2d46e7dbfc93a007f160987179249a24">SW_point_clear()</a> must be made after finishing with the <a class="el" href="struct_s_w__point.html">SW_point</a> to free the memory used by the curve. </p>
 
 </div>
 </div>
@@ -446,6 +493,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Sets P to point of elliptic curve E with coordinates x, y, z. Point parameters are given as elements of F. TODO: Check if P and E's fields are correct </p>
 
 </div>
 </div>
@@ -492,6 +540,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >See <a class="el" href="memory_8c.html#a864f201b486aa829a414d9de18a8c0bc">SW_point_set()</a>. Point coordinates are given as signed integers. </p>
 
 </div>
 </div>

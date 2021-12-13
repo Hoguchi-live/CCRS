@@ -25,7 +25,7 @@ void SW_curve_set(SW_curve *E, const fq_ctx_t *F, const fq_t a, const fq_t b) {
 
 /**
  See SW_curve_set().
- Parameters are given as signed integers.
+ Curve coefficients are given as signed integers.
 */
 void SW_curve_set_si(SW_curve *E, const fq_ctx_t *F, const slong a, const slong b) {
 
@@ -42,7 +42,7 @@ void SW_curve_set_si(SW_curve *E, const fq_ctx_t *F, const slong a, const slong 
 
 /**
  See SW_curve_set().
- Parameters are given as unsigned integers.
+ Curve coefficients are given as unsigned integers.
 */
 void SW_curve_set_su(SW_curve *E, const fq_ctx_t *F, const ulong a, const ulong b) {
 
@@ -57,13 +57,20 @@ void SW_curve_set_su(SW_curve *E, const fq_ctx_t *F, const ulong a, const ulong 
 	SW_curve_set(E, F, aa, bb);
 }
 
+/**
+  Clears the given curve, releasing any memory used. It must be reinitialised in order to be used again.
+*/
 void SW_curve_clear(SW_curve *E) {
 
 	fq_clear(E->a, *(E->F));
 	fq_clear(E->b, *(E->F));
 }
 
-// Points on elliptic curves
+/**
+  Initializes P for use, with context F, and setting its coefficients to zero.
+  A corresponding call to SW_point_clear() must be made after finishing with the SW_point to free the memory used by the curve.
+TODO: swap F for E in parameters. A point is member of E not of F.
+*/
 void SW_point_init(SW_point *P, const fq_ctx_t *F) {
 
 	fq_init(P->x, *F);
@@ -73,6 +80,11 @@ void SW_point_init(SW_point *P, const fq_ctx_t *F) {
 	P->E = NULL;
 }
 
+/**
+ Sets P to point of elliptic curve E with coordinates x, y, z.
+ Point parameters are given as elements of F.
+TODO: Check if P and E's fields are correct
+*/
 void SW_point_set(SW_point *P, const fq_t x, const fq_t y, const fq_t z, SW_curve *E) {
 
 	fq_set(P->x, x, *(E->F));
@@ -82,6 +94,10 @@ void SW_point_set(SW_point *P, const fq_t x, const fq_t y, const fq_t z, SW_curv
 	P->E = E;
 }
 
+/**
+ See SW_point_set().
+ Point coordinates are given as signed integers.
+*/
 void SW_point_set_si(SW_point *P, const ulong x, const ulong y, const ulong z, SW_curve *E) {
 
 	fq_t xx, yy, zz;
@@ -97,6 +113,9 @@ void SW_point_set_si(SW_point *P, const ulong x, const ulong y, const ulong z, S
 	SW_point_set(P, xx, yy, zz, E);
 }
 
+/**
+  Clears the given point, releasing any memory used. It must be reinitialised in order to be used again.
+*/
 void SW_point_clear(SW_point *P) {
 
 	fq_clear(P->x, *(P->E->F));

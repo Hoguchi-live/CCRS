@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CRS: src/EllipticCurves/pretty_print.h File Reference</title>
+<title>CRS: src/EllipticCurves Directory Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,63 +67,29 @@ $(function() {
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">pretty_print.h File Reference</div></div>
+  <div class="headertitle"><div class="title">EllipticCurves Directory Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;gmp.h&gt;</code><br />
-<code>#include &lt;flint/fmpz.h&gt;</code><br />
-<code>#include &lt;flint/fq.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="models_8h_source.html">models.h</a>&quot;</code><br />
-</div>
-<p><a href="pretty__print_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a282d419a61201303ea015ff020b0e2eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pretty__print_8h.html#a282d419a61201303ea015ff020b0e2eb">SW_curve_print</a> (<a class="el" href="struct_s_w__curve.html">SW_curve</a> *)</td></tr>
-<tr class="separator:a282d419a61201303ea015ff020b0e2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1d843b474a7c03e4ce9558cdce0f778"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pretty__print_8h.html#af1d843b474a7c03e4ce9558cdce0f778">SW_point_print</a> (<a class="el" href="struct_s_w__point.html">SW_point</a> *)</td></tr>
-<tr class="separator:af1d843b474a7c03e4ce9558cdce0f778"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
+Files</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="arithmetic_8c.html">arithmetic.c</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="arithmetic_8h.html">arithmetic.h</a> <a href="arithmetic_8h_source.html">[code]</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8c.html">memory.c</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html">memory.h</a> <a href="memory_8h_source.html">[code]</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="models_8c.html">models.c</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="models_8h.html">models.h</a> <a href="models_8h_source.html">[code]</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pretty__print_8c.html">pretty_print.c</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pretty__print_8h.html">pretty_print.h</a> <a href="pretty__print_8h_source.html">[code]</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a282d419a61201303ea015ff020b0e2eb" name="a282d419a61201303ea015ff020b0e2eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a282d419a61201303ea015ff020b0e2eb">&#9670;&nbsp;</a></span>SW_curve_print()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SW_curve_print </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_s_w__curve.html">SW_curve</a> *&#160;</td>
-          <td class="paramname"><em>E</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af1d843b474a7c03e4ce9558cdce0f778" name="af1d843b474a7c03e4ce9558cdce0f778"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1d843b474a7c03e4ce9558cdce0f778">&#9670;&nbsp;</a></span>SW_point_print()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SW_point_print </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_s_w__point.html">SW_point</a> *&#160;</td>
-          <td class="paramname"><em>P</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
