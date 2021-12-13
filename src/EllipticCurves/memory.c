@@ -2,6 +2,10 @@
 #include "memory.h"
 #include "models.h"
 
+/*****************************************
+   Short Weierstrass memory management
+*****************************************/
+
 /**
   Initializes E for use, with context F, and setting its coefficients to zero.
   A corresponding call to SW_curve_clear() must be made after finishing with the SW_curve to free the memory used by the curve.
@@ -66,6 +70,10 @@ void SW_curve_clear(SW_curve *E) {
 	fq_clear(E->b, *(E->F));
 }
 
+/*********************************************
+   Short Weierstrass points memory management
+**********************************************/
+
 /**
   Initializes P for use, with context F, and setting its coefficients to zero.
   A corresponding call to SW_point_clear() must be made after finishing with the SW_point to free the memory used by the curve.
@@ -98,7 +106,7 @@ void SW_point_set(SW_point *P, const fq_t x, const fq_t y, const fq_t z, SW_curv
  See SW_point_set().
  Point coordinates are given as signed integers.
 */
-void SW_point_set_si(SW_point *P, const ulong x, const ulong y, const ulong z, SW_curve *E) {
+void SW_point_set_si(SW_point *P, const slong x, const slong y, const slong z, SW_curve *E) {
 
 	fq_t xx, yy, zz;
 
@@ -114,6 +122,25 @@ void SW_point_set_si(SW_point *P, const ulong x, const ulong y, const ulong z, S
 }
 
 /**
+ See SW_point_set().
+ Point coordinates are given as unsigned integers.
+*/
+void SW_point_set_ui(SW_point *P, const ulong x, const ulong y, const ulong z, SW_curve *E) {
+
+	fq_t xx, yy, zz;
+
+	fq_init(xx, *(E->F));
+	fq_init(yy, *(E->F));
+	fq_init(zz, *(E->F));
+
+	fq_set_ui(xx, x, *(E->F));
+	fq_set_ui(yy, y, *(E->F));
+	fq_set_ui(zz, z, *(E->F));
+
+	SW_point_set(P, xx, yy, zz, E);
+}
+
+/**
   Clears the given point, releasing any memory used. It must be reinitialised in order to be used again.
 */
 void SW_point_clear(SW_point *P) {
@@ -124,16 +151,24 @@ void SW_point_clear(SW_point *P) {
 }
 
 
-/*
-   Montgomery elliptic curve
-*/
+/**************************************
+   Montgomery curves memory management
+**************************************/
 
+/**
+  Initializes E for use, with context F, and setting its coefficients to zero.
+  A corresponding call to MG_curve_clear() must be made after finishing with the MG_curve to free the memory used by the curve.
+*/
 void MG_curve_init(MG_curve *E, const fq_ctx_t *F) {
 
 	fq_init(E->A, *F);
 	fq_init(E->B, *F);
 }
 
+/**
+ Sets E to elliptic curve over F in Montgomery form with coefficients A and B.
+ Curve parameters are given as elements of F.
+*/
 void MG_curve_set(MG_curve *E, const fq_ctx_t *F, const fq_t A, const fq_t B) {
 
 	E->F = F;
@@ -141,7 +176,11 @@ void MG_curve_set(MG_curve *E, const fq_ctx_t *F, const fq_t A, const fq_t B) {
 	fq_set(E->B, B, *F);
 }
 
-void MG_curve_set_si(MG_curve *E, const fq_ctx_t *F, const ulong A, const ulong B) {
+/**
+ See MG_curve_set().
+ Curve coefficients are given as signed integers.
+*/
+void MG_curve_set_si(MG_curve *E, const fq_ctx_t *F, const slong A, const slong B) {
 
 	fq_t AA, BB;
 
@@ -154,6 +193,26 @@ void MG_curve_set_si(MG_curve *E, const fq_ctx_t *F, const ulong A, const ulong 
 	MG_curve_set(E, F, AA, BB);
 }
 
+/**
+ See MG_curve_set().
+ Curve coefficients are given as unsigned integers.
+*/
+void MG_curve_set_ui(MG_curve *E, const fq_ctx_t *F, const ulong A, const ulong B) {
+
+	fq_t AA, BB;
+
+	fq_init(AA, *F);
+	fq_init(BB, *F);
+
+	fq_set_ui(AA, A, *F);
+	fq_set_ui(BB, B, *F);
+
+	MG_curve_set(E, F, AA, BB);
+}
+
+/**
+  Clears the given curve, releasing any memory used. It must be reinitialised in order to be used again.
+*/
 void MG_curve_clear(MG_curve *E) {
 
 	fq_clear(E->A, *(E->F));

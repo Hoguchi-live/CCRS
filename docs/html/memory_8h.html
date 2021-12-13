@@ -98,6 +98,8 @@ Functions</h2></td></tr>
 <tr class="separator:aa284ff563823ae53fc423af505d255dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab53e5bc83fcf01432b8216cfdf10bbfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#ab53e5bc83fcf01432b8216cfdf10bbfc">SW_point_set_si</a> (<a class="el" href="struct_s_w__point.html">SW_point</a> *, const ulong, const ulong, const ulong, <a class="el" href="struct_s_w__curve.html">SW_curve</a> *)</td></tr>
 <tr class="separator:ab53e5bc83fcf01432b8216cfdf10bbfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab06a584c11c6c803fd7dc1989fd412fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#ab06a584c11c6c803fd7dc1989fd412fb">SW_point_set_ui</a> (<a class="el" href="struct_s_w__point.html">SW_point</a> *, const slong, const slong, const slong, <a class="el" href="struct_s_w__curve.html">SW_curve</a> *)</td></tr>
+<tr class="separator:ab06a584c11c6c803fd7dc1989fd412fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0e134f9ee9e8844f28f4ca6e6782064"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#aa0e134f9ee9e8844f28f4ca6e6782064">SW_point_clear</a> (<a class="el" href="struct_s_w__point.html">SW_point</a> *)</td></tr>
 <tr class="separator:aa0e134f9ee9e8844f28f4ca6e6782064"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31495ae0dd0668f49bd1938da3fbec03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#a31495ae0dd0668f49bd1938da3fbec03">MG_curve_init</a> (<a class="el" href="struct_m_g__curve.html">MG_curve</a> *, const fq_ctx_t *)</td></tr>
@@ -125,6 +127,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Clears the given curve, releasing any memory used. It must be reinitialised in order to be used again. </p>
 
 </div>
 </div>
@@ -153,6 +156,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Initializes E for use, with context F, and setting its coefficients to zero. A corresponding call to <a class="el" href="memory_8c.html#a50a096495a35f501ad48cb67a414115f">MG_curve_clear()</a> must be made after finishing with the <a class="el" href="struct_m_g__curve.html">MG_curve</a> to free the memory used by the curve. </p>
 
 </div>
 </div>
@@ -177,14 +181,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const&#160;</td>
-          <td class="paramname"><em>fq_t</em>, </td>
+          <td class="paramtype">const fq_t&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const&#160;</td>
-          <td class="paramname"><em>fq_t</em>&#160;</td>
+          <td class="paramtype">const fq_t&#160;</td>
+          <td class="paramname"><em>B</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -193,6 +197,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p >Sets E to elliptic curve over F in Montgomery form with coefficients A and B. Curve parameters are given as elements of F. </p>
 
 </div>
 </div>
@@ -206,13 +211,13 @@ Functions</h2></td></tr>
           <td class="memname">void MG_curve_set_si </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_m_g__curve.html">MG_curve</a> *&#160;</td>
-          <td class="paramname"><em>E</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const fq_ctx_t *&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -450,7 +455,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >Initializes P for use, with context F, and setting its coefficients to zero. A corresponding call to <a class="el" href="memory_8c.html#a2d46e7dbfc93a007f160987179249a24">SW_point_clear()</a> must be made after finishing with the <a class="el" href="struct_s_w__point.html">SW_point</a> to free the memory used by the curve. </p>
+<p >Initializes P for use, with context F, and setting its coefficients to zero. A corresponding call to <a class="el" href="memory_8c.html#a2d46e7dbfc93a007f160987179249a24">SW_point_clear()</a> must be made after finishing with the <a class="el" href="struct_s_w__point.html">SW_point</a> to free the memory used by the curve. TODO: swap F for E in parameters. A point is member of E not of F. </p>
 
 </div>
 </div>
@@ -511,31 +516,31 @@ Functions</h2></td></tr>
           <td class="memname">void SW_point_set_si </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_s_w__point.html">SW_point</a> *&#160;</td>
-          <td class="paramname"><em>P</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>ulong</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>ulong</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
-          <td class="paramname"><em>z</em>, </td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>ulong</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_s_w__curve.html">SW_curve</a> *&#160;</td>
-          <td class="paramname"><em>E</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -544,7 +549,52 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p >See <a class="el" href="memory_8c.html#a864f201b486aa829a414d9de18a8c0bc">SW_point_set()</a>. Point coordinates are given as signed integers. </p>
+
+</div>
+</div>
+<a id="ab06a584c11c6c803fd7dc1989fd412fb" name="ab06a584c11c6c803fd7dc1989fd412fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab06a584c11c6c803fd7dc1989fd412fb">&#9670;&nbsp;</a></span>SW_point_set_ui()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SW_point_set_ui </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_s_w__point.html">SW_point</a> *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>slong</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>slong</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const&#160;</td>
+          <td class="paramname"><em>slong</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_s_w__curve.html">SW_curve</a> *&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
