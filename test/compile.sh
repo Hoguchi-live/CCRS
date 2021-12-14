@@ -1,4 +1,5 @@
-gcc 	../src/EllipticCurves/memory.c \
+gcc	../confs/config.c \
+	../src/EllipticCurves/memory.c \
 	../src/EllipticCurves/models.c \
 	../src/EllipticCurves/pretty_print.c \
 	../src/EllipticCurves/arithmetic.c \

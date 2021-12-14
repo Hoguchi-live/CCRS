@@ -1,0 +1,42 @@
+\hypertarget{auxiliary_8c}{}\doxysection{src/\+Elliptic\+Curves/auxiliary.c File Reference}
+\label{auxiliary_8c}\index{src/EllipticCurves/auxiliary.c@{src/EllipticCurves/auxiliary.c}}
+{\ttfamily \#include \char`\"{}auxiliary.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{auxiliary_8c_a362bd9d12b830d5c6e53d699e2087b59}{fq\+\_\+add\+\_\+ui}} (fq\+\_\+t rop, fq\+\_\+t op, ulong x, const fq\+\_\+ctx\+\_\+t F)
+\item 
+void \mbox{\hyperlink{auxiliary_8c_a93b523dfb5e05dbaa7b8df7e284223a4}{fq\+\_\+add\+\_\+si}} (fq\+\_\+t rop, fq\+\_\+t op, slong x, const fq\+\_\+ctx\+\_\+t F)
+\item 
+void \mbox{\hyperlink{auxiliary_8c_a27c85c9e98f099507babd001784fbae2}{fq\+\_\+sub\+\_\+ui}} (fq\+\_\+t rop, fq\+\_\+t op, ulong x, const fq\+\_\+ctx\+\_\+t F)
+\item 
+void \mbox{\hyperlink{auxiliary_8c_a3161c8670760f8fe8795a76eeba26b87}{fq\+\_\+sub\+\_\+si}} (fq\+\_\+t rop, fq\+\_\+t op, slong x, const fq\+\_\+ctx\+\_\+t F)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{auxiliary_8c_a93b523dfb5e05dbaa7b8df7e284223a4}\label{auxiliary_8c_a93b523dfb5e05dbaa7b8df7e284223a4}} 
+\index{auxiliary.c@{auxiliary.c}!fq\_add\_si@{fq\_add\_si}}
+\index{fq\_add\_si@{fq\_add\_si}!auxiliary.c@{auxiliary.c}}
+\doxysubsubsection{\texorpdfstring{fq\_add\_si()}{fq\_add\_si()}}
+{\footnotesize\ttfamily void fq\+\_\+add\+\_\+si (\begin{DoxyParamCaption}\item[{fq\+\_\+t}]{rop,  }\item[{fq\+\_\+t}]{op,  }\item[{slong}]{x,  }\item[{const fq\+\_\+ctx\+\_\+t}]{F }\end{DoxyParamCaption})}
+
+Sets rop to the sum of op and x, where x is a slong considered as an element of F. \mbox{\Hypertarget{auxiliary_8c_a362bd9d12b830d5c6e53d699e2087b59}\label{auxiliary_8c_a362bd9d12b830d5c6e53d699e2087b59}} 
+\index{auxiliary.c@{auxiliary.c}!fq\_add\_ui@{fq\_add\_ui}}
+\index{fq\_add\_ui@{fq\_add\_ui}!auxiliary.c@{auxiliary.c}}
+\doxysubsubsection{\texorpdfstring{fq\_add\_ui()}{fq\_add\_ui()}}
+{\footnotesize\ttfamily void fq\+\_\+add\+\_\+ui (\begin{DoxyParamCaption}\item[{fq\+\_\+t}]{rop,  }\item[{fq\+\_\+t}]{op,  }\item[{ulong}]{x,  }\item[{const fq\+\_\+ctx\+\_\+t}]{F }\end{DoxyParamCaption})}
+
+Sets rop to the sum of {\ttfamily op{\ttfamily and} {\ttfamily x{\ttfamily },} where} x is an ulong considered as an element of F. \mbox{\Hypertarget{auxiliary_8c_a3161c8670760f8fe8795a76eeba26b87}\label{auxiliary_8c_a3161c8670760f8fe8795a76eeba26b87}} 
+\index{auxiliary.c@{auxiliary.c}!fq\_sub\_si@{fq\_sub\_si}}
+\index{fq\_sub\_si@{fq\_sub\_si}!auxiliary.c@{auxiliary.c}}
+\doxysubsubsection{\texorpdfstring{fq\_sub\_si()}{fq\_sub\_si()}}
+{\footnotesize\ttfamily void fq\+\_\+sub\+\_\+si (\begin{DoxyParamCaption}\item[{fq\+\_\+t}]{rop,  }\item[{fq\+\_\+t}]{op,  }\item[{slong}]{x,  }\item[{const fq\+\_\+ctx\+\_\+t}]{F }\end{DoxyParamCaption})}
+
+Sets rop to the sum of op and x, where x is a slong considered as an element of F. \mbox{\Hypertarget{auxiliary_8c_a27c85c9e98f099507babd001784fbae2}\label{auxiliary_8c_a27c85c9e98f099507babd001784fbae2}} 
+\index{auxiliary.c@{auxiliary.c}!fq\_sub\_ui@{fq\_sub\_ui}}
+\index{fq\_sub\_ui@{fq\_sub\_ui}!auxiliary.c@{auxiliary.c}}
+\doxysubsubsection{\texorpdfstring{fq\_sub\_ui()}{fq\_sub\_ui()}}
+{\footnotesize\ttfamily void fq\+\_\+sub\+\_\+ui (\begin{DoxyParamCaption}\item[{fq\+\_\+t}]{rop,  }\item[{fq\+\_\+t}]{op,  }\item[{ulong}]{x,  }\item[{const fq\+\_\+ctx\+\_\+t}]{F }\end{DoxyParamCaption})}
+
+Sets rop to the difference of op and x, where x is an ulong considered as an element of F. 

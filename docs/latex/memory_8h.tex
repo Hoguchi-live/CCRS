@@ -1,10 +1,10 @@
 \hypertarget{memory_8h}{}\doxysection{src/\+Elliptic\+Curves/memory.h File Reference}
 \label{memory_8h}\index{src/EllipticCurves/memory.h@{src/EllipticCurves/memory.h}}
 {\ttfamily \#include $<$string.\+h$>$}\newline
-{\ttfamily \#include \char`\"{}models.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$gmp.\+h$>$}\newline
 {\ttfamily \#include $<$flint/fmpz.\+h$>$}\newline
 {\ttfamily \#include $<$flint/fq.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}models.\+h\char`\"{}}\newline
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -22,9 +22,9 @@ void \mbox{\hyperlink{memory_8h_abca5dbfcbf3117e906f761b2363678a8}{SW\+\_\+point
 \item 
 void \mbox{\hyperlink{memory_8h_aa284ff563823ae53fc423af505d255dc}{SW\+\_\+point\+\_\+set}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$, const fq\+\_\+t, const fq\+\_\+t, const fq\+\_\+t, \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$)
 \item 
-void \mbox{\hyperlink{memory_8h_ab53e5bc83fcf01432b8216cfdf10bbfc}{SW\+\_\+point\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$, const ulong, const ulong, const ulong, \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$)
+void \mbox{\hyperlink{memory_8h_a05e6dba7e6f804e8cc73418d4735f005}{SW\+\_\+point\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$, const slong, const slong, const slong, \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$)
 \item 
-void \mbox{\hyperlink{memory_8h_ab06a584c11c6c803fd7dc1989fd412fb}{SW\+\_\+point\+\_\+set\+\_\+ui}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$, const slong, const slong, const slong, \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$)
+void \mbox{\hyperlink{memory_8h_a747cc9f86c423d48039d8a4d9985412d}{SW\+\_\+point\+\_\+set\+\_\+ui}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$, const ulong, const ulong, const ulong, \mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$)
 \item 
 void \mbox{\hyperlink{memory_8h_aa0e134f9ee9e8844f28f4ca6e6782064}{SW\+\_\+point\+\_\+clear}} (\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$)
 \item 
@@ -32,7 +32,7 @@ void \mbox{\hyperlink{memory_8h_a31495ae0dd0668f49bd1938da3fbec03}{MG\+\_\+curve
 \item 
 void \mbox{\hyperlink{memory_8h_a831fb39f75cba4ce01d7b81deeff541d}{MG\+\_\+curve\+\_\+set}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$, const fq\+\_\+ctx\+\_\+t $\ast$, const fq\+\_\+t, const fq\+\_\+t)
 \item 
-void \mbox{\hyperlink{memory_8h_ac72072d541bc6a1f3e0520d926207a1f}{MG\+\_\+curve\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$, const fq\+\_\+ctx\+\_\+t $\ast$, const ulong, const ulong)
+void \mbox{\hyperlink{memory_8h_a623e44d326ee1ff630d006ce3e6c5c76}{MG\+\_\+curve\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$, const fq\+\_\+ctx\+\_\+t $\ast$, const slong, const slong)
 \item 
 void \mbox{\hyperlink{memory_8h_ae51518b80b4873f1a6d00d48a1e22749}{MG\+\_\+curve\+\_\+clear}} (\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$)
 \end{DoxyCompactItemize}
@@ -57,13 +57,13 @@ Initializes E for use, with context F, and setting its coefficients to zero. A c
 \doxysubsubsection{\texorpdfstring{MG\_curve\_set()}{MG\_curve\_set()}}
 {\footnotesize\ttfamily void MG\+\_\+curve\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F,  }\item[{const fq\+\_\+t}]{A,  }\item[{const fq\+\_\+t}]{B }\end{DoxyParamCaption})}
 
-Sets E to elliptic curve over F in Montgomery form with coefficients A and B. Curve parameters are given as elements of F. \mbox{\Hypertarget{memory_8h_ac72072d541bc6a1f3e0520d926207a1f}\label{memory_8h_ac72072d541bc6a1f3e0520d926207a1f}} 
+Sets E to elliptic curve over F in Montgomery form with coefficients A and B. Curve parameters are given as elements of F. \mbox{\Hypertarget{memory_8h_a623e44d326ee1ff630d006ce3e6c5c76}\label{memory_8h_a623e44d326ee1ff630d006ce3e6c5c76}} 
 \index{memory.h@{memory.h}!MG\_curve\_set\_si@{MG\_curve\_set\_si}}
 \index{MG\_curve\_set\_si@{MG\_curve\_set\_si}!memory.h@{memory.h}}
 \doxysubsubsection{\texorpdfstring{MG\_curve\_set\_si()}{MG\_curve\_set\_si()}}
-{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+set\+\_\+si (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$}]{,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{,  }\item[{const}]{ulong,  }\item[{const}]{ulong }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+set\+\_\+si (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve}{MG\+\_\+curve}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F,  }\item[{const slong}]{A,  }\item[{const slong}]{B }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{memory_8h_a1c6f64647151debbb4ba25059c034d5b}\label{memory_8h_a1c6f64647151debbb4ba25059c034d5b}} 
+See \mbox{\hyperlink{memory_8c_ac492e2fed6628ec8c00f3ef2f74d89a8}{MG\+\_\+curve\+\_\+set()}}. Curve coefficients are given as signed integers. \mbox{\Hypertarget{memory_8h_a1c6f64647151debbb4ba25059c034d5b}\label{memory_8h_a1c6f64647151debbb4ba25059c034d5b}} 
 \index{memory.h@{memory.h}!SW\_curve\_clear@{SW\_curve\_clear}}
 \index{SW\_curve\_clear@{SW\_curve\_clear}!memory.h@{memory.h}}
 \doxysubsubsection{\texorpdfstring{SW\_curve\_clear()}{SW\_curve\_clear()}}
@@ -111,15 +111,16 @@ Initializes P for use, with context F, and setting its coefficients to zero. A c
 \doxysubsubsection{\texorpdfstring{SW\_point\_set()}{SW\_point\_set()}}
 {\footnotesize\ttfamily void SW\+\_\+point\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{P,  }\item[{const fq\+\_\+t}]{x,  }\item[{const fq\+\_\+t}]{y,  }\item[{const fq\+\_\+t}]{z,  }\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E }\end{DoxyParamCaption})}
 
-Sets P to point of elliptic curve E with coordinates x, y, z. Point parameters are given as elements of F. TODO\+: Check if P and E\textquotesingle{}s fields are correct \mbox{\Hypertarget{memory_8h_ab53e5bc83fcf01432b8216cfdf10bbfc}\label{memory_8h_ab53e5bc83fcf01432b8216cfdf10bbfc}} 
+Sets P to point of elliptic curve E with coordinates x, y, z. Point parameters are given as elements of F. TODO\+: Check if P and E\textquotesingle{}s fields are correct \mbox{\Hypertarget{memory_8h_a05e6dba7e6f804e8cc73418d4735f005}\label{memory_8h_a05e6dba7e6f804e8cc73418d4735f005}} 
 \index{memory.h@{memory.h}!SW\_point\_set\_si@{SW\_point\_set\_si}}
 \index{SW\_point\_set\_si@{SW\_point\_set\_si}!memory.h@{memory.h}}
 \doxysubsubsection{\texorpdfstring{SW\_point\_set\_si()}{SW\_point\_set\_si()}}
-{\footnotesize\ttfamily void SW\+\_\+point\+\_\+set\+\_\+si (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{,  }\item[{const}]{ulong,  }\item[{const}]{ulong,  }\item[{const}]{ulong,  }\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+set\+\_\+si (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{P,  }\item[{const slong}]{x,  }\item[{const slong}]{y,  }\item[{const slong}]{z,  }\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{memory_8h_ab06a584c11c6c803fd7dc1989fd412fb}\label{memory_8h_ab06a584c11c6c803fd7dc1989fd412fb}} 
+See \mbox{\hyperlink{memory_8c_a864f201b486aa829a414d9de18a8c0bc}{SW\+\_\+point\+\_\+set()}}. Point coordinates are given as signed integers. \mbox{\Hypertarget{memory_8h_a747cc9f86c423d48039d8a4d9985412d}\label{memory_8h_a747cc9f86c423d48039d8a4d9985412d}} 
 \index{memory.h@{memory.h}!SW\_point\_set\_ui@{SW\_point\_set\_ui}}
 \index{SW\_point\_set\_ui@{SW\_point\_set\_ui}!memory.h@{memory.h}}
 \doxysubsubsection{\texorpdfstring{SW\_point\_set\_ui()}{SW\_point\_set\_ui()}}
-{\footnotesize\ttfamily void SW\+\_\+point\+\_\+set\+\_\+ui (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{,  }\item[{const}]{slong,  }\item[{const}]{slong,  }\item[{const}]{slong,  }\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+set\+\_\+ui (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point}{SW\+\_\+point}} $\ast$}]{P,  }\item[{const ulong}]{x,  }\item[{const ulong}]{y,  }\item[{const ulong}]{z,  }\item[{\mbox{\hyperlink{struct_s_w__curve}{SW\+\_\+curve}} $\ast$}]{E }\end{DoxyParamCaption})}
 
+See \mbox{\hyperlink{memory_8c_a864f201b486aa829a414d9de18a8c0bc}{SW\+\_\+point\+\_\+set()}}. Point coordinates are given as unsigned integers. 

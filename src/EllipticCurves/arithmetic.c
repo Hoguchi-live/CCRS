@@ -78,7 +78,6 @@ void MG_j_invariant(fq_t *output, MG_curve *E) {
 void SW_point_valid(bool *output, SW_point *P) {
 
 	const fq_ctx_t *F;
-	// TODO:clear
 	fq_t res, tmp1, tmp2, tmp3, tmp4;
 
 	F = P->E->F;
@@ -89,7 +88,7 @@ void SW_point_valid(bool *output, SW_point *P) {
 	fq_init(tmp4, *F);
 
 	// Y^2 * Z
-	fq_pow_ui(tmp1, P->y, 2, *F);
+	//fq_pow_ui(tmp1, P->y, 2, *F);
 	fq_mul(tmp1, tmp1, P->z, *F);
 	// X^3
 	fq_pow_ui(tmp2, P->x, 3, *F);
@@ -106,4 +105,12 @@ void SW_point_valid(bool *output, SW_point *P) {
 	fq_sub(res, res, tmp1, *F);
 
 	*output = fq_is_zero(res, *F);
+
+	// clear
+	fq_clear(res, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp3, *F);
+	fq_clear(tmp4, *F);
 }
+

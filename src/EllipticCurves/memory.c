@@ -79,13 +79,13 @@ void SW_curve_clear(SW_curve *E) {
   A corresponding call to SW_point_clear() must be made after finishing with the SW_point to free the memory used by the curve.
 TODO: swap F for E in parameters. A point is member of E not of F.
 */
-void SW_point_init(SW_point *P, const fq_ctx_t *F) {
+void SW_point_init(SW_point *P, SW_curve *E) {
 
-	fq_init(P->x, *F);
-	fq_init(P->y, *F);
-	fq_init(P->z, *F);
+	fq_init(P->x, *(E->F));
+	fq_init(P->y, *(E->F));
+	fq_init(P->z, *(E->F));
 
-	P->E = NULL;
+	P->E = E;
 }
 
 /**
