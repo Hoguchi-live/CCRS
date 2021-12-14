@@ -5,7 +5,7 @@
 #include "stdbool.h"
 
 #include "models.h"
-
+#include "auxiliary.h"
 
 // Elliptic curves
 void SW_j_invariant(fq_t *, SW_curve *);
@@ -15,3 +15,4 @@ void MG_j_invariant(fq_t *, MG_curve *);
 void SW_point_valid(bool *, SW_point *);
 
 #endif
+
