@@ -14,7 +14,7 @@ typedef struct SW_curve{
 	fq_t a, b;		// curve parameters
 } SW_curve;
 
-typedef struct SW_point {
+typedef struct SW_point{
 
 	fq_t x, y, z;	// coordinates
 	SW_curve *E;	// base curve
@@ -28,4 +28,3 @@ typedef struct MG_curve{
 
 
 #endif
-

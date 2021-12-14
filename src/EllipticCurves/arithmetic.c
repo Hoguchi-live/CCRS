@@ -55,7 +55,7 @@ void MG_j_invariant(fq_t *output, MG_curve *E) {
 	// numerator
 	fq_pow_ui(tmp1, E->A, 2, *(E->F));
 	fq_add_si(tmp1, tmp1, -3, *(E->F));
-	fq_pow(tmp1, tmp1, 3);
+	fq_pow_ui(tmp1, tmp1, 3, *(E->F));
 	fq_mul_ui(tmp1, tmp1, 256, *(E->F));
 
 	// denominator
@@ -78,6 +78,7 @@ void MG_j_invariant(fq_t *output, MG_curve *E) {
 void SW_point_valid(bool *output, SW_point *P) {
 
 	const fq_ctx_t *F;
+	// TODO:clear
 	fq_t res, tmp1, tmp2, tmp3, tmp4;
 
 	F = P->E->F;
@@ -106,4 +107,3 @@ void SW_point_valid(bool *output, SW_point *P) {
 
 	*output = fq_is_zero(res, *F);
 }
-
