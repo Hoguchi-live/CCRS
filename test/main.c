@@ -35,9 +35,10 @@ int main() {
 	fq_ctx_init(F, base_p, d, Fgen);
 
 	// Base curve
-	SW_curve E;
-	SW_curve_init(&E, &F);
-	SW_curve_set_si(&E, &F, 1, 7);
+	MG_curve E;
+	MG_curve_init(&E, &F);
+	MG_curve_set_str(&E, &F, BASE_A, BASE_B, 10);
+	MG_curve_print(&E);
 
 	// Print base curve
 	//SW_curve_print(&E);
@@ -51,21 +52,21 @@ int main() {
 	//printf("\n");
 
 	// Test points
-	SW_point P;
-	SW_point_init(&P, &E);
-	SW_point_set_si(&P, 0, 1, 0, &E);
-	SW_point_print(&P);
+	//SW_point P;
+	//SW_point_init(&P, &E);
+	//SW_point_set_si(&P, 0, 1, 0, &E);
+	//SW_point_print(&P);
 
-	bool *is_valid;
-	is_valid = malloc(sizeof(bool));
-	SW_point_valid(is_valid, &P);
+	//bool *is_valid;
+	//is_valid = malloc(sizeof(bool));
+	//SW_point_valid(is_valid, &P);
 	//printf("Point P is valid? %d\n", *is_valid);
 
 	// clear
-	free(is_valid);
+	//free(is_valid);
 
-	SW_point_clear(&P);
-	SW_curve_clear(&E);
+	//MG_point_clear(&P);
+	MG_curve_clear(&E);
 
 	fq_ctx_clear(F);
 	fmpz_clear(base_p);

@@ -59,6 +59,43 @@ void SW_curve_set_su(SW_curve *E, const fq_ctx_t *F, const ulong a, const ulong 
 	fq_set_ui(bb, b, *F);
 
 	SW_curve_set(E, F, aa, bb);
+
+	fq_clear(aa, *F);
+	fq_clear(bb, *F);
+}
+
+
+/**
+ See SW_curve_set().
+ Parameters are given as null-terminated strings, in base b. The base b can vary between 2 and 62, inclusive. Returns 0 if the string contain valid inputs and −1 otherwise.
+*/
+int SW_curve_set_str(SW_curve *E, const fq_ctx_t *F, const char *str_a, const char *str_b, int b) {
+
+	fmpz_t fmpz_a, fmpz_b;
+	fq_t fq_a, fq_b;
+	int ret;
+
+	fmpz_init(fmpz_a);
+	fmpz_init(fmpz_b);
+	fq_init(fq_a, *F);
+	fq_init(fq_b, *F);
+
+	ret = fmpz_set_str(fmpz_a, str_a, b);
+	if(ret) return -1;
+	ret = fmpz_set_str(fmpz_b, str_b, b);
+	if(ret) return -1;
+
+	fq_set_fmpz(fq_a, fmpz_a, *F);
+	fq_set_fmpz(fq_b, fmpz_b, *F);
+
+	SW_curve_set(E, F, fq_a, fq_b);
+
+	fmpz_clear(fmpz_a);
+	fmpz_clear(fmpz_b);
+	fq_clear(fq_a, *F);
+	fq_clear(fq_b, *F);
+
+	return 0;
 }
 
 /**
@@ -119,6 +156,10 @@ void SW_point_set_si(SW_point *P, const slong x, const slong y, const slong z, S
 	fq_set_si(zz, z, *(E->F));
 
 	SW_point_set(P, xx, yy, zz, E);
+
+	fq_clear(xx, *(E->F));
+	fq_clear(yy, *(E->F));
+	fq_clear(zz, *(E->F));
 }
 
 /**
@@ -138,6 +179,10 @@ void SW_point_set_ui(SW_point *P, const ulong x, const ulong y, const ulong z, S
 	fq_set_ui(zz, z, *(E->F));
 
 	SW_point_set(P, xx, yy, zz, E);
+
+	fq_clear(xx, *(E->F));
+	fq_clear(yy, *(E->F));
+	fq_clear(zz, *(E->F));
 }
 
 /**
@@ -191,6 +236,9 @@ void MG_curve_set_si(MG_curve *E, const fq_ctx_t *F, const slong A, const slong 
 	fq_set_si(BB, B, *F);
 
 	MG_curve_set(E, F, AA, BB);
+
+	fq_clear(AA, *F);
+	fq_clear(BB, *F);
 }
 
 /**
@@ -208,6 +256,42 @@ void MG_curve_set_ui(MG_curve *E, const fq_ctx_t *F, const ulong A, const ulong 
 	fq_set_ui(BB, B, *F);
 
 	MG_curve_set(E, F, AA, BB);
+
+	fq_clear(AA, *F);
+	fq_clear(BB, *F);
+}
+
+/**
+ See MG_curve_set().
+ Parameters are given as null-terminated strings, in base b. The base b can vary between 2 and 62, inclusive. Returns 0 if the string contain valid inputs and −1 otherwise.
+*/
+int MG_curve_set_str(MG_curve *E, const fq_ctx_t *F, const char *str_A, const char *str_B, int b) {
+
+	fmpz_t fmpz_A, fmpz_B;
+	fq_t fq_A, fq_B;
+	int ret;
+
+	fmpz_init(fmpz_A);
+	fmpz_init(fmpz_B);
+	fq_init(fq_A, *F);
+	fq_init(fq_B, *F);
+
+	ret = fmpz_set_str(fmpz_A, str_A, b);
+	if(ret) return -1;
+	ret = fmpz_set_str(fmpz_B, str_B, b);
+	if(ret) return -1;
+
+	fq_set_fmpz(fq_A, fmpz_A, *F);
+	fq_set_fmpz(fq_B, fmpz_B, *F);
+
+	MG_curve_set(E, F, fq_A, fq_B);
+
+	fmpz_clear(fmpz_A);
+	fmpz_clear(fmpz_B);
+	fq_clear(fq_A, *F);
+	fq_clear(fq_B, *F);
+
+	return 0;
 }
 
 /**

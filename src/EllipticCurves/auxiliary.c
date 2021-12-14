@@ -15,7 +15,6 @@ void fq_add_ui(fq_t rop, fq_t op, ulong x, const fq_ctx_t F){
 	fq_clear(xx, F);
 }
 
-
 /**
   Sets rop to the sum of op and x, where x is a slong considered as an element of F.
 */
