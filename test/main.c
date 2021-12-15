@@ -6,9 +6,12 @@
 #include "../src/EllipticCurves/arithmetic.h"
 #include "../src/EllipticCurves/pretty_print.h"
 
+#include "../src/Polynomials/binary_trees.h"
+
 #include <gmp.h>
 #include <flint/fmpz.h>
 #include <flint/fq.h>
+#include <flint/fq_poly.h>
 
 
 #define BASE_p "12037340738208845034383383978222801137092029451270197923071397735408251586669938291587857560356890516069961904754171956588530344066457839297755929645858769"
@@ -38,7 +41,7 @@ int main() {
 	MG_curve E;
 	MG_curve_init(&E, &F);
 	MG_curve_set_str(&E, &F, BASE_A, BASE_B, 10);
-	MG_curve_print(&E);
+	//MG_curve_print(&E);
 
 	// Print base curve
 	//SW_curve_print(&E);
@@ -61,10 +64,27 @@ int main() {
 	//is_valid = malloc(sizeof(bool));
 	//SW_point_valid(is_valid, &P);
 	//printf("Point P is valid? %d\n", *is_valid);
-
-	// clear
 	//free(is_valid);
 
+	// Polynomials
+	const char *var = "X";
+	fmpz_t x;
+	fq_poly_t F0;
+
+	fmpz_init_set_ui(x, 2);
+	fq_poly_init(F0, F);
+
+	fq_poly_set_coeff_fmpz(F0, 4, x, F);
+	fq_poly_set_coeff_fmpz(F0, 3, x, F);
+	fq_poly_set_coeff_fmpz(F0, 2, x, F);
+	fq_poly_print_pretty(F0, var, F);
+
+	fq_poly_btree_t T;
+
+	fq_poly_clear(F0, F);
+	fmpz_clear(x);
+
+	//clear
 	//MG_point_clear(&P);
 	MG_curve_clear(&E);
 
