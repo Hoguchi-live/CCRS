@@ -36,9 +36,12 @@ typedef struct fq_poly_btree_t {
 *********************************/
 void fq_poly_blink_init(fq_poly_blink_t *, const fq_ctx_t *);
 void fq_poly_blink_set(fq_poly_blink_t *, fq_poly_t);
-int fq_poly_blink_append_right(fq_poly_blink_t *, fq_poly_blink_t *);
-int fq_poly_blink_append_left(fq_poly_blink_t *, fq_poly_blink_t *);
+int fq_poly_blink_set_right(fq_poly_blink_t *, fq_poly_blink_t *);
+int fq_poly_blink_set_left(fq_poly_blink_t *, fq_poly_blink_t *);
 void fq_poly_blink_clear(fq_poly_blink_t *);
 
-#endif
+void fq_poly_btree_init(fq_poly_btree_t *, const fq_ctx_t *);
+void fq_poly_btree_set(fq_poly_btree_t *, fq_poly_blink_t *);
+void fq_poly_btree_clear(fq_poly_btree_t *);
 
+#endif
