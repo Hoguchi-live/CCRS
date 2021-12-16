@@ -58,3 +58,31 @@ void fq_sub_si(fq_t rop, fq_t op, slong x, const fq_ctx_t F){
 	fq_clear(xx, F);
 }
 
+/**
+  Sets rop to the quotient of op and x, reducing the output in the given context.
+*/
+void fq_div_si(fq_t rop, fq_t op, slong x, const fq_ctx_t F) {
+
+	fq_t xx;
+	fq_init(xx, F);
+	fq_set_si(xx, x, F);
+
+	fq_div(rop, op, xx, F);
+
+	fq_clear(xx, F);
+}
+
+/**
+  Sets rop to the quotient of op and x, reducing the output in the given context.
+*/
+void fq_div_ui(fq_t rop, fq_t op, ulong x, const fq_ctx_t F) {
+
+	fq_t xx;
+	fq_init(xx, F);
+	fq_set_ui(xx, x, F);
+
+	fq_div(rop, op, xx, F);
+
+	fq_clear(xx, F);
+}
+
