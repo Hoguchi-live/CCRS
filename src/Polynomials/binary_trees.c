@@ -1,6 +1,8 @@
 /// @file binary_trees.c
 #include "binary_trees.h"
 
+
+
 /**
   Initializes b for use, with context F, and setting its childs to NULL.
   A corresponding call to fq_poly_blink_clear() must be made after finishing with the fq_poly_blink_t to free the memory used by the link.
