@@ -168,7 +168,7 @@ void MG_xDBL(MG_point *output, MG_point P) {
 	fq_div_ui(v3, v3, 4, *F);
 	fq_mul(v3, v3, v1, *F);
 	fq_add(v3, v3, v2, *F);
-	fq_mul(output->z, v1, v3, *F)
+	fq_mul(output->z, v1, v3, *F);
 
 	// clear memory
 	fq_clear(v1, *F);
