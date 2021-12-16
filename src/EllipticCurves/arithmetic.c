@@ -151,7 +151,6 @@ void MG_xDBL(MG_point *output, MG_point P) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
-	
 
 	fq_t v1, v2, v3;
 	fq_init(v1, *F);
@@ -174,4 +173,57 @@ void MG_xDBL(MG_point *output, MG_point P) {
 	fq_clear(v1, *F);
 	fq_clear(v2, *F);
 	fq_clear(v3, *F);
+}
+
+void MG_ladder_rec(MG_point *x0, MG_point *x1, fmpz_t k, MG_point P, fq_ctx_t *F) {
+
+	// base case
+	if (fmpz_is_one(k)) {
+		fq_set(x0->x, P.x, *F);
+		fq_set(x0->z, P.z, *F);
+		MG_xDBL(x1, P);
+	}
+
+	fmpz_t rem;
+	fmpz_init(rem);
+	fmpz_t two;
+	fmpz_init_set_ui(two, 2);
+	fmpz_fdiv_qr(k, rem, k, two);	// the value of k is modified here
+	fmpz_clear(two);
+
+	MG_ladder_rec(x0, x1, k, P, F); // recursive call
+
+	if (fmpz_is_zero(rem)) {
+		// copy *x0 into tmp
+		MG_point *tmp;
+		MG_point_init(tmp);
+		fq_set(tmp->x, x0->x, *F);
+		fq_set(tmp->z, x0->z, *F);
+
+		MG_xDBL(x0, *tmp);
+		MG_xADD(x1, *tmp, *x1, P);
+
+		MG_point_clear(tmp);
+	}
+
+	else {
+		MG_xADD(x0, *x0, *x1, P);
+		MG_xDBL(x1, *x1);
+	}
+
+	// clear memory
+	fmpz_clear(rem);
+}
+
+void MG_ladder(MG_point *x0, fmpz_t k, MG_point P) {
+
+	const fq_ctx_t *F;
+	F = (P.E)->F;
+
+	MG_point *x1;
+	MG_point_init(x1);
+
+	MG_ladder_rec(x0, x1, k, P, F);
+
+	MG_point_clear(x1);
 }
