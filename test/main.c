@@ -41,6 +41,7 @@ int main() {
 	MG_curve E;
 	MG_curve_init(&E, &F);
 	MG_curve_set_str(&E, &F, BASE_A, BASE_B, 10);
+	MG_curve_clear(&E);
 	//MG_curve_print(&E);
 
 	// Print base curve
@@ -67,30 +68,40 @@ int main() {
 	//free(is_valid);
 
 	// Polynomials
-	const char *var = "X";
-	fmpz_t x;
-	fq_poly_t F0;
+	//const char *var = "X";
+	//fmpz_t x;
+	//fq_poly_t F0;
 
-	fmpz_init_set_ui(x, 2);
-	fq_poly_init(F0, F);
+	//fmpz_init_set_ui(x, 2);
+	//fq_poly_init(F0, F);
 
-	fq_poly_set_coeff_fmpz(F0, 4, x, F);
-	fq_poly_set_coeff_fmpz(F0, 3, x, F);
-	fq_poly_set_coeff_fmpz(F0, 2, x, F);
-	fq_poly_print_pretty(F0, var, F);
+	//fq_poly_set_coeff_fmpz(F0, 4, x, F);
+	//fq_poly_set_coeff_fmpz(F0, 3, x, F);
+	//fq_poly_set_coeff_fmpz(F0, 2, x, F);
+	//fq_poly_print_pretty(F0, var, F);
+	//fq_poly_clear(F0, F);
+	//fmpz_clear(x);
 
-	fq_poly_btree_t T;
+	// tree
+	fq_poly_btree_t t;
+	fq_poly_blink_t b, br, bl;
 
-	fq_poly_clear(F0, F);
-	fmpz_clear(x);
+	fq_poly_btree_init(&t, &F);
+	fq_poly_blink_init(&b, &F);
+	//fq_poly_blink_init(&br, &F);
+	fq_poly_blink_init(&bl, &F);
+
+	fq_poly_btree_set(&t, &b);
+	//fq_poly_blink_set_right(t.head, &br);
+	fq_poly_blink_set_left(t.head, &bl);
+
+	fq_poly_btree_clear(&t);
 
 	//clear
 	//MG_point_clear(&P);
-	MG_curve_clear(&E);
 
 	fq_ctx_clear(F);
 	fmpz_clear(base_p);
 
 	return 0;
 }
-
