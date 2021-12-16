@@ -114,3 +114,64 @@ void SW_point_valid(bool *output, SW_point *P) {
 	fq_clear(tmp4, *F);
 }
 
+// Montgomery curve arithmetic
+
+void MG_xADD(MG_point *output, MG_point P, MG_point Q, MG_point D) {
+
+	const fq_ctx_t *F;
+	F = P->E->F;
+
+	fq_t v0, v1, v2, v3;
+	fq_init(v0, *F);
+	fq_init(v1, *F);
+	fq_init(v2, *F);
+	fq_init(v3, *F);
+
+	fq_add(v0, P->x, P->z, *F);
+	fq_sub(v1, Q->x, Q->z, *F);
+	fq_mul(v1, v1, v0, *F);
+	fq_sub(v0, P->x, P->z, *F);
+	fq_add(v2, Q->x, Q->z, *F);
+	fq_mul(v2, v2, v0, *F);
+	fq_add(v3, v1, v2, *F);
+	fq_sqr(v3, v3, *F);
+	fq_sub(v1, v1, v2, *F);
+	fq_sqr(v1, v1, *F);
+	fq_mul(output->x, D->z, v3, *F);
+	fq_mul(output->z, D->x, v1, *F);
+
+	// clear memory
+	fq_clear(v0, *F);
+	fq_clear(v1, *F);
+	fq_clear(v2, *F);
+	fq_clear(v3, *F);
+}
+
+void MG_xDBL(MG_point *output, MG_point P) {
+
+	const fq_ctx_t *F;
+	F = P->E->F;
+	
+
+	fq_t v1, v2, v3;
+	fq_init(v1, *F);
+	fq_init(v2, *F);
+	fq_init(v3, *F);
+
+	fq_add(v1, P->x, P->z, *F);
+	fq_sqr(v1, v1, *F);
+	fq_sub(v2, P->x, P->z, *F);
+	fq_sqr(v2, v2, *F);
+	fq_mul(output->x, v1, v2, *F);
+	fq_sub(v1, v1, v2, *F);
+	fq_add_ui(v3, *(P->E->A), 2, *F);
+	fq_div_ui(v3, v3, 4, *F);
+	fq_mul(v3, v3, v1, *F);
+	fq_add(v3, v3, v2, *F);
+	fq_mul(output->z, v1, v3, *F)
+
+	// clear memory
+	fq_clear(v1, *F);
+	fq_clear(v2, *F);
+	fq_clear(v3, *F);
+}

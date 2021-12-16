@@ -26,5 +26,11 @@ typedef struct MG_curve{
 	fq_t A, B;
 } MG_curve;
 
+typedef struct MG_point{
+
+	MG_curve *E;	// base curve
+	fq_t x, z;		// coordinates
+} MG_point;
+
 
 #endif
