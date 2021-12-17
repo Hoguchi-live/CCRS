@@ -272,3 +272,23 @@ void MG_ladder(MG_point *X0, fmpz_t k, MG_point P) {
 	MG_point_clear(X1);
 }
 
+void MG_ladder_iter(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, fq_ctx_t *F) {
+
+	fq_set(X0->X, P.X, *F);
+	fq_set(X0->Z, P.Z, *F);
+	MG_xDBL(X1, P);
+
+	ulong l;
+	l = fmpz_sizeinbase(k, 2);
+
+	for (ulong i = l-2; l>=0; l--) {
+		if (fmpz_tstbit(k, i)) {
+			MG_xADD(X0, *X0, *X1, P);
+			MG_xDBL(X1, *X1);
+		}
+		else {
+			MG_xADD(X1, *X0, *X1, P);
+			MG_xDBL(X0, *X0);
+		}
+	}
+}
