@@ -1,10 +1,8 @@
 /// @file arithmetic.c
 #include "arithmetic.h"
 
-/**
-  Sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
-TODO: check if point P is infinity and otherwise work in affine.
-*/
+// Elliptic curves
+
 void SW_j_invariant(fq_t *output, SW_curve *E) {
 
 	fq_t tmp1, tmp2, tmp3;				// temporary registers
@@ -63,7 +61,13 @@ void MG_j_invariant(fq_t *output, MG_curve *E) {
 
 	// denominator
 	fq_pow_ui(tmp2, E->A, 2, *(E->F));
+	printf("\n");
+	printf("\n");
+	fq_print(tmp2, *(E->F));
+	printf("\n");
+	printf("\n");
 	fq_sub_ui(tmp2, tmp2, 4, *(E->F));
+
 
 	fq_div(j_invariant, tmp1, tmp2, *(E->F));
 
@@ -76,36 +80,9 @@ void MG_j_invariant(fq_t *output, MG_curve *E) {
 	fq_clear(j_invariant, *(E->F));
 }
 
-/*************************************
-  Points on elliptic curves
-*************************************/
-/**
-  Sets output to 1 if point P=[0, 1, 0] and 0 otherwise.
-  Warning: this does not check whether P is a valid projective point or not.
-*/
-void SW_point_isinfinity(bool *output, SW_point *P) {
+// Points on elliptic curves
 
-	*output = fq_is_zero(P->x, *(P->E->F)) && fq_is_zero(P->z, *(P->E->F));
-}
-
-/**
-  Sets output to 1 if point P=(1, 0) and 0 otherwise.
-  Warning: this does not check whether P is a valid projective point or not.
-*/
-void MG_point_isinfinity(bool *output, MG_point *P) {
-
-	*output = fq_is_zero(P->Z, *(P->E->F));
-}
-
-/**
-  Returns -1 if P is not a projective point.
-  If it is, sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
-  Finally returns 0.
-*/
-int SW_point_isvalid(bool *output, SW_point *P) {
-
-	// Check if P is projective
-	if(fq_is_zero(P->x, *(P->E->F)) && fq_is_zero(P->y, *(P->E->F)) && fq_is_zero(P->z, *(P->E->F))) return -1;
+void SW_point_valid(bool *output, SW_point *P) {
 
 	const fq_ctx_t *F;
 	fq_t res, tmp1, tmp2, tmp3, tmp4;
@@ -142,20 +119,6 @@ int SW_point_isvalid(bool *output, SW_point *P) {
 	fq_clear(tmp2, *F);
 	fq_clear(tmp3, *F);
 	fq_clear(tmp4, *F);
-
-	return 0;
-}
-
-/**
-  Returns -1 if P is not a projective point.
-  If it is, sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
-  Finally returns 0.
-*/
-int MG_point_isvalid(bool *output, MG_point *P) {
-
-	// Check if P is projective
-	if(fq_is_zero(P->X, *(P->E->F)) && fq_is_zero(P->Z, *(P->E->F))) return -1;
-	return 0;
 }
 
 // Montgomery curve arithmetic
@@ -255,7 +218,7 @@ void MG_ladder_rec(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, const fq_ct
 		MG_XDBL(X1, *X1);
 	}
 
-	// clear memory
+	// clear memorY
 	fmpz_clear(rem);
 }
 
@@ -271,4 +234,3 @@ void MG_ladder(MG_point *X0, fmpz_t k, MG_point P) {
 
 	MG_point_clear(X1);
 }
-

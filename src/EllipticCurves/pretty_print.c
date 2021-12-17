@@ -60,3 +60,16 @@ void MG_curve_print(MG_curve *E) {
 	fmpz_clear(p);
 }
 
+/**
+  Prints a representation of P to stdout.
+*/
+void MG_point_print(MG_point *P) {
+
+	printf("Point (");
+	fq_print_pretty(P->X, *(P->E->F));
+	printf(", ");
+	fq_print_pretty(P->Z, *(P->E->F));
+	printf(") on ");
+	MG_curve_print(P->E);
+}
+

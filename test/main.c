@@ -37,23 +37,23 @@ int main() {
 	char *Fgen = "g";
 	fq_ctx_init(F, base_p, d, Fgen);
 
-	// Base curve
+
+	/**********************************
+		Base Curve
+	**********************************/
 	MG_curve E;
 	MG_curve_init(&E, &F);
 	MG_curve_set_str(&E, &F, BASE_A, BASE_B, 10);
-	MG_curve_clear(&E);
 	//MG_curve_print(&E);
-
-	// Print base curve
-	//SW_curve_print(&E);
 
 	// Compute j-invariant
 	//fq_t j;
 	//fq_init(j, F);
-	//SW_j_invariant(&j, &E);
+	//MG_j_invariant(&j, &E);
 	//printf("j-invariant of E: ");
 	//fq_print_pretty(j, F);
 	//printf("\n");
+
 
 	// Test points
 	//SW_point P;
@@ -83,25 +83,35 @@ int main() {
 	//fmpz_clear(x);
 
 	// tree
-	fq_poly_btree_t t;
-	fq_poly_blink_t b, br, bl;
+	//fq_poly_btree_t t;
+	//fq_poly_blink_t b, br, bl;
 
-	fq_poly_btree_init(&t, &F);
-	fq_poly_blink_init(&b, &F);
-	//fq_poly_blink_init(&br, &F);
-	fq_poly_blink_init(&bl, &F);
+	//fq_poly_btree_init(&t, &F);
+	//fq_poly_blink_init(&b, &F);
+	////fq_poly_blink_init(&br, &F);
+	//fq_poly_blink_init(&bl, &F);
 
-	fq_poly_btree_set(&t, &b);
-	//fq_poly_blink_set_right(t.head, &br);
-	fq_poly_blink_set_left(t.head, &bl);
+	//fq_poly_btree_set(&t, &b);
+	////fq_poly_blink_set_right(t.head, &br);
+	//fq_poly_blink_set_left(t.head, &bl);
 
-	fq_poly_btree_clear(&t);
+	//fq_poly_btree_clear(&t);
 
-	//clear
-	//MG_point_clear(&P);
+	/**********************************
+		Montgomery Points
+	**********************************/
+	MG_point P;
+	MG_point_init(&P, &E);
+	MG_point_print(&P);
+	MG_point_clear(&P);
 
+
+	/**********************************
+		Clear Memory
+	**********************************/
 	fq_ctx_clear(F);
 	fmpz_clear(base_p);
 
 	return 0;
 }
+

@@ -45,7 +45,9 @@ void MG_curve_clear(MG_curve *);
    Montgomery points memory management
 *********************************************/
 void MG_point_init(MG_point *, MG_curve *);
-void MG_point_set(MG_point *, const fq_t, const fq_t, const fq_t, MG_curve *);
+void MG_point_set(MG_point *, const fq_t, const fq_t, MG_curve *);
+void MG_point_set_si(MG_point *, const slong, const slong, MG_curve *);
+void MG_point_set_ui(MG_point *, const ulong, const ulong, MG_curve *);
 void MG_point_clear(MG_point *);
 
 #endif

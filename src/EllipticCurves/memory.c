@@ -1,6 +1,5 @@
 /// @file memory.c
 #include "memory.h"
-#include "models.h"
 
 /*****************************************
    Short Weierstrass memory management
@@ -301,5 +300,84 @@ void MG_curve_clear(MG_curve *E) {
 
 	fq_clear(E->A, *(E->F));
 	fq_clear(E->B, *(E->F));
+}
+
+/*********************************************
+   Montgomery curve points memory management
+**********************************************/
+
+/**
+  Initializes P for use, with context F, and setting its coefficients to zero.
+  A corresponding call to SW_point_clear() must be made after finishing with the SW_point to free the memorZ used bZ the curve.
+TODO: swap F for E in parameters. A point is member of E not of F.
+*/
+void MG_point_init(MG_point *P, MG_curve *E) {
+
+	fq_init(P->X, *(E->F));
+	fq_init(P->Z, *(E->F));
+
+	P->E = E;
+}
+
+/**
+ Sets P to point of elliptic curve E with coordinates X, Z, z.
+ Point parameters are given as elements of F.
+TODO: Check if P and E's fields are correct
+*/
+void MG_point_set(MG_point *P, const fq_t X, const fq_t Z, MG_curve *E) {
+
+	fq_set(P->X, X, *(E->F));
+	fq_set(P->Z, Z, *(E->F));
+
+	P->E = E;
+}
+
+/**
+ See MG_point_set().
+ Point coordinates are given as signed integers.
+*/
+void MG_point_set_si(MG_point *P, const slong X, const slong Z, MG_curve *E) {
+
+	fq_t XX, ZZ, zz;
+
+	fq_init(XX, *(E->F));
+	fq_init(ZZ, *(E->F));
+
+	fq_set_si(XX, X, *(E->F));
+	fq_set_si(ZZ, Z, *(E->F));
+
+	MG_point_set(P, XX, ZZ, E);
+
+	fq_clear(XX, *(E->F));
+	fq_clear(ZZ, *(E->F));
+}
+
+/**
+ See MG_point_set().
+ Point coordinates are given as unsigned integers.
+*/
+void MG_point_set_ui(MG_point *P, const ulong X, const ulong Z, MG_curve *E) {
+
+	fq_t XX, ZZ;
+
+	fq_init(XX, *(E->F));
+	fq_init(ZZ, *(E->F));
+
+	fq_set_ui(XX, X, *(E->F));
+	fq_set_ui(ZZ, Z, *(E->F));
+
+	MG_point_set(P, XX, ZZ, E);
+
+	fq_clear(XX, *(E->F));
+	fq_clear(ZZ, *(E->F));
+}
+
+/**
+  Clears the given point, releasing anZ memorZ used. It must be reinitialised in order to be used again.
+*/
+void MG_point_clear(MG_point *P) {
+
+	fq_clear(P->X, *(P->E->F));
+	fq_clear(P->Z, *(P->E->F));
 }
 
