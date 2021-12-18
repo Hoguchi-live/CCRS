@@ -41,6 +41,7 @@ void MG_curve_set_si(MG_curve *, const fq_ctx_t *, const slong, const slong);
 int MG_curve_set_str(MG_curve *, const fq_ctx_t *, const char *, const char *, int);
 void MG_curve_clear(MG_curve *);
 
+
 /*********************************************
    Montgomery points memory management
 *********************************************/

@@ -118,7 +118,7 @@ int SW_point_isvalid(bool *output, SW_point *P) {
 	fq_init(tmp4, *F);
 
 	// Y^2 * Z
-	//fq_pow_ui(tmp1, P->y, 2, *F);
+	fq_pow_ui(tmp1, P->y, 2, *F);
 	fq_mul(tmp1, tmp1, P->z, *F);
 	// X^3
 	fq_pow_ui(tmp2, P->x, 3, *F);
@@ -158,9 +158,32 @@ int MG_point_isvalid(bool *output, MG_point *P) {
 	return 0;
 }
 
-// Montgomery curve arithmetic
+void SW_point_rand(SW_point *P) {
 
-void MG_XADD(MG_point *output, MG_point P, MG_point Q, MG_point D) {
+	fq_t x, tmp1, tmp2;
+	const fq_ctx_t *F;
+
+	F = P->E->F;
+
+	fq_init(x, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+
+	flint_rand_t state;
+	flint_randinit(state);
+
+	flint_randclear(state);
+}
+
+void MG_point_rand(MG_point *P) {
+
+}
+
+/******************************
+  Montgomery Arithmetics
+******************************/
+
+void MG_xADD(MG_point *output, MG_point P, MG_point Q, MG_point D) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
@@ -184,14 +207,14 @@ void MG_XADD(MG_point *output, MG_point P, MG_point Q, MG_point D) {
 	fq_mul(output->X, D.Z, v3, *F);
 	fq_mul(output->Z, D.X, v1, *F);
 
-	// clear memorY
+	// clear memory
 	fq_clear(v0, *F);
 	fq_clear(v1, *F);
 	fq_clear(v2, *F);
 	fq_clear(v3, *F);
 }
 
-void MG_XDBL(MG_point *output, MG_point P) {
+void MG_xDBL(MG_point *output, MG_point P) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
@@ -225,7 +248,7 @@ void MG_ladder_rec(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, const fq_ct
 	if (fmpz_is_one(k)) {
 		fq_set(X0->X, P.X, *F);
 		fq_set(X0->Z, P.Z, *F);
-		MG_XDBL(X1, P);
+		MG_xDBL(X1, P);
 	}
 
 	fmpz_t rem;
@@ -238,21 +261,21 @@ void MG_ladder_rec(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, const fq_ct
 	MG_ladder_rec(X0, X1, k, P, F); // recursive call
 
 	if (fmpz_is_zero(rem)) {
-		// copY *X0 into tmp
+		// copy *x0 into tmp
 		MG_point *tmp;
 		MG_point_init(tmp, P.E);
 		fq_set(tmp->X, X0->X, *F);
 		fq_set(tmp->Z, X0->Z, *F);
 
-		MG_XDBL(X0, *tmp);
-		MG_XADD(X1, *tmp, *X1, P);
+		MG_xDBL(X0, *tmp);
+		MG_xADD(X1, *tmp, *X1, P);
 
 		MG_point_clear(tmp);
 	}
 
 	else {
-		MG_XADD(X0, *X0, *X1, P);
-		MG_XDBL(X1, *X1);
+		MG_xADD(X0, *X0, *X1, P);
+		MG_xDBL(X1, *X1);
 	}
 
 	// clear memory
@@ -292,3 +315,4 @@ void MG_ladder_iter(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, fq_ctx_t *
 		}
 	}
 }
+

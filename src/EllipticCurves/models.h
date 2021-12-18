@@ -32,6 +32,5 @@ typedef struct MG_point{
 	fq_t X, Z;		// coordinates
 } MG_point;
 
-
 #endif
 
