@@ -158,25 +158,88 @@ int MG_point_isvalid(bool *output, MG_point *P) {
 	return 0;
 }
 
-void SW_point_rand(SW_point *P) {
+void SW_point_rand_ninfty(SW_point *P) {
 
-	fq_t x, tmp1, tmp2;
-	const fq_ctx_t *F;
+	fq_t x, y, tmp1, tmp2;
+	flint_rand_t state;
 
-	F = P->E->F;
+	const fq_ctx_t *F = P->E->F;
 
 	fq_init(x, *F);
+	fq_init(y, *F);
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
-
-	flint_rand_t state;
 	flint_randinit(state);
 
+	// Main loop
+	int ret = 0;
+	while(ret == 0) {
+		// Find random x in base field
+		fq_randtest(x, state, *F);
+
+		// Compute T := X^3 + aX + b
+		fq_pow_ui(tmp1, x, 3, *F);
+		fq_mul(tmp2, P->E->a, x, *F);
+		fq_add(tmp2, tmp2, P->E->b, *F);
+		fq_add(tmp1, tmp1, tmp2, *F);
+
+		// Extract root if exists, otherwise fail with 0.
+		ret = fq_sqr_from_polyfact(y, tmp1, *F);
+	}
+
+	// Create corresponding SW_point_t, is not infinity
+	fq_set(P->x, x, *F);
+	fq_set(P->y, y, *F);
+	fq_set_ui(P->z, 1, *F);
+
 	flint_randclear(state);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(y, *F);
+	fq_clear(x, *F);
 }
 
-void MG_point_rand(MG_point *P) {
+void MG_point_rand_ninfty(MG_point *P) {
 
+	fq_t X, Y, tmp1, tmp2;
+	flint_rand_t state;
+
+	const fq_ctx_t *F = P->E->F;
+
+	fq_init(X, *F);
+	fq_init(Y, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+	flint_randinit(state);
+
+	// Main loop
+	int ret = 0;
+	while(ret == 0) {
+		// Find random x in base field
+		fq_randtest(X, state, *F);
+
+		// Compute T := B^-1 * x * (x^2 + Ax + 1)
+		fq_pow_ui(tmp1, X, 3, *F);
+		fq_mul(tmp2, P->E->A, X, *F);
+		fq_add_ui(tmp2, tmp2, 1, *F);
+		fq_add(tmp1, tmp1, tmp2, *F);
+
+		fq_inv(tmp2, P->E->B, *F);
+		fq_mul(tmp2, tmp2, X, *F);
+		fq_mul(tmp1, tmp1, tmp2, *F);
+
+		// Extract root if exists, otherwise fail with 0. TODO: JUST CHECK IF IT EXISTS?
+		ret = fq_sqr_from_polyfact(tmp2, tmp1, *F);
+	}
+	// Create corresponding SW_point_t, is not infinity
+	fq_set(P->X, X, *F);
+	fq_set_ui(P->Z, 1, *F);
+
+	flint_randclear(state);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(Y, *F);
+	fq_clear(X, *F);
 }
 
 /******************************
@@ -252,10 +315,12 @@ void MG_ladder_rec(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, const fq_ct
 	}
 
 	fmpz_t rem;
-	fmpz_init(rem);
 	fmpz_t two;
+
+	fmpz_init(rem);
 	fmpz_init_set_ui(two, 2);
 	fmpz_tdiv_qr(k, rem, k, two);	// the value of k is modified here
+
 	fmpz_clear(two);
 
 	MG_ladder_rec(X0, X1, k, P, F); // recursive call
@@ -287,12 +352,12 @@ void MG_ladder(MG_point *X0, fmpz_t k, MG_point P) {
 	const fq_ctx_t *F;
 	F = (P.E)->F;
 
-	MG_point *X1;
-	MG_point_init(X1, P.E);
+	MG_point X1;
+	MG_point_init(&X1, P.E);
 
-	MG_ladder_rec(X0, X1, k, P, F);
+	MG_ladder_rec(X0, &X1, k, P, F);
 
-	MG_point_clear(X1);
+	MG_point_clear(&X1);
 }
 
 void MG_ladder_iter(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, fq_ctx_t *F) {
@@ -304,6 +369,7 @@ void MG_ladder_iter(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, fq_ctx_t *
 	ulong l;
 	l = fmpz_sizeinbase(k, 2);
 
+	// Boucle infinie
 	for (ulong i = l-2; l>=0; l--) {
 		if (fmpz_tstbit(k, i)) {
 			MG_xADD(X0, *X0, *X1, P);
@@ -315,4 +381,3 @@ void MG_ladder_iter(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, fq_ctx_t *
 		}
 	}
 }
-

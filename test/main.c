@@ -48,6 +48,9 @@ int main() {
 	MG_curve_set_str(&E, &F, BASE_A, BASE_B, 10);
 	//MG_curve_print(&E);
 
+	/**********************************
+		Arithmetics Tests
+	**********************************/
 	// Compute j-invariant
 	//fq_t j;
 	//fq_init(j, F);
@@ -55,7 +58,6 @@ int main() {
 	//printf("j-invariant of E: ");
 	//fq_print_pretty(j, F);
 	//printf("\n");
-
 
 	// Test points
 	//SW_point P;
@@ -69,66 +71,45 @@ int main() {
 	//printf("Point P is valid? %d\n", *is_valid);
 	//free(is_valid);
 
-	// Polynomials
-	//const char *var = "X";
-	//fmpz_t x;
-	//fq_poly_t F0;
-
-	//fmpz_init_set_ui(x, 2);
-	//fq_poly_init(F0, F);
-
-	//fq_poly_set_coeff_fmpz(F0, 4, x, F);
-	//fq_poly_set_coeff_fmpz(F0, 3, x, F);
-	//fq_poly_set_coeff_fmpz(F0, 2, x, F);
-	//fq_poly_print_pretty(F0, var, F);
-	//fq_poly_clear(F0, F);
-	//fmpz_clear(x);
-
-	// tree
-	//fq_poly_btree_t t;
-	//fq_poly_blink_t b, br, bl;
-
-	//fq_poly_btree_init(&t, &F);
-	//fq_poly_blink_init(&b, &F);
-	////fq_poly_blink_init(&br, &F);
-	//fq_poly_blink_init(&bl, &F);
-
-	//fq_poly_btree_set(&t, &b);
-	////fq_poly_blink_set_right(t.head, &br);
-	//fq_poly_blink_set_left(t.head, &bl);
-
-	//fq_poly_btree_clear(&t);
+	/**********************************
+		Weierstrass Points
+	**********************************/
+	//SW_point P;
+	//SW_point_init(&P, &E);
+	//SW_point_print(&P);
+	//SW_point_clear(&P);
 
 	/**********************************
 		Montgomery Points
 	**********************************/
-	//MG_point P;
-	//MG_point_init(&P, &E);
-	//MG_point_print(&P);
-	//MG_point_clear(&P);
+	fmpz_t k;
+	MG_point P, X0, X1;
+
+	fmpz_init(k);
+	MG_point_init(&P, &E);
+	MG_point_init(&X0, &E);
+	MG_point_init(&X1, &E);
+
+	fmpz_set_ui(k, 1);
+	MG_point_rand_ninfty(&P);
+
+	MG_ladder_iter(&X0, &X1, k, P, &F);
+
+	fmpz_clear(k);
+	MG_point_clear(&P);
+	MG_point_clear(&X1);
+	MG_point_clear(&X0);
 
 	/**********************************
 		     SQRT
 	**********************************/
-	fq_t x, res;
-
-	fq_init(x, F);
-	fq_init(res, F);
-
-	fq_set_si(x, 3, F);
-	int r = fq_sqrt_fact(res, x, F);
-
-	printf("Success: %d \n", r);
-	fq_print_pretty(res, F);
-
-	fq_clear(x, F);
-	fq_clear(res, F);
 
 	/**********************************
 		Clear Memory
 	**********************************/
 	fq_ctx_clear(F);
 	fmpz_clear(base_p);
+	MG_curve_clear(&E);
 
 	return 0;
 }
