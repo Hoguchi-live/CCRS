@@ -7,11 +7,13 @@
 #include "../src/EllipticCurves/pretty_print.h"
 
 #include "../src/Polynomials/binary_trees.h"
+#include "../src/Polynomials/roots.h"
 
 #include <gmp.h>
 #include <flint/fmpz.h>
 #include <flint/fq.h>
 #include <flint/fq_poly.h>
+#include <flint/fq_poly_factor.h>
 
 
 #define BASE_p "12037340738208845034383383978222801137092029451270197923071397735408251586669938291587857560356890516069961904754171956588530344066457839297755929645858769"
@@ -100,11 +102,27 @@ int main() {
 	/**********************************
 		Montgomery Points
 	**********************************/
-	MG_point P;
-	MG_point_init(&P, &E);
-	MG_point_print(&P);
-	MG_point_clear(&P);
+	//MG_point P;
+	//MG_point_init(&P, &E);
+	//MG_point_print(&P);
+	//MG_point_clear(&P);
 
+	/**********************************
+		     SQRT
+	**********************************/
+	fq_t x, res;
+
+	fq_init(x, F);
+	fq_init(res, F);
+
+	fq_set_si(x, 3, F);
+	int r = fq_sqrt_fact(res, x, F);
+
+	printf("Success: %d \n", r);
+	fq_print_pretty(res, F);
+
+	fq_clear(x, F);
+	fq_clear(res, F);
 
 	/**********************************
 		Clear Memory
@@ -114,4 +132,3 @@ int main() {
 
 	return 0;
 }
-

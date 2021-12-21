@@ -5,5 +5,6 @@ gcc	../confs/config.c \
 	../src/EllipticCurves/arithmetic.c \
 	../src/EllipticCurves/auxiliary.c \
 	../src/Polynomials/binary_trees.c \
+	../src/Polynomials/roots.c \
 	main.c \
 	-lgmp -lflint -o main && ./main
