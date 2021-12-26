@@ -19,6 +19,8 @@ void SW_point_isinfinity(bool *, SW_point *);
 void MG_point_isinfinity(bool *, MG_point *);
 int SW_point_isvalid(bool *, SW_point *);
 int MG_point_isvalid(bool *, MG_point *);
+void MG_point_isinfty(bool *, MG_point *);
+void MG_point_normalize(MG_point *);
 void SW_point_rand_ninfty(SW_point *);
 void MG_point_rand_ninfty(MG_point *);
 
@@ -30,5 +32,6 @@ void MG_xDBL(MG_point *, MG_point);
 void MG_ladder_rec(MG_point *, MG_point *, fmpz_t, MG_point, const fq_ctx_t *);
 void MG_ladder(MG_point *x0, fmpz_t k, MG_point P);
 void MG_ladder_iter(MG_point *, MG_point *, fmpz_t, MG_point, fq_ctx_t *);
+void MG_ladder_iter_(MG_point *, fmpz_t, MG_point *);
 
 #endif

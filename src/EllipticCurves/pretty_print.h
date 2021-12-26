@@ -14,5 +14,11 @@ void SW_point_print(SW_point *);
 void MG_curve_print(MG_curve *);
 void MG_point_print(MG_point *);
 
-#endif
+void SW_curve_print_full(SW_curve *);
+void SW_point_print_full(SW_point *);
+void MG_curve_print_full(MG_curve *);
+void MG_point_print_full(MG_point *);
 
+//compact
+
+#endif

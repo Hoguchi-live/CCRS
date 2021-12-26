@@ -1,4 +1,4 @@
-/// @file arithmetic.c
+// @file arithmetic.c
 #include "arithmetic.h"
 
 /**
@@ -147,6 +147,7 @@ int SW_point_isvalid(bool *output, SW_point *P) {
 }
 
 /**
+TODO: try by square root to determine if point is in predefined extension.
   Returns -1 if P is not a projective point.
   If it is, sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
   Finally returns 0.
@@ -156,6 +157,25 @@ int MG_point_isvalid(bool *output, MG_point *P) {
 	// Check if P is projective
 	if(fq_is_zero(P->X, *(P->E->F)) && fq_is_zero(P->Z, *(P->E->F))) return -1;
 	return 0;
+}
+
+
+void MG_point_isinfty(bool *output, MG_point *P) {
+
+	*output = fq_is_zero(P->Z, *(P->E->F));
+}
+
+/**
+  Normalizes point coordinate to (X/Z, 1) or (1, 0) if P is infinity.
+*/
+void MG_point_normalize(MG_point *P) {
+
+	bool isinfty;
+	MG_point_isinfty(&isinfty, P);
+	if(!isinfty) {
+		fq_div(P->X, P->X, P->Z, *(P->E->F));
+		fq_one(P->Z, *(P->E->F));
+	}
 }
 
 void SW_point_rand_ninfty(SW_point *P) {
@@ -230,6 +250,8 @@ void MG_point_rand_ninfty(MG_point *P) {
 
 		// Extract root if exists, otherwise fail with 0. TODO: JUST CHECK IF IT EXISTS?
 		ret = fq_sqr_from_polyfact(tmp2, tmp1, *F);
+	//	fq_print_pretty(tmp2, *F);
+	//	printf("\n");
 	}
 	// Create corresponding SW_point_t, is not infinity
 	fq_set(P->X, X, *F);
@@ -299,7 +321,7 @@ void MG_xDBL(MG_point *output, MG_point P) {
 	fq_add(v3, v3, v2, *F);
 	fq_mul(output->Z, v1, v3, *F);
 
-	// clear memorY
+	// clear memory
 	fq_clear(v1, *F);
 	fq_clear(v2, *F);
 	fq_clear(v3, *F);
@@ -360,17 +382,87 @@ void MG_ladder(MG_point *X0, fmpz_t k, MG_point P) {
 	MG_point_clear(&X1);
 }
 
+
+void MG_ladder_iter_(MG_point *rop, fmpz_t k, MG_point *op) {
+	// Check if k <0
+	//TODO
+
+	MG_curve *E = op->E;
+	const fq_ctx_t *F = E->F;
+
+	// Check if k = 0
+	if(fmpz_is_zero(k)){
+		fq_one(rop->X, *F);
+		fq_zero(rop->Z, *F);
+		return;
+	}
+
+	// Check if P = O
+	bool isinfty;
+	MG_point_isinfty(&isinfty, op);
+	if(isinfty) return;
+
+	// Buffers
+	MG_point X0, X1;
+
+	MG_point_init(&X0, E);
+	MG_point_init(&X1, E);
+
+	fq_set(X0.X, op->X, *F);
+	fq_set(X0.Z, op->Z, *F);
+	MG_xDBL(&X1, *op);
+
+	int l;
+	l = fmpz_sizeinbase(k, 2);
+
+	printf("\n");
+	for (int i = l-2; i>=0; i--) {
+		if (fmpz_tstbit(k, i)) {
+			printf("1");
+			MG_xADD(&X0, X0, X1, *op);
+			MG_xDBL(&X1, X1);
+		}
+		else {
+			printf("0");
+			MG_xADD(&X1, X0, X1, *op);
+			MG_xDBL(&X0, X0);
+		}
+	}
+	printf("\n");
+
+	fq_set(rop->X, X0.X, *F);
+	fq_set(rop->Z, X0.Z, *F);
+
+	MG_point_clear(&X0);
+	MG_point_clear(&X1);
+}
+
 void MG_ladder_iter(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, fq_ctx_t *F) {
+	//TODO NEED P AS POINTER
+
+	// Check if k <0
+	//TODO
+
+	// Check if k = 0
+	if(fmpz_is_zero(k)){
+		fq_one(X0->X, *(P.E->F));
+		fq_zero(X0->Z, *(P.E->F));
+		return;
+	}
+
+	// Check if P = O
+	bool isinfty;
+	MG_point_isinfty(&isinfty, &P);
+	if(isinfty) return;
 
 	fq_set(X0->X, P.X, *F);
 	fq_set(X0->Z, P.Z, *F);
 	MG_xDBL(X1, P);
 
-	ulong l;
+	int l;
 	l = fmpz_sizeinbase(k, 2);
 
-	// Boucle infinie
-	for (ulong i = l-2; l>=0; l--) {
+	for (int i = l-2; i>=0; i--) {
 		if (fmpz_tstbit(k, i)) {
 			MG_xADD(X0, *X0, *X1, P);
 			MG_xDBL(X1, *X1);

@@ -83,22 +83,56 @@ int main() {
 		Montgomery Points
 	**********************************/
 	fmpz_t k;
-	MG_point P, X0, X1;
+	MG_point P, Q, R, res;
 
 	fmpz_init(k);
 	MG_point_init(&P, &E);
-	MG_point_init(&X0, &E);
-	MG_point_init(&X1, &E);
+	MG_point_init(&Q, &E);
+	MG_point_init(&R, &E);
+	MG_point_init(&res, &E);
 
-	fmpz_set_ui(k, 1);
-	MG_point_rand_ninfty(&P);
+	fmpz_set_ui(k, 2);
+	//MG_point_rand_ninfty(&P);
 
-	MG_ladder_iter(&X0, &X1, k, P, &F);
+	// Rand Sage test
+	//fmpz_t AA;
+	//fmpz_set_str(AA, "5271924811707382594219474826841227070541619870303527507321729363247235083901432543590160620034604195244770376879479244051028554117448522106375394422417497", 10);
+	//fq_set_fmpz(P.X, AA, F);
+	//fq_set_ui(P.Z, 1, F);
+	//fmpz_clear(AA);
+
+	/***************************
+		Test xADD
+	***************************/
+	// P
+	fmpz_t tmp;
+	fmpz_set_str(tmp, "1706202762055133895294293812437047635215141946710319269825765792863929768061371366694612669405467945104077853682860729195547221027289546642680421098590919", 10);
+	fq_set_fmpz(P.X, tmp, F);
+	fq_set_ui(P.Z, 1, F);
+	fmpz_clear(tmp);
+	// Q = infty
+	MG_point_set_ui(&Q, 1, 0, &E);
+	// Q = P
+	MG_point_set(&R, P.X, P.Z, &E);
+
+	MG_xADD(&res, P, Q, R);
+	MG_point_normalize(&res);
+	MG_point_print(&res);
+
+	/***************************
+		Test xDBL
+	***************************/
+	MG_xDBL(&res, P);
+	MG_point_normalize(&res);
+	MG_point_print(&res);
+
+
 
 	fmpz_clear(k);
 	MG_point_clear(&P);
-	MG_point_clear(&X1);
-	MG_point_clear(&X0);
+	MG_point_clear(&Q);
+	MG_point_clear(&R);
+	MG_point_clear(&res);
 
 	/**********************************
 		     SQRT
