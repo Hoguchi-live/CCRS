@@ -8,29 +8,29 @@
 #include <flint/fmpz.h>
 #include <flint/fq.h>
 
-typedef struct SW_curve{
+typedef struct SW_curve_t{
 
 	const fq_ctx_t *F;	// base field
 	fq_t a, b;		// curve parameters
-} SW_curve;
+} SW_curve_t;
 
-typedef struct SW_point{
+typedef struct SW_point_t{
 
 	fq_t x, y, z;	// coordinates
-	SW_curve *E;	// base curve
-} SW_point;
+	SW_curve_t *E;	// base curve
+} SW_point_t;
 
-typedef struct MG_curve{
+typedef struct MG_curve_t{
 
 	const fq_ctx_t *F;
 	fq_t A, B;
-} MG_curve;
+} MG_curve_t;
 
-typedef struct MG_point{
+typedef struct MG_point_t{
 
-	MG_curve *E;	// base curve
+	MG_curve_t *E;	// base curve
 	fq_t X, Z;		// coordinates
-} MG_point;
+} MG_point_t;
 
 #endif
 

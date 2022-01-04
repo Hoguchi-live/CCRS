@@ -5,7 +5,7 @@
   Sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
 TODO: check if point P is infinity and otherwise work in affine.
 */
-void SW_j_invariant(fq_t *output, SW_curve *E) {
+void SW_j_invariant(fq_t *output, SW_curve_t *E) {
 
 	fq_t tmp1, tmp2, tmp3;				// temporary registers
 	fq_t delta, j_invariant;	 		// discriminant, j-invariant
@@ -46,7 +46,7 @@ void SW_j_invariant(fq_t *output, SW_curve *E) {
 }
 
 
-void MG_j_invariant(fq_t *output, MG_curve *E) {
+void MG_j_invariant(fq_t *output, MG_curve_t *E) {
 
 	fq_t tmp1, tmp2;				// temporary registers
 	fq_t j_invariant;	 		// discriminant, j-invariant
@@ -83,7 +83,7 @@ void MG_j_invariant(fq_t *output, MG_curve *E) {
   Sets output to 1 if point P=[0, 1, 0] and 0 otherwise.
   Warning: this does not check whether P is a valid projective point or not.
 */
-void SW_point_isinfinity(bool *output, SW_point *P) {
+void SW_point_isinfinity(bool *output, SW_point_t *P) {
 
 	*output = fq_is_zero(P->x, *(P->E->F)) && fq_is_zero(P->z, *(P->E->F));
 }
@@ -92,7 +92,7 @@ void SW_point_isinfinity(bool *output, SW_point *P) {
   Sets output to 1 if point P=(1, 0) and 0 otherwise.
   Warning: this does not check whether P is a valid projective point or not.
 */
-void MG_point_isinfinity(bool *output, MG_point *P) {
+void MG_point_isinfinity(bool *output, MG_point_t *P) {
 
 	*output = fq_is_zero(P->Z, *(P->E->F));
 }
@@ -102,7 +102,7 @@ void MG_point_isinfinity(bool *output, MG_point *P) {
   If it is, sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
   Finally returns 0.
 */
-int SW_point_isvalid(bool *output, SW_point *P) {
+int SW_point_isvalid(bool *output, SW_point_t *P) {
 
 	// Check if P is projective
 	if(fq_is_zero(P->x, *(P->E->F)) && fq_is_zero(P->y, *(P->E->F)) && fq_is_zero(P->z, *(P->E->F))) return -1;
@@ -152,7 +152,7 @@ TODO: try by square root to determine if point is in predefined extension.
   If it is, sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
   Finally returns 0.
 */
-int MG_point_isvalid(bool *output, MG_point *P) {
+int MG_point_isvalid(bool *output, MG_point_t *P) {
 
 	// Check if P is projective
 	if(fq_is_zero(P->X, *(P->E->F)) && fq_is_zero(P->Z, *(P->E->F))) return -1;
@@ -160,7 +160,7 @@ int MG_point_isvalid(bool *output, MG_point *P) {
 }
 
 
-void MG_point_isinfty(bool *output, MG_point *P) {
+void MG_point_isinfty(bool *output, MG_point_t *P) {
 
 	*output = fq_is_zero(P->Z, *(P->E->F));
 }
@@ -168,7 +168,7 @@ void MG_point_isinfty(bool *output, MG_point *P) {
 /**
   Normalizes point coordinate to (X/Z, 1) or (1, 0) if P is infinity.
 */
-void MG_point_normalize(MG_point *P) {
+void MG_point_normalize(MG_point_t *P) {
 
 	bool isinfty;
 	MG_point_isinfty(&isinfty, P);
@@ -178,7 +178,7 @@ void MG_point_normalize(MG_point *P) {
 	}
 }
 
-void SW_point_rand_ninfty(SW_point *P) {
+void SW_point_rand_ninfty(SW_point_t *P) {
 
 	fq_t x, y, tmp1, tmp2;
 	flint_rand_t state;
@@ -219,7 +219,7 @@ void SW_point_rand_ninfty(SW_point *P) {
 	fq_clear(x, *F);
 }
 
-void MG_point_rand_ninfty(MG_point *P) {
+void MG_point_rand_ninfty(MG_point_t *P) {
 
 	fq_t X, Y, tmp1, tmp2;
 	flint_rand_t state;
@@ -268,7 +268,7 @@ void MG_point_rand_ninfty(MG_point *P) {
   Montgomery Arithmetics
 ******************************/
 
-void MG_xADD(MG_point *output, MG_point P, MG_point Q, MG_point D) {
+void MG_xADD(MG_point_t *output, MG_point_t P, MG_point_t Q, MG_point_t D) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
@@ -299,7 +299,7 @@ void MG_xADD(MG_point *output, MG_point P, MG_point Q, MG_point D) {
 	fq_clear(v3, *F);
 }
 
-void MG_xDBL(MG_point *output, MG_point P) {
+void MG_xDBL(MG_point_t *output, MG_point_t P) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
@@ -327,7 +327,7 @@ void MG_xDBL(MG_point *output, MG_point P) {
 	fq_clear(v3, *F);
 }
 
-void MG_ladder_rec(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, const fq_ctx_t *F) {
+void MG_ladder_rec(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, const fq_ctx_t *F) {
 
 	// base case
 	if (fmpz_is_one(k)) {
@@ -349,7 +349,7 @@ void MG_ladder_rec(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, const fq_ct
 
 	if (fmpz_is_zero(rem)) {
 		// copy *x0 into tmp
-		MG_point *tmp;
+		MG_point_t *tmp;
 		MG_point_init(tmp, P.E);
 		fq_set(tmp->X, X0->X, *F);
 		fq_set(tmp->Z, X0->Z, *F);
@@ -369,12 +369,12 @@ void MG_ladder_rec(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, const fq_ct
 	fmpz_clear(rem);
 }
 
-void MG_ladder(MG_point *X0, fmpz_t k, MG_point P) {
+void MG_ladder(MG_point_t *X0, fmpz_t k, MG_point_t P) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
 
-	MG_point X1;
+	MG_point_t X1;
 	MG_point_init(&X1, P.E);
 
 	MG_ladder_rec(X0, &X1, k, P, F);
@@ -383,11 +383,11 @@ void MG_ladder(MG_point *X0, fmpz_t k, MG_point P) {
 }
 
 
-void MG_ladder_iter_(MG_point *rop, fmpz_t k, MG_point *op) {
+void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 	// Check if k <0
 	//TODO
 
-	MG_curve *E = op->E;
+	MG_curve_t *E = op->E;
 	const fq_ctx_t *F = E->F;
 
 	// Check if k = 0
@@ -403,7 +403,7 @@ void MG_ladder_iter_(MG_point *rop, fmpz_t k, MG_point *op) {
 	if(isinfty) return;
 
 	// Buffers
-	MG_point X0, X1;
+	MG_point_t X0, X1;
 
 	MG_point_init(&X0, E);
 	MG_point_init(&X1, E);
@@ -437,7 +437,7 @@ void MG_ladder_iter_(MG_point *rop, fmpz_t k, MG_point *op) {
 	MG_point_clear(&X1);
 }
 
-void MG_ladder_iter(MG_point *X0, MG_point *X1, fmpz_t k, MG_point P, fq_ctx_t *F) {
+void MG_ladder_iter(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, fq_ctx_t *F) {
 	//TODO NEED P AS POINTER
 
 	// Check if k <0

@@ -43,7 +43,7 @@ int main() {
 	/**********************************
 		Base Curve
 	**********************************/
-	MG_curve E;
+	MG_curve_t E;
 	MG_curve_init(&E, &F);
 	MG_curve_set_str(&E, &F, BASE_A, BASE_B, 10);
 	//MG_curve_print(&E);
@@ -60,7 +60,7 @@ int main() {
 	//printf("\n");
 
 	// Test points
-	//SW_point P;
+	//SW_point_t P;
 	//SW_point_init(&P, &E);
 	//SW_point_set_si(&P, 0, 1, 0, &E);
 	//SW_point_print(&P);
@@ -74,7 +74,7 @@ int main() {
 	/**********************************
 		Weierstrass Points
 	**********************************/
-	//SW_point P;
+	//SW_point_t P;
 	//SW_point_init(&P, &E);
 	//SW_point_print(&P);
 	//SW_point_clear(&P);
@@ -83,7 +83,7 @@ int main() {
 		Montgomery Points
 	**********************************/
 	fmpz_t k;
-	MG_point P, Q, R, res;
+	MG_point_t P, Q, R, res;
 
 	fmpz_init(k);
 	MG_point_init(&P, &E);
