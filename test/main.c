@@ -82,16 +82,16 @@ int main() {
 	/**********************************
 		Montgomery Points
 	**********************************/
-	fmpz_t k;
-	MG_point_t P, Q, R, res;
+	//fmpz_t k;
+	//MG_point_t P, Q, R, res;
 
-	fmpz_init(k);
-	MG_point_init(&P, &E);
-	MG_point_init(&Q, &E);
-	MG_point_init(&R, &E);
-	MG_point_init(&res, &E);
+	//fmpz_init(k);
+	//MG_point_init(&P, &E);
+	//MG_point_init(&Q, &E);
+	//MG_point_init(&R, &E);
+	//MG_point_init(&res, &E);
 
-	fmpz_set_ui(k, 2);
+	//fmpz_set_ui(k, 2);
 	//MG_point_rand_ninfty(&P);
 
 	// Rand Sage test
@@ -144,11 +144,29 @@ int main() {
 	fmpz_set_ui(r, 3);
 
 	MG_curve_card_ext(card, &E, r);
-	fmpz_print(card);
+
+	// Random torsion point
+	MG_point_t P;
+	MG_point_t Q;
+	bool isinfty;
+	fmpz_t l;
+
+	MG_point_init(&P, &E);
+	MG_point_init(&Q, &E);
+	fmpz_init(l);
+
+	fmpz_set_ui(l, 19);
+
+	MG_curve_rand_torsion(&P, l, r, card);
+	MG_ladder_iter_(&Q, card, &P);
+
+	MG_point_print(&Q);
 
 	fmpz_clear(r);
+	fmpz_clear(l);
 	fmpz_clear(card);
-
+	MG_point_clear(&Q);
+	MG_point_clear(&P);
 	/**********************************
 		Clear Memory
 	**********************************/

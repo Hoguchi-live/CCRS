@@ -239,19 +239,17 @@ void MG_point_rand_ninfty(MG_point_t *P) {
 		fq_randtest(X, state, *F);
 
 		// Compute T := B^-1 * x * (x^2 + Ax + 1)
-		fq_pow_ui(tmp1, X, 3, *F);
+		fq_pow_ui(tmp1, X, 2, *F);
 		fq_mul(tmp2, P->E->A, X, *F);
 		fq_add_ui(tmp2, tmp2, 1, *F);
 		fq_add(tmp1, tmp1, tmp2, *F);
+		fq_mul(tmp1, tmp1, X, *F);
 
 		fq_inv(tmp2, P->E->B, *F);
-		fq_mul(tmp2, tmp2, X, *F);
 		fq_mul(tmp1, tmp1, tmp2, *F);
 
 		// Extract root if exists, otherwise fail with 0. TODO: JUST CHECK IF IT EXISTS?
 		ret = fq_sqr_from_polyfact(tmp2, tmp1, *F);
-	//	fq_print_pretty(tmp2, *F);
-	//	printf("\n");
 	}
 	// Create corresponding SW_point_t, is not infinity
 	fq_set(P->X, X, *F);
@@ -415,20 +413,16 @@ void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 	int l;
 	l = fmpz_sizeinbase(k, 2);
 
-	printf("\n");
 	for (int i = l-2; i>=0; i--) {
 		if (fmpz_tstbit(k, i)) {
-			printf("1");
 			MG_xADD(&X0, X0, X1, *op);
 			MG_xDBL(&X1, X1);
 		}
 		else {
-			printf("0");
 			MG_xADD(&X1, X0, X1, *op);
 			MG_xDBL(&X0, X0);
 		}
 	}
-	printf("\n");
 
 	fq_set(rop->X, X0.X, *F);
 	fq_set(rop->Z, X0.Z, *F);
@@ -474,7 +468,7 @@ void MG_ladder_iter(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, fq_c
 	}
 }
 
-/*
+/**
    Sets rop to the frobenius' trace for the CRS base curve.
    rop must be initialized.
    One should call PARI to turn this into a real function.
@@ -485,7 +479,7 @@ void MG_curve_trace(fmpz_t rop) {
 	fmpz_set_str(rop, trace, 10);
 }
 
-/*
+/**
    Sets rop to the cardinal of E(F_p) where p is the caracteristic of the base field.
    rop must be initialized.
 */
@@ -502,7 +496,7 @@ void MG_curve_card_base(fmpz_t rop, MG_curve_t *E) {
 	fmpz_clear(trace);
 }
 
-/*
+/**
    Sets rop to the cardinal of E(F_p^r) where p is the caracteristic of the base field.
    rop must be initialized.
    r must be positive and greater than 1.
@@ -554,13 +548,62 @@ void MG_curve_card_ext(fmpz_t rop, MG_curve_t *E, fmpz_t r) {
 	fmpz_clear(tmp);
 }
 
-/*
+/**
    Sets P to a random l-torsion point on the underlying curve and returns 1.
-   Variable card holds the cardinal of E(F_q) and can be computed using MG_curve_card.
-   Returns 0 in case of failure.
-*/
-int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
+   The point P will be strictly in E(F_q^r).
 
+   not implemented yet:
+   If r % 2 == 0, the x-coordinate of P will be in F_q^r//2 (x-only arithmetics).
+   Variable card holds the cardinal of E(F_q) and can be computed using MG_curve_card.
+   TODO: card will be hardcoded and held in a struct.
+   Returns 0 in case of failure (no such point on E).
+*/
+int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
+
+	fmpz_t val, l_pow, cofactor, e;
+	MG_point_t Q, R;
+	bool isinfty = 1;
+
+	fmpz_init(val);
+	fmpz_init(cofactor);
+	fmpz_init(e);
+	MG_point_init(&Q, P->E);
+	MG_point_init(&R, P->E);
+
+	MG_point_set_infty(&Q);
+
+	fmpz_val_q(val, cofactor, card, l);
+	if(fmpz_is_zero(val)) return 0;
+
+	while(isinfty) {
+
+		MG_point_rand_ninfty(&R);
+		MG_ladder_iter_(&Q, cofactor, &R);
+		MG_point_isinfty(&isinfty, &Q);
+	};
+
+	// Extract l-torsion point from possibly l^val-torsion point.
+	// Here R acts as a temporary variable for l*Q
+	MG_ladder_iter_(&R, l, &Q);
+	MG_point_isinfty(&isinfty, &R);
+	fmpz_set_ui(e, 1);
+
+	// While l*Q != O do Q := l*Q
+	while(!isinfty && 0 >= fmpz_cmp(e, val)) {
+		MG_point_set_(&Q, &R);
+		MG_ladder_iter_(&R, l, &Q);
+		MG_point_isinfty(&isinfty, &R);
+
+		fmpz_add_ui(e, e, 1);
+	}
+
+	MG_point_set_(P, &Q);
+
+	MG_point_clear(&R);
+	MG_point_clear(&Q);
+	fmpz_clear(e);
+	fmpz_clear(cofactor);
+	fmpz_clear(val);
 
 }
 
