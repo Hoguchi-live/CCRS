@@ -105,38 +105,49 @@ int main() {
 		Test xADD
 	***************************/
 	// P
-	fmpz_t tmp;
-	fmpz_set_str(tmp, "1706202762055133895294293812437047635215141946710319269825765792863929768061371366694612669405467945104077853682860729195547221027289546642680421098590919", 10);
-	fq_set_fmpz(P.X, tmp, F);
-	fq_set_ui(P.Z, 1, F);
-	fmpz_clear(tmp);
-	// Q = infty
-	MG_point_set_ui(&Q, 1, 0, &E);
-	// Q = P
-	MG_point_set(&R, P.X, P.Z, &E);
+	//fmpz_t tmp;
+	//fmpz_set_str(tmp, "1706202762055133895294293812437047635215141946710319269825765792863929768061371366694612669405467945104077853682860729195547221027289546642680421098590919", 10);
+	//fq_set_fmpz(P.X, tmp, F);
+	//fq_set_ui(P.Z, 1, F);
+	//fmpz_clear(tmp);
+	//// Q = infty
+	//MG_point_set_ui(&Q, 1, 0, &E);
+	//// Q = P
+	//MG_point_set(&R, P.X, P.Z, &E);
 
-	MG_xADD(&res, P, Q, R);
-	MG_point_normalize(&res);
-	MG_point_print(&res);
+	//MG_xADD(&res, P, Q, R);
+	//MG_point_normalize(&res);
+	//MG_point_print(&res);
 
 	/***************************
 		Test xDBL
 	***************************/
-	MG_xDBL(&res, P);
-	MG_point_normalize(&res);
-	MG_point_print(&res);
+	//MG_xDBL(&res, P);
+	//MG_point_normalize(&res);
+	//MG_point_print(&res);
 
-
-
-	fmpz_clear(k);
-	MG_point_clear(&P);
-	MG_point_clear(&Q);
-	MG_point_clear(&R);
-	MG_point_clear(&res);
+	//fmpz_clear(k);
+	//MG_point_clear(&P);
+	//MG_point_clear(&Q);
+	//MG_point_clear(&R);
+	//MG_point_clear(&res);
 
 	/**********************************
-		     SQRT
+		     Torsion
 	**********************************/
+
+	// Card over extension
+	fmpz_t card, r;
+	fmpz_init(card);
+	fmpz_init(r);
+
+	fmpz_set_ui(r, 3);
+
+	MG_curve_card_ext(card, &E, r);
+	fmpz_print(card);
+
+	fmpz_clear(r);
+	fmpz_clear(card);
 
 	/**********************************
 		Clear Memory
@@ -147,3 +158,4 @@ int main() {
 
 	return 0;
 }
+

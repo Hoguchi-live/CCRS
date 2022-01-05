@@ -21,8 +21,10 @@ int SW_point_isvalid(bool *, SW_point_t *);
 int MG_point_isvalid(bool *, MG_point_t *);
 void MG_point_isinfty(bool *, MG_point_t *);
 void MG_point_normalize(MG_point_t *);
+
 void SW_point_rand_ninfty(SW_point_t *);
 void MG_point_rand_ninfty(MG_point_t *);
+
 
 // Montgomery curve arithmetic
 void MG_xADD(MG_point_t *, MG_point_t, MG_point_t, MG_point_t);
@@ -34,4 +36,11 @@ void MG_ladder(MG_point_t *x0, fmpz_t k, MG_point_t P);
 void MG_ladder_iter(MG_point_t *, MG_point_t *, fmpz_t, MG_point_t, fq_ctx_t *);
 void MG_ladder_iter_(MG_point_t *, fmpz_t, MG_point_t *);
 
+// Torsion
+void MG_curve_trace(fmpz_t);
+void MG_curve_card_base(fmpz_t, MG_curve_t *);
+void MG_curve_card_ext(fmpz_t, MG_curve_t *, fmpz_t r);
+int MG_curve_rand_torsion(MG_point_t *, fmpz_t, fmpz_t);
+
 #endif
+

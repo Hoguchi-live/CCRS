@@ -473,3 +473,94 @@ void MG_ladder_iter(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, fq_c
 		}
 	}
 }
+
+/*
+   Sets rop to the frobenius' trace for the CRS base curve.
+   rop must be initialized.
+   One should call PARI to turn this into a real function.
+*/
+void MG_curve_trace(fmpz_t rop) {
+
+	char trace[] = "-147189550172528104900422131912266898599387555512924231762107728432541952979290";
+	fmpz_set_str(rop, trace, 10);
+}
+
+/*
+   Sets rop to the cardinal of E(F_p) where p is the caracteristic of the base field.
+   rop must be initialized.
+*/
+void MG_curve_card_base(fmpz_t rop, MG_curve_t *E) {
+
+	fmpz_t trace;
+	fmpz_init(trace);
+	MG_curve_trace(trace);
+
+	fmpz_set(rop, fq_ctx_prime(*(E->F)));
+	fmpz_add_ui(rop, rop, 1);
+	fmpz_sub(rop, rop, trace);
+
+	fmpz_clear(trace);
+}
+
+/*
+   Sets rop to the cardinal of E(F_p^r) where p is the caracteristic of the base field.
+   rop must be initialized.
+   r must be positive and greater than 1.
+   ref: https://perso.univ-rennes1.fr/christophe.ritzenthaler/cours/elliptic-curve-course.pdf page 11.
+	TODO: Work with q instead of p, problem with quad twist?
+*/
+void MG_curve_card_ext(fmpz_t rop, MG_curve_t *E, fmpz_t r) {
+
+	fmpz_t t, p, c, s, s_, tmp;
+
+	fmpz_init(t);	// trace
+	fmpz_init(p);	// caracteristic
+	fmpz_init(c);	// counter
+	fmpz_init(s);	// s_n
+	fmpz_init(s_);	// s_{n-1}
+	fmpz_init(tmp);
+
+	fmpz_set(p, fq_ctx_prime(*(E->F)));
+	MG_curve_trace(t);
+	fmpz_set(c, r);
+
+	// Initialization
+	fmpz_set_ui(s_, 2);
+	fmpz_set(s, t);
+
+	while(!fmpz_is_one(c)) {
+
+		// compute new s_n
+		fmpz_set(tmp, s);
+		fmpz_mul(s, s, t);
+		fmpz_mul(s_, s_, p);
+		fmpz_sub(s, s, s_);
+
+		// set s_{n-1} to previous s_n
+		fmpz_set(s_, tmp);
+
+		fmpz_sub_ui(c, c, 1);
+	}
+	// Compute cardinal as q^r + 1 - s_
+	fmpz_pow_ui(rop, p, fmpz_get_ui(r));
+	fmpz_add_ui(rop, rop, 1);
+	fmpz_sub(rop, rop, s);
+
+	fmpz_clear(t);
+	fmpz_clear(p);
+	fmpz_clear(c);
+	fmpz_clear(s);
+	fmpz_clear(s_);
+	fmpz_clear(tmp);
+}
+
+/*
+   Sets P to a random l-torsion point on the underlying curve and returns 1.
+   Variable card holds the cardinal of E(F_q) and can be computed using MG_curve_card.
+   Returns 0 in case of failure.
+*/
+int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
+
+
+}
+
