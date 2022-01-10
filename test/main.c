@@ -137,41 +137,36 @@ int main() {
 	**********************************/
 
 	// Card over extension
-	//fmpz_t card, r;
-	//fmpz_init(card);
-	//fmpz_init(r);
+	fmpz_t card, r;
+	fmpz_init(card);
+	fmpz_init(r);
 
-	//fmpz_set_ui(r, 3);
+	fmpz_set_ui(r, 3);
 
-	//MG_curve_card_ext(card, &E, r);
+	MG_curve_card_ext(card, &E, r);
 
-	//// Random torsion point
-	//MG_point_t P;
-	//MG_point_t Q;
-	//bool isinfty;
-	//fmpz_t l;
+	// Random torsion point
+	MG_point_t P;
+	MG_point_t Q;
+	bool isinfty;
+	fmpz_t l;
 
-	//MG_point_init(&P, &E);
-	//MG_point_init(&Q, &E);
-	//fmpz_init(l);
+	MG_point_init(&P, &E);
+	MG_point_init(&Q, &E);
+	fmpz_init(l);
 
-	//fmpz_set_ui(l, 19);
+	fmpz_set_ui(l, 19);
 
-	//MG_curve_rand_torsion(&P, l, r, card);
-	//MG_ladder_iter_(&Q, card, &P);
+	MG_curve_rand_torsion(&P, l, r, card);
+	MG_ladder_iter_(&Q, card, &P);
 
-	//MG_point_print(&Q);
+	MG_point_print(&Q);
 
-	//fmpz_clear(r);
-	//fmpz_clear(l);
-	//fmpz_clear(card);
-	//MG_point_clear(&Q);
-	//MG_point_clear(&P);
-
-	/**********************************
-		Recover y
-	**********************************/
-
+	fmpz_clear(r);
+	fmpz_clear(l);
+	fmpz_clear(card);
+	MG_point_clear(&Q);
+	MG_point_clear(&P);
 	/**********************************
 		Clear Memory
 	**********************************/

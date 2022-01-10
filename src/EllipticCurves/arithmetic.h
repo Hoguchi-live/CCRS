@@ -27,6 +27,7 @@ void MG_point_normalize(MG_point_t *);
 void SW_point_rand_ninfty(SW_point_t *);
 void MG_point_rand_ninfty(MG_point_t *);
 
+
 // Montgomery curve arithmetic
 int MG_rec_y(fq_t, MG_point_t *);
 void MG_xADD(MG_point_t *, MG_point_t, MG_point_t, MG_point_t);
