@@ -8,6 +8,7 @@
 #include <flint/fmpz.h>
 #include <flint/fq.h>
 
+/// Short Weierstrass curves
 typedef struct SW_curve_t{
 
 	const fq_ctx_t *F;	// base field
@@ -20,6 +21,7 @@ typedef struct SW_point_t{
 	SW_curve_t *E;	// base curve
 } SW_point_t;
 
+/// Montgomery curves
 typedef struct MG_curve_t{
 
 	const fq_ctx_t *F;
@@ -31,6 +33,13 @@ typedef struct MG_point_t{
 	MG_curve_t *E;	// base curve
 	fq_t X, Z;		// coordinates
 } MG_point_t;
+
+/// Tate-normal curves
+typedef struct TN_curve_t{
+
+	const fq_ctx_t *F;
+	fq_t b, c;
+} TN_curve_t;
 
 #endif
 

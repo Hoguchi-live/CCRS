@@ -82,16 +82,16 @@ int main() {
 	/**********************************
 		Montgomery Points
 	**********************************/
-	fmpz_t k;
-	MG_point_t P, Q, R, res;
+	//fmpz_t k;
+	//MG_point_t P, Q, R, res;
 
-	fmpz_init(k);
-	MG_point_init(&P, &E);
-	MG_point_init(&Q, &E);
-	MG_point_init(&R, &E);
-	MG_point_init(&res, &E);
+	//fmpz_init(k);
+	//MG_point_init(&P, &E);
+	//MG_point_init(&Q, &E);
+	//MG_point_init(&R, &E);
+	//MG_point_init(&res, &E);
 
-	fmpz_set_ui(k, 2);
+	//fmpz_set_ui(k, 2);
 	//MG_point_rand_ninfty(&P);
 
 	// Rand Sage test
@@ -105,37 +105,71 @@ int main() {
 		Test xADD
 	***************************/
 	// P
-	fmpz_t tmp;
-	fmpz_set_str(tmp, "1706202762055133895294293812437047635215141946710319269825765792863929768061371366694612669405467945104077853682860729195547221027289546642680421098590919", 10);
-	fq_set_fmpz(P.X, tmp, F);
-	fq_set_ui(P.Z, 1, F);
-	fmpz_clear(tmp);
-	// Q = infty
-	MG_point_set_ui(&Q, 1, 0, &E);
-	// Q = P
-	MG_point_set(&R, P.X, P.Z, &E);
+	//fmpz_t tmp;
+	//fmpz_set_str(tmp, "1706202762055133895294293812437047635215141946710319269825765792863929768061371366694612669405467945104077853682860729195547221027289546642680421098590919", 10);
+	//fq_set_fmpz(P.X, tmp, F);
+	//fq_set_ui(P.Z, 1, F);
+	//fmpz_clear(tmp);
+	//// Q = infty
+	//MG_point_set_ui(&Q, 1, 0, &E);
+	//// Q = P
+	//MG_point_set(&R, P.X, P.Z, &E);
 
-	MG_xADD(&res, P, Q, R);
-	MG_point_normalize(&res);
-	MG_point_print(&res);
+	//MG_xADD(&res, P, Q, R);
+	//MG_point_normalize(&res);
+	//MG_point_print(&res);
 
 	/***************************
 		Test xDBL
 	***************************/
-	MG_xDBL(&res, P);
-	MG_point_normalize(&res);
-	MG_point_print(&res);
+	//MG_xDBL(&res, P);
+	//MG_point_normalize(&res);
+	//MG_point_print(&res);
 
-
-
-	fmpz_clear(k);
-	MG_point_clear(&P);
-	MG_point_clear(&Q);
-	MG_point_clear(&R);
-	MG_point_clear(&res);
+	//fmpz_clear(k);
+	//MG_point_clear(&P);
+	//MG_point_clear(&Q);
+	//MG_point_clear(&R);
+	//MG_point_clear(&res);
 
 	/**********************************
-		     SQRT
+		     Torsion
+	**********************************/
+
+	// Card over extension
+	//fmpz_t card, r;
+	//fmpz_init(card);
+	//fmpz_init(r);
+
+	//fmpz_set_ui(r, 3);
+
+	//MG_curve_card_ext(card, &E, r);
+
+	//// Random torsion point
+	//MG_point_t P;
+	//MG_point_t Q;
+	//bool isinfty;
+	//fmpz_t l;
+
+	//MG_point_init(&P, &E);
+	//MG_point_init(&Q, &E);
+	//fmpz_init(l);
+
+	//fmpz_set_ui(l, 19);
+
+	//MG_curve_rand_torsion(&P, l, r, card);
+	//MG_ladder_iter_(&Q, card, &P);
+
+	//MG_point_print(&Q);
+
+	//fmpz_clear(r);
+	//fmpz_clear(l);
+	//fmpz_clear(card);
+	//MG_point_clear(&Q);
+	//MG_point_clear(&P);
+
+	/**********************************
+		Recover y
 	**********************************/
 
 	/**********************************
@@ -147,3 +181,4 @@ int main() {
 
 	return 0;
 }
+

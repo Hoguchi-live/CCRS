@@ -2,6 +2,25 @@
 
 #include "roots.h"
 
+///**
+//  Sets rop to a root of op if it exists (in the underlying ctx).
+//  This is very inefficient
+//  Returns 1 if successful and 0 otherwise.
+//*/
+//int fq_poly_anyroot(fq_t rop, fq_poly_t op, const fq_ctx_t F) {
+//
+//	fq_poly_factor_t fac;
+//	fq_poly_factor_init(fac, F);
+//
+//	fq_poly_factor(fac, lead, pol, F);
+//
+//	if(fac->num < 2) return 0;
+//
+//
+//
+//	fq_poly_factor_clear(fac, F);
+//}
+
 /**
   Extract square root of op by factoring polynomial X^2-op.
   Returns 1 if successful and 0 otherwise.
@@ -38,3 +57,4 @@ int fq_sqr_from_polyfact(fq_t rop, fq_t op, const fq_ctx_t F) {
 
 	return 1;
 }
+

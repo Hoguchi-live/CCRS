@@ -8,6 +8,8 @@
 #include <flint/fq_poly.h>
 #include <flint/fq_poly_factor.h>
 
+//int fq_poly_anyroot(fq_t, fq_poly_t, const fq_ctx_t);
 int fq_sqr_from_polyfact(fq_t, fq_t, const fq_ctx_t);
 
 #endif
+

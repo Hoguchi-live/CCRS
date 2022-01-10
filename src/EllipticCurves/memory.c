@@ -333,6 +333,15 @@ void MG_point_set(MG_point_t *P, const fq_t X, const fq_t Z, MG_curve_t *E) {
 }
 
 /**
+   Sets P to the same point as Q.
+   */
+void MG_point_set_(MG_point_t *P, MG_point_t *Q) {
+
+	fq_set(P->X, Q->X, *(P->E->F));
+	fq_set(P->Z, Q->Z, *(P->E->F));
+}
+
+/**
  See MG_point_set().
  Point coordinates are given as signed integers.
 */
@@ -373,11 +382,167 @@ void MG_point_set_ui(MG_point_t *P, const ulong X, const ulong Z, MG_curve_t *E)
 }
 
 /**
+ See MG_point_set().
+ Point coordinates are given as strings of integers.
+   */
+void MG_point_set_fmpz(MG_point_t *P, const fmpz_t X, const fmpz_t Z, MG_curve_t *E) {
+
+	fq_t XX, ZZ;
+
+	fq_init(XX, *(E->F));
+	fq_init(ZZ, *(E->F));
+
+	fq_set_fmpz(XX, X, *(E->F));
+	fq_set_fmpz(ZZ, Z, *(E->F));
+
+	MG_point_set(P, XX, ZZ, E);
+
+	fq_clear(XX, *(E->F));
+	fq_clear(ZZ, *(E->F));
+}
+
+/**
+ See MG_point_set().
+ Point coordinates are given as strings of integers.
+   */
+void MG_point_set_str(MG_point_t *P, const char *X, const char *Z, MG_curve_t *E) {
+
+	fmpz_t XX, ZZ;
+
+	fmpz_init(XX);
+	fmpz_init(ZZ);
+
+	fmpz_set_str(XX, X, 10);
+	fmpz_set_str(ZZ, Z, 10);
+
+	MG_point_set_fmpz(P, XX, ZZ, E);
+
+	fmpz_clear(XX);
+	fmpz_clear(ZZ);
+}
+
+/**
+ Sets P to the point at infinity on the underlying curve.
+*/
+void MG_point_set_infty(MG_point_t *P) {
+
+	fq_set_ui(P->X, 1, *(P->E->F));
+	fq_set_ui(P->Z, 0, *(P->E->F));
+}
+
+/**
   Clears the given point, releasing anZ memorZ used. It must be reinitialised in order to be used again.
 */
 void MG_point_clear(MG_point_t *P) {
 
 	fq_clear(P->X, *(P->E->F));
 	fq_clear(P->Z, *(P->E->F));
+}
+
+/**************************************
+   Tate normal curves memory management
+**************************************/
+
+/**
+  Initializes E for use, with context F, and setting its coefficients to zero.
+  A corresponding call to TN_curve_clear() must be made after finishing with the TN_curve_t to free the memory used by the curve.
+*/
+void TN_curve_init(TN_curve_t *E, const fq_ctx_t *F) {
+
+	fq_init(E->b, *F);
+	fq_init(E->c, *F);
+}
+
+/**
+ Sets E to elliptic curve over F in Tate-normal form with coefficients A and B.
+ Curve parameters are given as elements of F.
+*/
+void TN_curve_set(TN_curve_t *E, const fq_ctx_t *F, const fq_t b, const fq_t c) {
+
+	E->F = F;
+	fq_set(E->b, b, *F);
+	fq_set(E->c, c, *F);
+}
+
+/**
+ See TN_curve_set().
+ Curve coefficients are given as signed integers.
+*/
+void TN_curve_set_si(TN_curve_t *E, const fq_ctx_t *F, const slong b, const slong c) {
+
+	fq_t bb, cc;
+
+	fq_init(bb, *F);
+	fq_init(cc, *F);
+
+	fq_set_si(bb, b, *F);
+	fq_set_si(cc, c, *F);
+
+	TN_curve_set(E, F, bb, cc);
+
+	fq_clear(bb, *F);
+	fq_clear(cc, *F);
+}
+
+/**
+ See TN_curve_set().
+ Curve coefficients are given as unsigned integers.
+*/
+void TN_curve_set_ui(TN_curve_t *E, const fq_ctx_t *F, const ulong b, const ulong c) {
+
+	fq_t bb, cc;
+
+	fq_init(bb, *F);
+	fq_init(cc, *F);
+
+	fq_set_ui(bb, b, *F);
+	fq_set_ui(cc, c, *F);
+
+	TN_curve_set(E, F, bb, cc);
+
+	fq_clear(bb, *F);
+	fq_clear(cc, *F);
+}
+
+/**
+ See TN_curve_set().
+ Parameters are given as null-terminated strings, in base b. The base b can vary between 2 and 62, inclusive. Returns 0 if the string contain valid inputs and −1 otherwise.
+*/
+int TN_curve_set_str(TN_curve_t *E, const fq_ctx_t *F, const char *str_b, const char *str_c, int base) {
+
+	fmpz_t fmpz_b, fmpz_c;
+	fq_t fq_b, fq_c;
+	int ret;
+
+	fmpz_init(fmpz_b);
+	fmpz_init(fmpz_c);
+	fq_init(fq_b, *F);
+	fq_init(fq_c, *F);
+
+	ret = fmpz_set_str(fmpz_b, str_c, base);
+	if(ret) return -1;
+	ret = fmpz_set_str(fmpz_c, str_c, base);
+	if(ret) return -1;
+
+	fq_set_fmpz(fq_b, fmpz_b, *F);
+	fq_set_fmpz(fq_c, fmpz_c, *F);
+
+	TN_curve_set(E, F, fq_b, fq_c);
+
+	fmpz_clear(fmpz_b);
+	fmpz_clear(fmpz_c);
+	fq_clear(fq_b, *F);
+	fq_clear(fq_c, *F);
+
+	return 0;
+}
+
+/**
+  Clears the given curve, releasing any memory used. It must be reinitialised in order to be used again.
+*/
+void TN_curve_clear(TN_curve_t *E) {
+
+	fq_clear(E->b, *(E->F));
+	fq_clear(E->c, *(E->F));
 }
 
