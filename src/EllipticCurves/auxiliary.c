@@ -86,6 +86,21 @@ void fq_div_ui(fq_t rop, fq_t op, ulong x, const fq_ctx_t F) {
 	fq_clear(xx, F);
 }
 
+/**
+  Sets rop to the inverse of op, reducing the output in the given context.
+*/
+void fq_inv_ui(fq_t rop, ulong op, const fq_ctx_t F) {
+
+	fq_t tmp;
+	fq_init(tmp, F);
+	fq_set_ui(tmp, op, F);
+
+	fq_inv(rop, tmp, F);
+
+	fq_clear(tmp, F);
+}
+
+
 /**************************************************************************************
   fmpz
 **************************************************************************************/

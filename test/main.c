@@ -141,32 +141,62 @@ int main() {
 	fmpz_init(card);
 	fmpz_init(r);
 
-	fmpz_set_ui(r, 3);
+	fmpz_set_ui(r, 1);
 
 	MG_curve_card_ext(card, &E, r);
 
-	// Random torsion point
+	//Random torsion point
 	MG_point_t P;
-	MG_point_t Q;
 	bool isinfty;
 	fmpz_t l;
 
 	MG_point_init(&P, &E);
-	MG_point_init(&Q, &E);
 	fmpz_init(l);
 
-	fmpz_set_ui(l, 19);
+	fmpz_set_ui(l, 5);
 
 	MG_curve_rand_torsion(&P, l, r, card);
-	MG_ladder_iter_(&Q, card, &P);
+	/**********************************
+		MG -> TN
+	**********************************/
+	fq_t j_inv;
+	TN_curve_t E_TN;
+	MG_curve_t E_recover;
 
-	MG_point_print(&Q);
+	fq_init(j_inv, F);
+	TN_curve_init(&E_TN, &F);
+	MG_curve_init(&E_recover, &F);
 
+	// Print original j-invariant
+	MG_j_invariant(&j_inv, &E);
+	printf("\n");
+	fq_print_pretty(j_inv, F);
+
+	// MG to TN
+	MG_get_TN(&E_TN, &E, &P, l);
+	TN_curve_print(&E_TN);
+
+	// TN to MG
+	int ret = TN_get_MG(&E_recover, &E_TN);
+	printf("\nSuccess: %d\n", ret);
+	MG_curve_print(&E_recover);
+
+	// Print recovered j-invariant
+	MG_j_invariant(&j_inv, &E_recover);
+	printf("\n");
+	fq_print_pretty(j_inv, F);
+
+	// clear curves
+	MG_curve_clear(&E_recover);
+	TN_curve_clear(&E_TN);
+	fq_clear(j_inv, F);
+
+	// clear torsion
 	fmpz_clear(r);
 	fmpz_clear(l);
 	fmpz_clear(card);
-	MG_point_clear(&Q);
 	MG_point_clear(&P);
+
 	/**********************************
 		Clear Memory
 	**********************************/

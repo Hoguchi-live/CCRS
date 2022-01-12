@@ -121,3 +121,16 @@ void MG_point_print_full(MG_point_t *P) {
 	printf(") on ");
 	MG_curve_print(P->E);
 }
+
+/**
+  Prints a compact representation of E to stdout.
+*/
+void TN_curve_print(TN_curve_t *E) {
+
+	printf("Y^2 + (1-c)XY -bY = X^3 -bX^2 with \n");
+	printf("b = ");
+	fq_print_pretty(E->b, *(E->F));
+	printf("\nc = ");
+	fq_print_pretty(E->b, *(E->F));
+}
+

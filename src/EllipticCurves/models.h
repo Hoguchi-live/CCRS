@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "auxiliary.h"
+
 #include <gmp.h>
 #include <flint/fmpz.h>
 #include <flint/fq.h>
@@ -40,6 +42,7 @@ typedef struct TN_curve_t{
 	const fq_ctx_t *F;
 	fq_t b, c;
 } TN_curve_t;
+
 
 #endif
 

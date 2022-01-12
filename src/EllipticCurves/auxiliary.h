@@ -14,6 +14,8 @@ void fq_sub_si(fq_t, fq_t, slong, const fq_ctx_t);
 void fq_div_si(fq_t, fq_t, slong, const fq_ctx_t);
 void fq_div_ui(fq_t, fq_t, ulong, const fq_ctx_t);
 
+void fq_inv_ui(fq_t, ulong, const fq_ctx_t);
+
 void fmpz_pow(fmpz_t, fmpz_t, fmpz_t);
 void fmpz_val(fmpz_t, fmpz_t, fmpz_t);
 void fmpz_val_q(fmpz_t, fmpz_t, fmpz_t, fmpz_t);

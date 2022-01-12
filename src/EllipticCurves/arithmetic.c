@@ -270,6 +270,19 @@ void MG_point_rand_ninfty(MG_point_t *P) {
 /******************************
   Montgomery Arithmetics
 ******************************/
+/**
+  Try to set B to 1, return 1 if successful, 0 otherwise.
+**/
+int MG_curve_normalize(MG_curve_t *E){
+	fq_t tmp;
+	fq_init(tmp, *(E->F));
+
+	int ret = fq_sqr_from_polyfact(tmp, E->B, *(E->F));
+	if(ret == 1) fq_set_ui(E->B, 1, *(E->F));
+
+	fq_clear(tmp, *(E->F));
+	return ret;
+}
 
 /**
   Bruteforce recovery of a possible y-coordinate of P into rop.
@@ -647,5 +660,221 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 	fmpz_clear(cofactor);
 	fmpz_clear(val);
 
+}
+
+
+/******************************
+  Tate form Arithmetics
+******************************/
+/**
+  Sets rop to the Tate-normal form of op relative to point P
+  rop must be initialized.
+TODO: Check torsion
+*/
+void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
+
+	// Case l == 3
+
+	// Case l >= 4
+	fq_t y, b, c, tmp1, tmp2;
+
+	const fq_ctx_t *F = op->F;
+	fq_init(y, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+	fq_init(b, *F);
+	fq_init(c, *F);
+
+	// extract y^2 into tmp1
+	// TODO: make this a function
+	MG_point_normalize(P);
+	fq_pow_ui(tmp1, P->X, 2, *F);
+	fq_mul(tmp2, P->X, op->A, *F);
+	fq_add(tmp1, tmp2, tmp1, *F);
+	fq_add_ui(tmp1, tmp1, 1, *F);
+	fq_mul(tmp1, tmp1, P->X, *F);
+
+	fq_inv(tmp2, op->B, *F);
+	fq_mul(tmp1, tmp1, tmp2, *F);
+
+	// Computing b and c (see thesis page 15 - 16)
+	//(3x)
+	fq_mul_ui(tmp2, P->X, 3, *F);
+	// copy 3x in c to avoid recomputation
+	fq_set(c, tmp2, *F);
+	//(3x + A)
+	fq_add(tmp2, tmp2, P->E->A, *F);
+	//(3x + A)^3
+	fq_pow_ui(tmp2, tmp2, 3, *F);
+	//-(3x + A)^3
+	fq_neg(tmp2, tmp2, *F);
+
+	// 4y^2
+	fq_mul_ui(tmp1, tmp1, 4, *F);
+	// (4y^2)^(-1)
+	fq_inv(tmp1, tmp1, *F);
+	// b
+	fq_mul(b, tmp1, tmp2, *F);
+
+	//3x is already in c
+	//2A
+	fq_mul_ui(tmp1, P->E->A, 2, *F);
+	//3x + 2A
+	fq_add(tmp1, tmp1, c, *F);
+	//x(3x + 2A)
+	fq_mul(tmp1, tmp1, P->X, *F);
+	//(3x^2 + 2Ax + 1)
+	fq_add_ui(tmp1, tmp1, 1, *F);
+	//(3x^2 + 2Ax + 1)b
+	fq_mul(tmp1, tmp1, b, *F);
+	//2(3x^2 + 2Ax + 1)b
+	fq_mul_ui(tmp1, tmp1, 2, *F);
+	//B^-1
+	fq_inv(tmp2, P->E->B, *F);
+	//2(3x^2 + 2Ax + 1)b/B
+	fq_mul(tmp1, tmp1, tmp2, *F);
+	//-2(3x^2 + 2Ax + 1)b/B
+	fq_neg(tmp1, tmp1, *F);
+	// c
+	fq_add_ui(c, tmp1, 1, *F);
+
+	TN_curve_set(rop, b, c, F);
+
+	// Free memory
+	fq_init(c, *F);
+	fq_init(b, *F);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(y, *F);
+}
+
+/**
+  Sets rop to the Montgomery form of op
+  Returns 1 if successful, 0 otherwise.
+  rop must be initialized.
+TODO: Check torsion
+*/
+int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
+
+	fq_t c2, c4, d0, d1, d2, d3, tmp1, tmp2, tmp3, tmp4, root1, root2, alpha, beta;
+	fq_poly_t  pol;
+	fq_poly_factor_t fac;
+
+	const fq_ctx_t *F = op->F;
+	fq_init(c2, *F);
+	fq_init(c4, *F);
+	fq_init(d0, *F);
+	fq_init(d1, *F);
+	fq_init(d2, *F);
+	fq_init(d3, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+	fq_init(tmp3, *F);
+	fq_init(root1, *F);
+	fq_init(root2, *F);
+	fq_init(alpha, *F);
+	fq_init(beta, *F);
+	fq_poly_init(pol, *F);
+	fq_poly_factor_init(fac, *F);
+
+	// Set tmp1 to -1/2(1-c) for re-use
+	fq_sub_ui(tmp1, op->c, 1, *F);
+	fq_inv_ui(tmp2, 2, *F);
+	fq_mul(tmp1, tmp1, tmp2, *F);
+
+	// Set tmp2 to -(b+((1-c)^2)/4) for re-use
+	fq_pow_ui(tmp2, tmp2, 2, *F);
+	fq_add(tmp2, tmp2, op->b, *F);
+	fq_neg(tmp2, tmp2, *F);
+
+	//////// Prepare polynomial to extract x candidates
+	//// Prepare coefficients
+	// Set d0 to b^2/4
+	fq_inv_ui(tmp3, 2, *F);
+	fq_mul(tmp3, tmp3, op->b, *F);
+	fq_pow_ui(d0, tmp3, 2, *F);
+	// Set d1 to -b/2(1-c)
+	fq_mul(d1, tmp2, op->b, *F);
+	// Set d2 to -(b+((1-c)^2)/4)
+	fq_set(d2, tmp1, *F);
+	// Set d3 to 1
+	fq_set_ui(d3, 1, *F);
+
+	//// set coefficients
+	fq_poly_set_coeff(pol, 0, d0, *F);
+	fq_poly_set_coeff(pol, 1, d1, *F);
+	fq_poly_set_coeff(pol, 2, d2, *F);
+	fq_poly_set_coeff(pol, 3, d3, *F);
+
+	//// Factor polynomial, catch errors, discard lead
+	fq_poly_factor(fac, tmp3, pol, *F);
+	if(fac->num < 2) return 0; // pol has no roots in the underlying field!
+
+	//// Get roots
+	fq_poly_get_coeff(root1, fac->poly, 0, *F);
+	fq_poly_get_coeff(root2, fac->poly + 1, 0, *F);
+
+	fq_t roots[2];
+	fq_init(roots[0], *F);
+	fq_init(roots[1], *F);
+	fq_set(roots[0], root1, *F);
+	fq_set(roots[1], root1, *F);
+
+	int ret = 0;
+
+	for(int i=0; i < 2; i++) {
+		//// Set c4 to (3x^2 - (b+((1-c)^2)/4) * 2x - b/2(1-c))
+		fq_mul_ui(c4, c4, 3, *F);
+		fq_mul_ui(tmp3, tmp2, 2, *F);
+		fq_add(c4, c4, tmp3, *F);
+		fq_mul(c4, c4, roots[i], *F);
+		fq_mul(tmp3, op->b, tmp1, *F);
+		fq_add(c4, c4, tmp3, *F);
+
+		//// Try to extract root
+		ret = fq_sqr_from_polyfact(alpha, c4, *F);
+
+		//// If successful, create c2
+		if(ret == 1) {
+
+			//// Set c2 to (3x - (b+((1-c)^2)/4)) and divide by alpha to normalize
+			fq_mul_ui(c2, roots[i], 3, *F);
+			fq_add(c2, c2, tmp1, *F);
+			fq_div(c2, c2, alpha, *F);
+
+			//// Extract B
+			fq_inv(beta, alpha, *F);
+			fq_pow_ui(beta, beta, 3, *F);
+
+			//// At this point A = c2 and B = beta = alpha^-3
+			break;
+		}
+	}
+
+	//// Check if we got a correct x (we should)
+
+	MG_curve_set(rop, F, c2, beta);
+
+	fq_clear(roots[0], *F);
+	fq_clear(roots[1], *F);
+
+	fq_poly_factor_clear(fac, *F);
+	fq_poly_clear(pol, *F);
+	fq_clear(tmp3, *F);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(beta, *F);
+	fq_clear(alpha, *F);
+	fq_clear(root2, *F);
+	fq_clear(root1, *F);
+	fq_clear(d0, *F);
+	fq_clear(d1, *F);
+	fq_clear(d2, *F);
+	fq_clear(d3, *F);
+	fq_clear(c4, *F);
+	fq_clear(c2, *F);
+
+	if(ret == 0) return 0; // Error!
+	else return 1;
 }
 

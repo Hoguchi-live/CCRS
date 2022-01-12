@@ -17,7 +17,7 @@ void MG_j_invariant(fq_t *, MG_curve_t *);
 
 // Points on elliptic curves
 void SW_point_isinfinity(bool *, SW_point_t *);
-void MG_point_isinfinity(bool *, MG_point_t *);
+void MG_point_isinfinity(bool *, MG_point_t *); // DEPRECATED
 bool MG_point_isinfinity_(MG_point_t *); // CORRECT
 int SW_point_isvalid(bool *, SW_point_t *);
 int MG_point_isvalid(bool *, MG_point_t *);
@@ -27,8 +27,8 @@ void MG_point_normalize(MG_point_t *);
 void SW_point_rand_ninfty(SW_point_t *);
 void MG_point_rand_ninfty(MG_point_t *);
 
-
 // Montgomery curve arithmetic
+int MG_curve_normalize(MG_curve_t *);
 int MG_rec_y(fq_t, MG_point_t *);
 void MG_xADD(MG_point_t *, MG_point_t, MG_point_t, MG_point_t);
 void MG_xDBL(MG_point_t *, MG_point_t);
@@ -45,5 +45,8 @@ void MG_curve_card_base(fmpz_t, MG_curve_t *);
 void MG_curve_card_ext(fmpz_t, MG_curve_t *, fmpz_t r);
 int MG_curve_rand_torsion(MG_point_t *, fmpz_t, fmpz_t, fmpz_t);
 
+// Tate normal curve arithmetic
+void MG_get_TN(TN_curve_t *, MG_curve_t *, MG_point_t *, fmpz_t);
+int TN_get_MG(MG_curve_t *, TN_curve_t *);
 #endif
 

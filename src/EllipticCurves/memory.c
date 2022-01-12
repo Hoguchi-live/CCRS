@@ -457,7 +457,7 @@ void TN_curve_init(TN_curve_t *E, const fq_ctx_t *F) {
  Sets E to elliptic curve over F in Tate-normal form with coefficients A and B.
  Curve parameters are given as elements of F.
 */
-void TN_curve_set(TN_curve_t *E, const fq_ctx_t *F, const fq_t b, const fq_t c) {
+void TN_curve_set(TN_curve_t *E, const fq_t b, const fq_t c, const fq_ctx_t *F) {
 
 	E->F = F;
 	fq_set(E->b, b, *F);
@@ -468,7 +468,7 @@ void TN_curve_set(TN_curve_t *E, const fq_ctx_t *F, const fq_t b, const fq_t c) 
  See TN_curve_set().
  Curve coefficients are given as signed integers.
 */
-void TN_curve_set_si(TN_curve_t *E, const fq_ctx_t *F, const slong b, const slong c) {
+void TN_curve_set_si(TN_curve_t *E, const slong b, const slong c, const fq_ctx_t *F) {
 
 	fq_t bb, cc;
 
@@ -478,7 +478,7 @@ void TN_curve_set_si(TN_curve_t *E, const fq_ctx_t *F, const slong b, const slon
 	fq_set_si(bb, b, *F);
 	fq_set_si(cc, c, *F);
 
-	TN_curve_set(E, F, bb, cc);
+	TN_curve_set(E, bb, cc, F);
 
 	fq_clear(bb, *F);
 	fq_clear(cc, *F);
@@ -488,7 +488,7 @@ void TN_curve_set_si(TN_curve_t *E, const fq_ctx_t *F, const slong b, const slon
  See TN_curve_set().
  Curve coefficients are given as unsigned integers.
 */
-void TN_curve_set_ui(TN_curve_t *E, const fq_ctx_t *F, const ulong b, const ulong c) {
+void TN_curve_set_ui(TN_curve_t *E, const ulong b, const ulong c, const fq_ctx_t *F) {
 
 	fq_t bb, cc;
 
@@ -498,7 +498,7 @@ void TN_curve_set_ui(TN_curve_t *E, const fq_ctx_t *F, const ulong b, const ulon
 	fq_set_ui(bb, b, *F);
 	fq_set_ui(cc, c, *F);
 
-	TN_curve_set(E, F, bb, cc);
+	TN_curve_set(E, bb, cc, F);
 
 	fq_clear(bb, *F);
 	fq_clear(cc, *F);
@@ -508,7 +508,7 @@ void TN_curve_set_ui(TN_curve_t *E, const fq_ctx_t *F, const ulong b, const ulon
  See TN_curve_set().
  Parameters are given as null-terminated strings, in base b. The base b can vary between 2 and 62, inclusive. Returns 0 if the string contain valid inputs and −1 otherwise.
 */
-int TN_curve_set_str(TN_curve_t *E, const fq_ctx_t *F, const char *str_b, const char *str_c, int base) {
+int TN_curve_set_str(TN_curve_t *E, const char *str_b, const char *str_c, int base, const fq_ctx_t *F) {
 
 	fmpz_t fmpz_b, fmpz_c;
 	fq_t fq_b, fq_c;
@@ -527,7 +527,7 @@ int TN_curve_set_str(TN_curve_t *E, const fq_ctx_t *F, const char *str_b, const 
 	fq_set_fmpz(fq_b, fmpz_b, *F);
 	fq_set_fmpz(fq_c, fmpz_c, *F);
 
-	TN_curve_set(E, F, fq_b, fq_c);
+	TN_curve_set(E, fq_b, fq_c, F);
 
 	fmpz_clear(fmpz_b);
 	fmpz_clear(fmpz_c);
