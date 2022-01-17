@@ -146,16 +146,25 @@ int main() {
 	MG_curve_card_ext(card, &E, r);
 
 	//Random torsion point
-	MG_point_t P;
+	MG_point_t P, Q;
 	bool isinfty;
 	fmpz_t l;
 
 	MG_point_init(&P, &E);
+	MG_point_init(&Q, &E);
 	fmpz_init(l);
 
-	fmpz_set_ui(l, 5);
+	fmpz_set_ui(l, 7);
 
-	MG_curve_rand_torsion(&P, l, r, card);
+	int ret = MG_curve_rand_torsion(&P, l, r, card);
+	printf("\nTorsion returned %d\n", ret);
+	MG_ladder_iter_(&Q, l, &P);
+	MG_point_normalize(&P);
+	MG_point_normalize(&Q);
+	printf("Test torsion: \n");
+	MG_point_print(&P);
+	printf("\n");
+	printf("\n");
 	/**********************************
 		MG -> TN
 	**********************************/
@@ -169,22 +178,23 @@ int main() {
 
 	// Print original j-invariant
 	MG_j_invariant(&j_inv, &E);
-	printf("\n");
-	fq_print_pretty(j_inv, F);
 
 	// MG to TN
 	MG_get_TN(&E_TN, &E, &P, l);
 	TN_curve_print(&E_TN);
-
-	// TN to MG
-	int ret = TN_get_MG(&E_recover, &E_TN);
-	printf("\nSuccess: %d\n", ret);
-	MG_curve_print(&E_recover);
-
-	// Print recovered j-invariant
-	MG_j_invariant(&j_inv, &E_recover);
-	printf("\n");
+	TN_j_invariant(&j_inv, &E_TN);
+	printf("\nMG--->TN gave j_invariant: \n");
 	fq_print_pretty(j_inv, F);
+
+	//// TN to MG
+	//int ret = TN_get_MG(&E_recover, &E_TN);
+	//printf("\nSuccessfully converted TN->MG: %d\n", ret);
+	//MG_curve_print(&E_recover);
+
+	//// Print recovered j-invariant
+	//MG_j_invariant(&j_inv, &E_recover);
+	//printf("\n");
+	//fq_print_pretty(j_inv, F);
 
 	// clear curves
 	MG_curve_clear(&E_recover);

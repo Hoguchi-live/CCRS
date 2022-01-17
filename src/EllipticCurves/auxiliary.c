@@ -152,19 +152,34 @@ void fmpz_val_q(fmpz_t rop1, fmpz_t rop2, fmpz_t op1, fmpz_t op2) {
 
 	if(fmpz_is_one(op2) || fmpz_is_zero(op2)) return;
 
-	fmpz_t rem;
+	fmpz_t rem, tmp_rop1, tmp_rop2;
 
 	fmpz_init(rem);
+	fmpz_init(tmp_rop1);
+	fmpz_init(tmp_rop2);
 
-	fmpz_set(rop2, op1);
-	fmpz_tdiv_qr(rop2, rem, op1, op2);
+	// op1 = op2*tmp_rop2 + rem
+	fmpz_set(tmp_rop2, op1); // if val = 0, op1 = 1*rop2
+
+	fmpz_tdiv_qr(tmp_rop2, rem, op1, op2);
+	if(fmpz_is_zero(rem)) {
+		fmpz_add_ui(tmp_rop1, tmp_rop1, 1);
+		fmpz_set(rop1, tmp_rop1);
+		fmpz_set(rop2, tmp_rop2);
+	}
 
 	while(fmpz_is_zero(rem)) {
 
-		fmpz_tdiv_qr(rop2, rem, rop2, op2);
-		fmpz_add_ui(rop1, rop1, 1);
+		fmpz_tdiv_qr(tmp_rop2, rem, tmp_rop2, op2);
+		if(fmpz_is_zero(rem)) {
+			fmpz_add_ui(tmp_rop1, tmp_rop1, 1);
+			fmpz_set(rop1, tmp_rop1);
+			fmpz_set(rop2, tmp_rop2);
+		}
 	}
 
 	fmpz_clear(rem);
+	fmpz_clear(tmp_rop1);
+	fmpz_clear(tmp_rop2);
 }
 

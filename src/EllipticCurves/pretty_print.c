@@ -131,6 +131,6 @@ void TN_curve_print(TN_curve_t *E) {
 	printf("b = ");
 	fq_print_pretty(E->b, *(E->F));
 	printf("\nc = ");
-	fq_print_pretty(E->b, *(E->F));
+	fq_print_pretty(E->c, *(E->F));
 }
 

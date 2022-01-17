@@ -1,10 +1,6 @@
 // @file arithmetic.c
 #include "arithmetic.h"
 
-/**
-  Sets output to 1 if point P belongs to the underlying curve and 0 otherwise.
-TODO: check if point P is infinity and otherwise work in affine.
-*/
 void SW_j_invariant(fq_t *output, SW_curve_t *E) {
 
 	fq_t tmp1, tmp2, tmp3;				// temporary registers
@@ -74,6 +70,79 @@ void MG_j_invariant(fq_t *output, MG_curve_t *E) {
 	fq_clear(tmp1, *(E->F));
 	fq_clear(tmp2, *(E->F));
 	fq_clear(j_invariant, *(E->F));
+}
+
+void TN_j_invariant(fq_t *rop, TN_curve_t *E){
+
+	fq_t b2, b4, b6, b8, c4, delta, tmp1, tmp2, j_invariant;
+
+	const fq_ctx_t *F = E->F;
+	fq_init(b2, *F);
+	fq_init(b4, *F);
+	fq_init(b6, *F);
+	fq_init(b8, *F);
+	fq_init(c4, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+	fq_init(delta, *F);
+	fq_init(j_invariant, *F);
+
+	// Set tmp1 = (c-1) = -a1
+	fq_sub_ui(tmp1, E->c, 1, *F);
+
+	// Set b2 = a1^2 - 4b
+	fq_pow_ui(b2, tmp1, 2, *F);
+	fq_mul_ui(tmp2, E->b, 4, *F);
+	fq_sub(b2, b2, tmp2, *F);
+
+	// Set b4 = (c-1)b
+	fq_mul(b4, tmp1, E->b, *F);
+
+	// Set b6 = b^2
+	fq_pow_ui(b6, E->b, 2, *F);
+
+	// Set b8 = -b^3
+	fq_pow_ui(b8, E->b, 3, *F);
+	fq_neg(b8, b8, *F);
+
+	// Set c4 = b2^2 - 24b4
+	fq_pow_ui(c4, b2, 2, *F);
+	fq_mul_ui(tmp1, b4, 24, *F);
+	fq_sub(c4, c4, tmp1, *F);
+
+	// Set delta = -b2^2*b8 - 8b^4 - 27 b6^2 + 9b2*b4*b6
+	fq_mul_ui(delta, b2, 9, *F);
+	fq_mul(delta, delta, b4, *F);
+	fq_mul(delta, delta, b6, *F);
+
+	fq_pow_ui(tmp2, b2, 2, *F);
+	fq_mul(tmp2, tmp2, b8, *F);
+	fq_sub(delta, delta, tmp2, *F);
+
+	fq_pow_ui(tmp1, b6, 2, *F);
+	fq_mul_ui(tmp1, tmp1, 27, *F);
+	fq_sub(delta, delta, tmp1, *F);
+
+	fq_pow_ui(tmp1, b4, 3, *F);
+	fq_mul_ui(tmp1, tmp1, 8, *F);
+	fq_sub(delta, delta, tmp1, *F);
+
+	// Set j = c4^3 / delta
+	fq_pow_ui(j_invariant, c4, 3, *F);
+	fq_inv(tmp1, delta, *F);
+	fq_mul(j_invariant, j_invariant, tmp1, *F);
+
+	fq_set(*rop, j_invariant, *F);
+
+	fq_clear(tmp1, *(E->F));
+	fq_clear(tmp2, *(E->F));
+	fq_clear(j_invariant, *(E->F));
+	fq_clear(delta, *(E->F));
+	fq_clear(c4, *F);
+	fq_clear(b2, *F);
+	fq_clear(b4, *F);
+	fq_clear(b6, *F);
+	fq_clear(b8, *F);
 }
 
 /*************************************
@@ -180,6 +249,9 @@ void MG_point_normalize(MG_point_t *P) {
 	if(!isinfty) {
 		fq_div(P->X, P->X, P->Z, *(P->E->F));
 		fq_one(P->Z, *(P->E->F));
+	}
+	else {
+		fq_set_ui(P->X, 1, *(P->E->F));
 	}
 }
 
@@ -652,6 +724,9 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 		fmpz_add_ui(e, e, 1);
 	}
 
+	// Case of failure
+	if(!isinfty) return 0;
+
 	MG_point_set_(P, &Q);
 
 	MG_point_clear(&R);
@@ -660,6 +735,7 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 	fmpz_clear(cofactor);
 	fmpz_clear(val);
 
+	return 1;
 }
 
 
@@ -676,12 +752,16 @@ void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 	// Case l == 3
 
 	// Case l >= 4
-	fq_t y, b, c, tmp1, tmp2;
+	fq_t y, b2, b3_, b4, c2, b, c, tmp1, tmp2;
 
 	const fq_ctx_t *F = op->F;
 	fq_init(y, *F);
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
+	fq_init(b2, *F);
+	fq_init(b3_, *F);
+	fq_init(b4, *F);
+	fq_init(c2, *F);
 	fq_init(b, *F);
 	fq_init(c, *F);
 
@@ -697,46 +777,34 @@ void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 	fq_inv(tmp2, op->B, *F);
 	fq_mul(tmp1, tmp1, tmp2, *F);
 
-	// Computing b and c (see thesis page 15 - 16)
-	//(3x)
-	fq_mul_ui(tmp2, P->X, 3, *F);
-	// copy 3x in c to avoid recomputation
-	fq_set(c, tmp2, *F);
-	//(3x + A)
-	fq_add(tmp2, tmp2, P->E->A, *F);
-	//(3x + A)^3
-	fq_pow_ui(tmp2, tmp2, 3, *F);
-	//-(3x + A)^3
-	fq_neg(tmp2, tmp2, *F);
+	// Computing temporary coefficients
+	// b2 = 3x + A
+	fq_mul_ui(b2, P->X, 3, *F);
+	fq_add(b2, b2, P->E->A, *F);
+	// b3_ = b3 ^ 2 = 4y^2
+	fq_mul_ui(b3_, tmp1, 4, *F);
+	// b4 = 3x^2 + 2Ax + 1
+	fq_mul(b4, b2, P->X, *F);
+	fq_mul(tmp1, P->X, op->A, *F);
+	fq_add(b4, b4, tmp1, *F);
+	fq_add_ui(b4, b4, 1, *F);
+	// c2 = b2 - b4^2 / b3_
+	fq_pow_ui(tmp1, b4, 2, *F);
+	fq_inv(tmp2, b3_, *F);
+	fq_mul(c2, tmp1, tmp2, *F);
+	fq_sub(c2, b2, c2, *F);
 
-	// 4y^2
-	fq_mul_ui(tmp1, tmp1, 4, *F);
-	// (4y^2)^(-1)
-	fq_inv(tmp1, tmp1, *F);
-	// b
-	fq_mul(b, tmp1, tmp2, *F);
+	// b = -c2^3 / b3_
+	fq_pow_ui(b, c2, 3, *F);
+	fq_mul(b, b, tmp2, *F);
+	fq_neg(b, b, *F);
 
-	//3x is already in c
-	//2A
-	fq_mul_ui(tmp1, P->E->A, 2, *F);
-	//3x + 2A
-	fq_add(tmp1, tmp1, c, *F);
-	//x(3x + 2A)
-	fq_mul(tmp1, tmp1, P->X, *F);
-	//(3x^2 + 2Ax + 1)
-	fq_add_ui(tmp1, tmp1, 1, *F);
-	//(3x^2 + 2Ax + 1)b
-	fq_mul(tmp1, tmp1, b, *F);
-	//2(3x^2 + 2Ax + 1)b
-	fq_mul_ui(tmp1, tmp1, 2, *F);
-	//B^-1
-	fq_inv(tmp2, P->E->B, *F);
-	//2(3x^2 + 2Ax + 1)b/B
-	fq_mul(tmp1, tmp1, tmp2, *F);
-	//-2(3x^2 + 2Ax + 1)b/B
-	fq_neg(tmp1, tmp1, *F);
-	// c
-	fq_add_ui(c, tmp1, 1, *F);
+	// c = 1-2* b4/b3_ * c2
+	fq_mul(c, b4, tmp2, *F);
+	fq_mul(c, c, c2, *F);
+	fq_mul_ui(c, c, 2, *F);
+	fq_neg(c, c, *F);
+	fq_add_ui(c, c, 1, *F);
 
 	TN_curve_set(rop, b, c, F);
 
