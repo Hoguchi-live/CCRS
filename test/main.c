@@ -154,7 +154,7 @@ int main() {
 	MG_point_init(&Q, &E);
 	fmpz_init(l);
 
-	fmpz_set_ui(l, 7);
+	fmpz_set_ui(l, 3);
 
 	int ret = MG_curve_rand_torsion(&P, l, r, card);
 	printf("\nTorsion returned %d\n", ret);

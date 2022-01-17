@@ -74,6 +74,7 @@ void MG_j_invariant(fq_t *output, MG_curve_t *E) {
 
 void TN_j_invariant(fq_t *rop, TN_curve_t *E){
 
+	int flag_3 = fmpz_equal_ui(E->l, 3);
 	fq_t b2, b4, b6, b8, c4, delta, tmp1, tmp2, j_invariant;
 
 	const fq_ctx_t *F = E->F;
@@ -90,10 +91,12 @@ void TN_j_invariant(fq_t *rop, TN_curve_t *E){
 	// Set tmp1 = (c-1) = -a1
 	fq_sub_ui(tmp1, E->c, 1, *F);
 
-	// Set b2 = a1^2 - 4b
+	// Set b2 = a1^2 - 4b OR a1^2 when l = 3
 	fq_pow_ui(b2, tmp1, 2, *F);
-	fq_mul_ui(tmp2, E->b, 4, *F);
-	fq_sub(b2, b2, tmp2, *F);
+	if(!flag_3) {
+		fq_mul_ui(tmp2, E->b, 4, *F);
+		fq_sub(b2, b2, tmp2, *F);
+	}
 
 	// Set b4 = (c-1)b
 	fq_mul(b4, tmp1, E->b, *F);
@@ -101,9 +104,11 @@ void TN_j_invariant(fq_t *rop, TN_curve_t *E){
 	// Set b6 = b^2
 	fq_pow_ui(b6, E->b, 2, *F);
 
-	// Set b8 = -b^3
-	fq_pow_ui(b8, E->b, 3, *F);
-	fq_neg(b8, b8, *F);
+	// Set b8 = -b^3 or 0 when l = 3
+	if(!flag_3) {
+		fq_pow_ui(b8, E->b, 3, *F);
+		fq_neg(b8, b8, *F);
+	}
 
 	// Set c4 = b2^2 - 24b4
 	fq_pow_ui(c4, b2, 2, *F);
@@ -115,9 +120,11 @@ void TN_j_invariant(fq_t *rop, TN_curve_t *E){
 	fq_mul(delta, delta, b4, *F);
 	fq_mul(delta, delta, b6, *F);
 
-	fq_pow_ui(tmp2, b2, 2, *F);
-	fq_mul(tmp2, tmp2, b8, *F);
-	fq_sub(delta, delta, tmp2, *F);
+	if(!flag_3) {
+		fq_pow_ui(tmp2, b2, 2, *F);
+		fq_mul(tmp2, tmp2, b8, *F);
+		fq_sub(delta, delta, tmp2, *F);
+	}
 
 	fq_pow_ui(tmp1, b6, 2, *F);
 	fq_mul_ui(tmp1, tmp1, 27, *F);
@@ -749,9 +756,6 @@ TODO: Check torsion
 */
 void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 
-	// Case l == 3
-
-	// Case l >= 4
 	fq_t y, b2, b3_, b4, c2, b, c, tmp1, tmp2;
 
 	const fq_ctx_t *F = op->F;
@@ -788,25 +792,41 @@ void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 	fq_mul(tmp1, P->X, op->A, *F);
 	fq_add(b4, b4, tmp1, *F);
 	fq_add_ui(b4, b4, 1, *F);
-	// c2 = b2 - b4^2 / b3_
-	fq_pow_ui(tmp1, b4, 2, *F);
-	fq_inv(tmp2, b3_, *F);
-	fq_mul(c2, tmp1, tmp2, *F);
-	fq_sub(c2, b2, c2, *F);
 
-	// b = -c2^3 / b3_
-	fq_pow_ui(b, c2, 3, *F);
-	fq_mul(b, b, tmp2, *F);
-	fq_neg(b, b, *F);
+	if(!fmpz_equal_ui(l, 3)) {
 
-	// c = 1-2* b4/b3_ * c2
-	fq_mul(c, b4, tmp2, *F);
-	fq_mul(c, c, c2, *F);
-	fq_mul_ui(c, c, 2, *F);
-	fq_neg(c, c, *F);
-	fq_add_ui(c, c, 1, *F);
+		// c2 = b2 - b4^2 / b3_
+		fq_pow_ui(tmp1, b4, 2, *F);
+		fq_inv(tmp2, b3_, *F);
+		fq_mul(c2, tmp1, tmp2, *F);
+		fq_sub(c2, b2, c2, *F);
 
-	TN_curve_set(rop, b, c, F);
+		// b = -c2^3 / b3_
+		fq_pow_ui(b, c2, 3, *F);
+		fq_mul(b, b, tmp2, *F);
+		fq_neg(b, b, *F);
+
+		// c = 1-2* b4/b3_ * c2
+		fq_mul(c, b4, tmp2, *F);
+		fq_mul(c, c, c2, *F);
+		fq_mul_ui(c, c, 2, *F);
+		fq_neg(c, c, *F);
+		fq_add_ui(c, c, 1, *F);
+	}
+	else {
+		// c1 = 2*b2
+		fq_mul_ui(c, b2, 2, *F);
+		// c = 1-c1
+		fq_sub_ui(c, c, 1, *F);
+		fq_neg(c, c, *F);
+
+		// c3 = b4/b2 = -b
+		fq_inv(b, b2, *F);
+		fq_mul(b, b, b4, *F);
+		fq_neg(b, b, *F);
+	}
+
+	TN_curve_set(rop, b, c, l, F);
 
 	// Free memory
 	fq_init(c, *F);

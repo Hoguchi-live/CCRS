@@ -62,9 +62,9 @@ void MG_point_clear(MG_point_t *);
    Tate-normal curves memory management
 **************************************/
 void TN_curve_init(TN_curve_t *, const fq_ctx_t *);
-void TN_curve_set(TN_curve_t *,  const fq_t, const fq_t, const fq_ctx_t *);
-void TN_curve_set_si(TN_curve_t *, const slong, const slong, const fq_ctx_t *);
-int TN_curve_set_str(TN_curve_t *, const char *, const char *, int, const fq_ctx_t *);
+void TN_curve_set(TN_curve_t *,  const fq_t, const fq_t, fmpz_t, const fq_ctx_t *);
+void TN_curve_set_si(TN_curve_t *, const slong, const slong, const slong, const fq_ctx_t *);
+int TN_curve_set_str(TN_curve_t *, const char *, const char *, const char *, int, const fq_ctx_t *);
 void TN_curve_clear(TN_curve_t *);
 
 #endif

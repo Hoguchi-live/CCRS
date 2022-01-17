@@ -40,6 +40,7 @@ typedef struct MG_point_t{
 typedef struct TN_curve_t{
 
 	const fq_ctx_t *F;
+	fmpz_t l;
 	fq_t b, c;
 } TN_curve_t;
 
