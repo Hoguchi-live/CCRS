@@ -14,6 +14,7 @@
 // Elliptic curves
 void SW_j_invariant(fq_t *, SW_curve_t *);
 void MG_j_invariant(fq_t *, MG_curve_t *);
+void TN_j_invariant(fq_t *, TN_curve_t *);
 
 // Points on elliptic curves
 void SW_point_isinfinity(bool *, SW_point_t *);
