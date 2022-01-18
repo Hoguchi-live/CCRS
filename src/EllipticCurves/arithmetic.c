@@ -844,17 +844,16 @@ TODO: Check torsion
 */
 int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 
-	fq_t c2, c4, d0, d1, d2, d3, tmp1, tmp2, tmp3, tmp4, root1, root2, alpha, beta;
-	fq_poly_t  pol;
+	fq_t b2, b4, b6, c2, c4, tmp1, tmp2, tmp3, tmp4, root1, root2, alpha, beta;
+	fq_poly_t pol, pol_;
 	fq_poly_factor_t fac;
 
 	const fq_ctx_t *F = op->F;
+	fq_init(b2, *F);
+	fq_init(b4, *F);
+	fq_init(b6, *F);
 	fq_init(c2, *F);
 	fq_init(c4, *F);
-	fq_init(d0, *F);
-	fq_init(d1, *F);
-	fq_init(d2, *F);
-	fq_init(d3, *F);
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
 	fq_init(tmp3, *F);
@@ -863,106 +862,90 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 	fq_init(alpha, *F);
 	fq_init(beta, *F);
 	fq_poly_init(pol, *F);
+	fq_poly_init(pol_, *F);
 	fq_poly_factor_init(fac, *F);
 
-	// Set tmp1 to -1/2(1-c) for re-use
+	// Set tmp1 to (c-1)/2 for re-use
 	fq_sub_ui(tmp1, op->c, 1, *F);
 	fq_inv_ui(tmp2, 2, *F);
 	fq_mul(tmp1, tmp1, tmp2, *F);
 
-	// Set tmp2 to -(b+((1-c)^2)/4) for re-use
-	fq_pow_ui(tmp2, tmp2, 2, *F);
-	fq_add(tmp2, tmp2, op->b, *F);
-	fq_neg(tmp2, tmp2, *F);
+	// Set b2 = (c-1)^2 / 4 - b
+	fq_pow_ui(tmp2, tmp1, 2, *F);
+	fq_sub(b2, tmp2, op->b, *F);
+
+	// Set b4 = (c-1)b/2
+	fq_mul(b4, tmp1, op->b, *F);
+
+	// Set b6 = b^2 / 4
+	fq_pow_ui(b6, op->b, 2, *F);
+	fq_inv_ui(tmp1, 4, *F);
+	fq_mul(b6, b6, tmp1, *F);
 
 	//////// Prepare polynomial to extract x candidates
-	//// Prepare coefficients
-	// Set d0 to b^2/4
-	fq_inv_ui(tmp3, 2, *F);
-	fq_mul(tmp3, tmp3, op->b, *F);
-	fq_pow_ui(d0, tmp3, 2, *F);
-	// Set d1 to -b/2(1-c)
-	fq_mul(d1, tmp2, op->b, *F);
-	// Set d2 to -(b+((1-c)^2)/4)
-	fq_set(d2, tmp1, *F);
-	// Set d3 to 1
-	fq_set_ui(d3, 1, *F);
-
 	//// set coefficients
-	fq_poly_set_coeff(pol, 0, d0, *F);
-	fq_poly_set_coeff(pol, 1, d1, *F);
-	fq_poly_set_coeff(pol, 2, d2, *F);
-	fq_poly_set_coeff(pol, 3, d3, *F);
+	fq_set_ui(tmp1, 1, *F);
+	fq_poly_set_coeff(pol, 0, b6, *F);
+	fq_poly_set_coeff(pol, 1, b4, *F);
+	fq_poly_set_coeff(pol, 2, b2, *F);
+	fq_poly_set_coeff(pol, 3, tmp1, *F);
 
 	//// Factor polynomial, catch errors, discard lead
-	fq_poly_factor(fac, tmp3, pol, *F);
-	if(fac->num < 2) return 0; // pol has no roots in the underlying field!
+	fq_poly_factor(fac, tmp1, pol, *F);
+	if(fac->num < 1) return 0; // pol has no roots in the underlying field!
 
-	//// Get roots
-	fq_poly_get_coeff(root1, fac->poly, 0, *F);
-	fq_poly_get_coeff(root2, fac->poly + 1, 0, *F);
-
-	fq_t roots[2];
-	fq_init(roots[0], *F);
-	fq_init(roots[1], *F);
-	fq_set(roots[0], root1, *F);
-	fq_set(roots[1], root1, *F);
-
-	int ret = 0;
-
-	for(int i=0; i < 2; i++) {
-		//// Set c4 to (3x^2 - (b+((1-c)^2)/4) * 2x - b/2(1-c))
-		fq_mul_ui(c4, c4, 3, *F);
-		fq_mul_ui(tmp3, tmp2, 2, *F);
-		fq_add(c4, c4, tmp3, *F);
-		fq_mul(c4, c4, roots[i], *F);
-		fq_mul(tmp3, op->b, tmp1, *F);
-		fq_add(c4, c4, tmp3, *F);
-
-		//// Try to extract root
-		ret = fq_sqr_from_polyfact(alpha, c4, *F);
-
-		//// If successful, create c2
-		if(ret == 1) {
-
-			//// Set c2 to (3x - (b+((1-c)^2)/4)) and divide by alpha to normalize
-			fq_mul_ui(c2, roots[i], 3, *F);
-			fq_add(c2, c2, tmp1, *F);
-			fq_div(c2, c2, alpha, *F);
-
-			//// Extract B
-			fq_inv(beta, alpha, *F);
-			fq_pow_ui(beta, beta, 3, *F);
-
-			//// At this point A = c2 and B = beta = alpha^-3
-			break;
+	//// Get roots candidates for x
+	fq_t roots[fac->num];
+	int roots_flag[fac->num];
+	for(int i=0; i < fac->num; i++){
+		/// Check if this factor is of degree 1, ITC leave 0 (non-root)
+		fq_init(roots[i], *F);
+		if(fq_poly_degree(fac->poly + i, *F) == 1) {
+			fq_poly_get_coeff(roots[i], fac->poly + i, 0, *F);
+			fq_neg(roots[i], roots[i], *F); // Careful there
+			roots_flag[i] = 1;
+		}
+		else{
+			roots_flag[i] = 0;
 		}
 	}
 
-	//// Check if we got a correct x (we should)
+	//// Try roots candidates
+	int ret = 0;
+	for(int i=0; i < fac->num; i++) {
+		if(roots_flag[i]) {
 
-	MG_curve_set(rop, F, c2, beta);
 
-	fq_clear(roots[0], *F);
-	fq_clear(roots[1], *F);
+			// Set c4 = pol'(x), we need a square root of c4 to continue
+			fq_poly_derivative(pol_, pol, *F);
+			fq_poly_evaluate_fq(c4, pol_, roots[i], *F);
+			int sqrt_ret = fq_sqr_from_polyfact(alpha, c4, *F);
 
+			if(sqrt_ret == 1) {
+				/// If successful, create A = c2 = (3x + b2)/alpha
+				fq_mul_ui(c2, roots[i], 3, *F);
+				fq_add(c2, c2, b2, *F);
+				fq_div(c2, c2, alpha, *F);
+				fq_set_ui(tmp1, 1, *F);
+				MG_curve_set(rop, F, c2, tmp1);
+				return 1;
+			}
+		}
+	}
 	fq_poly_factor_clear(fac, *F);
 	fq_poly_clear(pol, *F);
+	fq_poly_clear(pol_, *F);
 	fq_clear(tmp3, *F);
 	fq_clear(tmp2, *F);
 	fq_clear(tmp1, *F);
 	fq_clear(beta, *F);
 	fq_clear(alpha, *F);
-	fq_clear(root2, *F);
-	fq_clear(root1, *F);
-	fq_clear(d0, *F);
-	fq_clear(d1, *F);
-	fq_clear(d2, *F);
-	fq_clear(d3, *F);
-	fq_clear(c4, *F);
 	fq_clear(c2, *F);
+	fq_clear(c4, *F);
+	fq_clear(b2, *F);
+	fq_clear(b4, *F);
+	fq_clear(b6, *F);
 
 	if(ret == 0) return 0; // Error!
-	else return 1;
 }
 
