@@ -6,6 +6,8 @@
 #include <flint/fmpz.h>
 #include <flint/fq.h>
 
+void fq_set_str(fq_t, char *, const fq_ctx_t);
+
 void fq_add_ui(fq_t, fq_t, ulong, const fq_ctx_t);
 void fq_add_si(fq_t, fq_t, slong, const fq_ctx_t);
 void fq_sub_ui(fq_t, fq_t, ulong, const fq_ctx_t);
