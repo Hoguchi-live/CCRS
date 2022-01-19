@@ -222,7 +222,6 @@ int main() {
 	TN_curve_init(&E_rad_target, &F);
 
 	radical_isogeny_5(&E_rad_target, &E_TN, k);
-	TN_curve_print(&E_TN);
 	TN_j_invariant(&j_inv, &E_rad_target);
 	printf("\n\nTN--radical-->TN gave j_invariant: \n");
 	fq_print_pretty(j_inv, F);

@@ -130,3 +130,107 @@ void radical_isogeny_5(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 	for(int i=0; i< 4; i++) fq_clear(alpha_pow[i], *F);
 }
 
+void radical_isogeny_7(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
+
+	fmpz_t l;
+	fq_t b, c, A, rho, alpha, tmp1, tmp2, tmp3, tmp4, num, den, res;
+	fq_t alpha_pow[6], A_pow[4];
+
+	const fq_ctx_t *F = op->F;
+	fq_init(b, *F);
+	fq_init(c, *F);
+	fq_init(A, *F);
+	fq_init(rho, *F);
+	fq_init(alpha, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+	fq_init(tmp3, *F);
+	fq_init(tmp4, *F);
+	fq_init(res, *F);
+	fq_init(num, *F);
+	fq_init(den, *F);
+	fmpz_init_set_ui(l, 7);
+
+	// We're only using A = b/c and b = A^2(A-1) in the loop
+	fq_div(A, op->b, op->c, *F);
+	fq_set(b, op->b, *F);
+
+	// Main loop that goes through k isogeny steps
+	for(int step=0; fmpz_cmp_ui(k, step) > 0; step++) {
+
+		//// Set A
+		fq_pow_ui(rho, A, 2, *F);
+
+		//// Get b from A
+		fq_pow_ui(b, A, 2, *F);
+		fq_sub_ui(tmp4, A, 1, *F);
+		fq_mul(b, b, tmp4, *F);
+
+		//// Extract root of rho = b^3 / c^2 = A^2 * b
+		fq_mul(rho, rho, b, *F);
+		fq_nth_root_trick_ui(alpha, rho, 7, *F);
+
+		//// Store alpha ^ i for i = 1 to 6
+		for(int i=0; i< 6; i++){
+			fq_init(alpha_pow[i], *F);
+			if(i == 0) fq_set(alpha_pow[i], alpha, *F);
+			else fq_mul(alpha_pow[i], alpha_pow[i-1], alpha, *F);
+		}
+
+		//// Store A ^ i for i = 1 to 4
+		for(int i=0; i< 4; i++){
+			fq_init(A_pow[i], *F);
+			if(i == 0) fq_set(A_pow[i], A, *F);
+			else fq_mul(A_pow[i], A_pow[i-1], A, *F);
+		}
+
+		//// Precompute A*rho^4, A^3*rho^2, A^3*rho
+		fq_mul(tmp1, A, alpha_pow[3], *F);
+		fq_mul(tmp2, A_pow[2], alpha_pow[1], *F);
+		fq_mul(tmp3, A_pow[2], alpha, *F);
+
+		//// Compute num
+		fq_add(num, alpha_pow[5], A_pow[3], *F);
+		fq_sub(num, num, tmp3, *F);
+		fq_mul(tmp4, alpha, tmp1, *F);
+		fq_add(num, num, tmp4, *F);
+		fq_mul_ui(tmp4, tmp2, 2, *F);
+		fq_add(num, num, tmp4, *F);
+
+		//// Compute den
+		fq_sub(den, A_pow[3], alpha_pow[5], *F);
+		fq_sub(den, den, tmp3, *F);
+		fq_add(den, den, tmp1, *F);
+		fq_add(den, den, tmp2, *F);
+		fq_mul_ui(tmp4, tmp3, 2, *F);
+		fq_sub(den, den, tmp4, *F);
+
+		//// Finally compute A_new =  * num / den
+		fq_inv(tmp4, den, *F);
+		fq_mul(A, num, tmp4, *F);
+	}
+	//// Set curve (here c = A(A-1) and b = Ac)
+	fq_sub_ui(tmp4, A, 1, *F);
+	fq_mul(c, tmp4, A, *F);
+
+	fq_mul(b, c, A, *F);
+
+	TN_curve_set(rop, b, c, l, F);
+
+	fmpz_clear(l);
+	fq_clear(alpha, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp3, *F);
+	fq_clear(tmp4, *F);
+	fq_clear(res, *F);
+	fq_clear(num, *F);
+	fq_clear(den, *F);
+	fq_clear(rho, *F);
+	fq_clear(A, *F);
+	fq_clear(b, *F);
+	fq_clear(c, *F);
+	for(int i=0; i< 4; i++) fq_clear(alpha_pow[i], *F);
+	for(int i=0; i< 5; i++) fq_clear(A_pow[i], *F);
+}
+
