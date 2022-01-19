@@ -9,6 +9,8 @@
 #include "../src/Polynomials/binary_trees.h"
 #include "../src/Polynomials/roots.h"
 
+#include "../src/Isogeny/radical.h"
+
 #include <gmp.h>
 #include <flint/fmpz.h>
 #include <flint/fq.h>
@@ -154,7 +156,7 @@ int main() {
 	MG_point_init(&Q, &E);
 	fmpz_init(l);
 
-	fmpz_set_ui(l, 5);
+	fmpz_set_ui(l, 7);
 
 	int ret = MG_curve_rand_torsion(&P, l, r, card);
 	printf("\nTorsion returned %d\n", ret);
@@ -186,14 +188,56 @@ int main() {
 	printf("\nMG--->TN gave j_invariant: \n");
 	fq_print_pretty(j_inv, F);
 
-	//// TN to MG
-	ret = TN_get_MG(&E_recover, &E_TN);
+	/**********************************
+		Radical Isogeny
+	**********************************/
+	///// Test root extraction
+	//fq_t op, rop, tmp;
+	//fmpz_t ll;
+
+	//fq_init(op, F);
+	//fq_init(rop, F);
+	//fq_init(tmp, F);
+
+	//fmpz_init_set_ui(ll, 5);
+	//fq_set_str(op, "4063586130596956414283027045992326587934151778993610559629589936729917325882588183038434597241688613436103492350229907002041400104642312708503544107406363", F);
+
+	//fq_nth_root_trick(rop, op, ll, F);
+	//printf("\nExtracting root of:\n");
+	//fq_print_pretty(op, F);
+	//printf("\nChecking rop^ll:\n");
+	//fq_pow(tmp, rop, ll, F);
+	//fq_print_pretty(tmp, F);
+
+	//fmpz_clear(ll);
+	//fq_clear(op, F);
+	//fq_clear(rop, F);
+	//fq_clear(tmp, F);
+
+	// Test isogeny
+	fmpz_t k;
+	TN_curve_t E_rad_target;
+
+	fmpz_init_set_ui(k, 1);
+	TN_curve_init(&E_rad_target, &F);
+
+	radical_isogeny_5(&E_rad_target, &E_TN, k);
+	TN_curve_print(&E_TN);
+	TN_j_invariant(&j_inv, &E_rad_target);
+	printf("\n\nTN--radical-->TN gave j_invariant: \n");
+	fq_print_pretty(j_inv, F);
+	printf("\n\n");
+
+	/**********************************
+		TN -> MG
+	**********************************/
+	ret = TN_get_MG(&E_recover, &E_rad_target);
 	printf("\nSuccessfully converted TN->MG: %d\n", ret);
 	MG_curve_print(&E_recover);
 
 	//// Print recovered j-invariant
 	MG_j_invariant(&j_inv, &E_recover);
-	printf("\n");
+	printf("\nTN--->MG gave j_invariant: \n");
 	fq_print_pretty(j_inv, F);
 
 	// clear curves
@@ -210,6 +254,8 @@ int main() {
 	/**********************************
 		Clear Memory
 	**********************************/
+	fmpz_clear(k);
+	TN_curve_clear(&E_rad_target);
 	fq_ctx_clear(F);
 	fmpz_clear(base_p);
 	MG_curve_clear(&E);

@@ -1,6 +1,17 @@
 /// @file auxiliary.c
 #include "auxiliary.h"
 
+void fq_set_str(fq_t rop, char *s, const fq_ctx_t F) {
+
+	fmpz_t tmp;
+	fmpz_init(tmp);
+	fmpz_set_str(tmp, s, 10);
+
+	fq_set_fmpz(rop, tmp, F);
+
+	fmpz_clear(tmp);
+}
+
 /**
   Sets rop to the sum of op and x, where x is an ulong considered as an element of F.
 */

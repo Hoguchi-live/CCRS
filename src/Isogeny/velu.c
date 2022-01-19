@@ -73,14 +73,14 @@ void KPS(MG_point_t P, int l) {
 	// TODO: Memory management
 }
 
-void xISOG(fq_t *A2, MG_point_t P, int l, MG_point_t I[], MG_point_t J[], MG_point_t K[]) {
+void xISOG(fq_t *A2, MG_point_t P, int l, MG_point_t I[], MG_point_t J[], MG_point_t K[], int b, int bprime) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
 
 	fq_poly_t h, E0, E1, R0, R1, M0, M1;
 	fq_poly_init(h, *F); //TODO: initialize with length brpime = #I
-	fq_poly_one(h, *F)
+	fq_poly_one(h, *F);
 
 	fq_poly_t f, c;
 	fq_poly_init(f, *F);
@@ -103,7 +103,7 @@ void _F0(fq_poly_t *rop, MG_point_t P, fq_ctx_t ctx) {
 	fq_poly_set_coeff(*rop, 2, tmp, ctx); //coeff X^2 = 1
 	fq_mul_si(tmp, P.X, -2, ctx);
 	fq_poly_set_coeff(*rop, 1, tmp, ctx); //coeff X^1 = -2*x
-	fq_sqr(tmp, P.X, ctx)
+	fq_sqr(tmp, P.X, ctx);
 	fq_poly_set_coeff(*rop, 0, tmp, ctx); //coeff const = x^2
 	fq_clear(tmp, ctx);
 }
