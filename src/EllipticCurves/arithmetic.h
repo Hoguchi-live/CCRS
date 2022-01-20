@@ -45,6 +45,7 @@ void MG_curve_trace(fmpz_t);
 void MG_curve_card_base(fmpz_t, MG_curve_t *);
 void MG_curve_card_ext(fmpz_t, MG_curve_t *, fmpz_t r);
 int MG_curve_rand_torsion(MG_point_t *, fmpz_t, fmpz_t, fmpz_t);
+int MG_curve_rand_torsion_(MG_point_t *, fmpz_t, fmpz_t, fmpz_t);
 
 // Tate normal curve arithmetic
 void MG_get_TN(TN_curve_t *, MG_curve_t *, MG_point_t *, fmpz_t);

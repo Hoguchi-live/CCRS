@@ -63,7 +63,7 @@ QAB<B> := FunctionField(QA);
 E := EllipticCurve([A,0,B,0,0]);
 P := E ! [0,0];
 assert N*P eq E ! 0;
-QAz<z> := PolynomialRing(QAB); 
+QAz<z> := PolynomialRing(QAB);
 EA, phi := IsogenyFromKernel(E, &*{(z-(n*P)[1]) : n in [1..N-1]});
 t := TatePairing(P,-P,N);
 Qw<w> := ext<QAB | z^N - t>;
@@ -458,9 +458,3 @@ news := 1 + newB/(newA*(newA + 1));
 newb := newr*news*(newr-1); newc := news*(newr-1);
 assert same_j_invars(EA, newb, newc);
 "Formulas verified for N equal", N;
-
-
-
-
-
-

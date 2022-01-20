@@ -745,7 +745,6 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 	return 1;
 }
 
-
 /******************************
   Tate form Arithmetics
 ******************************/
