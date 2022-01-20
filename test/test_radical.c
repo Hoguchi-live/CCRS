@@ -119,7 +119,7 @@ int main() {
 	// Convert curve over quad
 	fq_ctx_t L;
 	char *Lgen = "h";
-	fq_ctx_init(L, base_p, 2, Lgen);
+	fq_ctx_init(L, base_p, 1, Lgen);
 
 	char for_A[] = "3915468794113749017087156486292827787669165333415113841607098158225533242295781327150654194559447513607069017184234939125791683195870243174799630549135375";
 	char for_B[] = "1";
@@ -134,13 +134,13 @@ int main() {
 	MG_point_init(&Q, &E_quad_MG);
 	MG_point_init(&Q_test, &E_quad_MG);
 
-	int ret_quad = MG_curve_rand_torsion(&Q, l, r_quad, card_quad);
+	int ret_quad = MG_curve_rand_torsion_(&Q, l, r, card_quad);
 	printf("\nTorsion returned %d\n", ret_quad);
 	MG_point_normalize(&Q);
 
-	//MG_ladder_iter_(&Q_test, l, &Q);
-	//MG_point_normalize(&Q_test);
-	//MG_point_print(&Q_test);
+	MG_ladder_iter_(&Q_test, l, &Q);
+	MG_point_normalize(&Q_test);
+	MG_point_print(&Q_test);
 	/**********************************
 		MG -> TN conversion
 	**********************************/

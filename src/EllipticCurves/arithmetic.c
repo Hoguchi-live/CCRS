@@ -346,6 +346,55 @@ void MG_point_rand_ninfty(MG_point_t *P) {
 	fq_clear(X, *F);
 }
 
+/**
+  Same as MG_point_rand_ninfty but with y being in Fq^2 \ Fq.
+  The only thing that changes in the algorithm is
+  	ret == 0 ---> ret == 1
+  as we want a non-square.
+  **/
+void MG_point_rand_ninfty_nsquare(MG_point_t *P) {
+
+	fq_t X, Y, tmp1, tmp2;
+	flint_rand_t state;
+
+	const fq_ctx_t *F = P->E->F;
+
+	fq_init(X, *F);
+	fq_init(Y, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+	flint_randinit(state);
+
+	// Main loop
+	int ret = 1;
+	while(ret == 1) {
+		// Find random x in base field
+		fq_randtest(X, state, *F);
+
+		// Compute T := B^-1 * x * (x^2 + Ax + 1)
+		fq_pow_ui(tmp1, X, 2, *F);
+		fq_mul(tmp2, P->E->A, X, *F);
+		fq_add_ui(tmp2, tmp2, 1, *F);
+		fq_add(tmp1, tmp1, tmp2, *F);
+		fq_mul(tmp1, tmp1, X, *F);
+
+		fq_inv(tmp2, P->E->B, *F);
+		fq_mul(tmp1, tmp1, tmp2, *F);
+
+		// Extract root if exists, otherwise fail with 0. TODO: JUST CHECK IF IT EXISTS?
+		ret = fq_sqr_from_polyfact(tmp2, tmp1, *F);
+	}
+	// Create corresponding SW_point_t, is not infinity
+	fq_set(P->X, X, *F);
+	fq_set_ui(P->Z, 1, *F);
+
+	flint_randclear(state);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(Y, *F);
+	fq_clear(X, *F);
+}
+
 /******************************
   Montgomery Arithmetics
 ******************************/
@@ -712,6 +761,69 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 	while(isinfty) {
 
 		MG_point_rand_ninfty(&R);
+		MG_ladder_iter_(&Q, cofactor, &R);
+		MG_point_isinfty(&isinfty, &Q);
+	};
+
+	// Extract l-torsion point from possibly l^val-torsion point.
+	// Here R acts as a temporary variable for l*Q
+	MG_ladder_iter_(&R, l, &Q);
+	MG_point_isinfty(&isinfty, &R);
+	fmpz_set_ui(e, 1);
+
+	// While l*Q != O do Q := l*Q
+	while(!isinfty && 0 >= fmpz_cmp(e, val)) {
+		MG_point_set_(&Q, &R);
+		MG_ladder_iter_(&R, l, &Q);
+		MG_point_isinfty(&isinfty, &R);
+
+		fmpz_add_ui(e, e, 1);
+	}
+
+	// Case of failure
+	if(!isinfty) return 0;
+
+	MG_point_set_(P, &Q);
+
+	MG_point_clear(&R);
+	MG_point_clear(&Q);
+	fmpz_clear(e);
+	fmpz_clear(cofactor);
+	fmpz_clear(val);
+
+	return 1;
+}
+/**
+WIP: only for degree two reduction
+   Sets P to a random l-torsion point on the underlying curve and returns 1.
+   The point P will be strictly in E(F_q^r).
+
+   not implemented yet:
+   If r % 2 == 0, the x-coordinate of P will be in F_q^r//2 (x-only arithmetics).
+   Variable card holds the cardinal of E(F_q) and can be computed using MG_curve_card.
+   TODO: card will be hardcoded and held in a struct.
+   Returns 0 in case of failure (no such point on E).
+*/
+int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
+
+	fmpz_t val, l_pow, cofactor, e;
+	MG_point_t Q, R;
+	bool isinfty = 1;
+
+	fmpz_init(val);
+	fmpz_init(cofactor);
+	fmpz_init(e);
+	MG_point_init(&Q, P->E);
+	MG_point_init(&R, P->E);
+
+	MG_point_set_infty(&Q);
+
+	fmpz_val_q(val, cofactor, card, l);
+	if(fmpz_is_zero(val)) return 0;
+
+	while(isinfty) {
+
+		MG_point_rand_ninfty_nsquare(&R);
 		MG_ladder_iter_(&Q, cofactor, &R);
 		MG_point_isinfty(&isinfty, &Q);
 	};
