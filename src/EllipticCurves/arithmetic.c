@@ -684,7 +684,7 @@ void MG_curve_card_base(fmpz_t rop, MG_curve_t *E) {
    rop must be initialized.
    r must be positive and greater than 1.
    ref: https://perso.univ-rennes1.fr/christophe.ritzenthaler/cours/elliptic-curve-course.pdf page 11.
-	TODO: Work with q instead of p, problem with quad twist?
+	TODO: Work with q instead of p, problem with quad twist? Remove E in parameters, p is constant. r should be an int.
 */
 void MG_curve_card_ext(fmpz_t rop, MG_curve_t *E, fmpz_t r) {
 
@@ -741,7 +741,7 @@ void MG_curve_card_ext(fmpz_t rop, MG_curve_t *E, fmpz_t r) {
    TODO: card will be hardcoded and held in a struct.
    Returns 0 in case of failure (no such point on E).
 */
-int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
+int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	fmpz_t val, l_pow, cofactor, e;
 	MG_point_t Q, R;
@@ -804,7 +804,7 @@ WIP: only for degree two reduction
    TODO: card will be hardcoded and held in a struct.
    Returns 0 in case of failure (no such point on E).
 */
-int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
+int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	fmpz_t val, l_pow, cofactor;
 	MG_point_t Q, R, Q_test;
@@ -827,27 +827,6 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 		MG_ladder_iter_(&Q, cofactor, &R);
 		MG_point_isinfty(&isinfty, &Q);
 	};
-	printf("TEST");
-	printf("\nE = \n");
-	MG_curve_print(P->E);
-	printf("\ncard = \n");
-	fmpz_print(card);
-	printf("\ncofactor = \n");
-	fmpz_print(cofactor);
-	printf("\nR = \n");
-	MG_point_normalize(&R);
-	MG_point_print(&R);
-	printf("\nQ = \n");
-	MG_point_normalize(&Q);
-	MG_point_print(&Q);
-
-	printf("\nl^2*card = \n");
-	fmpz_t u;
-	fmpz_init_set_ui(u, 20);
-	MG_ladder_iter_(&Q_test, u, &Q);
-	MG_point_normalize(&Q_test);
-	MG_point_print(&Q_test);
-
 
 	// Extract l-torsion point from possibly l^val-torsion point.
 	// Here R acts as a temporary variable for l*Q
@@ -958,6 +937,13 @@ void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 	}
 
 	TN_curve_set(rop, b, c, l, F);
+
+	//// TEST
+	fq_t j_inv;
+	fq_init(j_inv, *(op->F));
+	TN_j_invariant(&j_inv, rop);
+	fq_print_pretty(j_inv, *(op->F));
+
 
 	// Free memory
 	fq_init(c, *F);

@@ -56,6 +56,72 @@ void fq_nth_root_trick_ui(fq_t rop, fq_t op, slong l, const fq_ctx_t F) {
 	fmpz_clear(ll);
 }
 
+void radical_isogeny_3(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
+
+	fmpz_t l;
+	fq_t a1, a3, b, tmp1, tmp2, tmp3, tmp4, alpha;
+
+	const fq_ctx_t *F = op->F;
+	fq_init(b, *F);
+	fq_init(a1, *F);
+	fq_init(a3, *F);
+	fq_init(tmp1, *F);
+	fq_init(tmp2, *F);
+	fq_init(tmp3, *F);
+	fq_init(tmp4, *F);
+	fq_init(alpha, *F);
+	fmpz_init_set_ui(l, 3);
+
+	// Init a1 = 1-c, a3 = -b
+	fq_set_ui(a1, 1, *F);
+	fq_sub(a1, a1, op->c, *F);
+
+	fq_set(b, op->b, *F);
+
+	// Main loop that goes through k isogeny steps
+	for(int step=0; fmpz_cmp_ui(k, step) > 0; step++) {
+
+		//// Extract root of rho = -a3 = b
+		fq_neg(tmp1, b, *F);
+		fq_nth_root_trick_ui(alpha, tmp1, 3, *F);
+
+		//// Compute new b = b*alpha - a1
+		fq_mul(tmp1, tmp1, alpha, *F);
+		fq_sub(tmp1, tmp1, a1, *F);
+
+		//// Compute new a1' = 3*a1*alpha^2 - a1*alpha + 9*a3
+		fq_mul_ui(tmp2, b, 9, *F);
+		fq_neg(tmp2, tmp2, *F);
+
+		fq_mul(tmp3, a1, alpha, *F);
+		fq_sub(tmp2, tmp2, tmp3, *F);
+
+		fq_mul_ui(tmp3, a1, 3, *F);
+		fq_pow_ui(tmp1, alpha, 2, *F);
+		fq_mul(tmp3, tmp3, tmp1, *F);
+		fq_add(tmp2, tmp2, tmp3, *F);
+
+		//// Copy buffer
+		fq_set(b, tmp1, *F);
+		fq_set(a1, tmp2, *F);
+	}
+	//// Set curve
+	fq_neg(tmp1, a1, *F);
+	fq_add_ui(tmp1, tmp1, 1, *F);
+	TN_curve_set(rop, b, tmp1, l, F);
+
+	//// Clear
+	fq_clear(b, *F);
+	fq_clear(a1, *F);
+	fq_clear(a3, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(tmp2, *F);
+	fq_clear(tmp3, *F);
+	fq_clear(tmp4, *F);
+	fq_clear(alpha, *F);
+	fmpz_clear(l);
+}
+
 void radical_isogeny_5(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 
 	fmpz_t l;

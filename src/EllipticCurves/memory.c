@@ -210,6 +210,18 @@ void MG_curve_init(MG_curve_t *E, const fq_ctx_t *F) {
 }
 
 /**
+ Sets elliptic curve rop in Montgomery form to curve op.
+ This is aking to a deep copy.
+ rop must be initialized.
+*/
+void MG_curve_set_(MG_curve_t *rop, MG_curve_t *op) {
+
+	rop->F = op->F;
+	fq_set(rop->A, op->A, *(op->F));
+	fq_set(rop->B, op->B, *(op->F));
+}
+
+/**
  Sets E to elliptic curve over F in Montgomery form with coefficients A and B.
  Curve parameters are given as elements of F.
 */

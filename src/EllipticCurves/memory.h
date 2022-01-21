@@ -36,7 +36,8 @@ void SW_point_clear(SW_point_t *);
    Montgomery curves memory management
 **************************************/
 void MG_curve_init(MG_curve_t *, const fq_ctx_t *);
-void MG_curve_set(MG_curve_t *, const fq_ctx_t *, const fq_t, const fq_t);
+void MG_curve_set(MG_curve_t *, const fq_ctx_t *, const fq_t, const fq_t); // WRONG SYNTAX
+void MG_curve_set_(MG_curve_t *, MG_curve_t *); // USE THIS
 void MG_curve_set_si(MG_curve_t *, const fq_ctx_t *, const slong, const slong);
 int MG_curve_set_str(MG_curve_t *, const fq_ctx_t *, const char *, const char *, int);
 void MG_curve_clear(MG_curve_t *);
