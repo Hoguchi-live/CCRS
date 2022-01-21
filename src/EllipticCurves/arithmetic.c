@@ -806,15 +806,15 @@ WIP: only for degree two reduction
 */
 int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 
-	fmpz_t val, l_pow, cofactor, e;
-	MG_point_t Q, R;
+	fmpz_t val, l_pow, cofactor;
+	MG_point_t Q, R, Q_test;
 	bool isinfty = 1;
 
 	fmpz_init(val);
 	fmpz_init(cofactor);
-	fmpz_init(e);
 	MG_point_init(&Q, P->E);
 	MG_point_init(&R, P->E);
+	MG_point_init(&Q_test, P->E);
 
 	MG_point_set_infty(&Q);
 
@@ -827,20 +827,41 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 		MG_ladder_iter_(&Q, cofactor, &R);
 		MG_point_isinfty(&isinfty, &Q);
 	};
+	printf("TEST");
+	printf("\nE = \n");
+	MG_curve_print(P->E);
+	printf("\ncard = \n");
+	fmpz_print(card);
+	printf("\ncofactor = \n");
+	fmpz_print(cofactor);
+	printf("\nR = \n");
+	MG_point_normalize(&R);
+	MG_point_print(&R);
+	printf("\nQ = \n");
+	MG_point_normalize(&Q);
+	MG_point_print(&Q);
+
+	printf("\nl^2*card = \n");
+	fmpz_t u;
+	fmpz_init_set_ui(u, 20);
+	MG_ladder_iter_(&Q_test, u, &Q);
+	MG_point_normalize(&Q_test);
+	MG_point_print(&Q_test);
+
 
 	// Extract l-torsion point from possibly l^val-torsion point.
 	// Here R acts as a temporary variable for l*Q
 	MG_ladder_iter_(&R, l, &Q);
 	MG_point_isinfty(&isinfty, &R);
-	fmpz_set_ui(e, 1);
+	int e = 0;
 
 	// While l*Q != O do Q := l*Q
-	while(!isinfty && 0 >= fmpz_cmp(e, val)) {
+	while(!isinfty && 0 <= fmpz_cmp_ui(val, e)) {
 		MG_point_set_(&Q, &R);
 		MG_ladder_iter_(&R, l, &Q);
 		MG_point_isinfty(&isinfty, &R);
 
-		fmpz_add_ui(e, e, 1);
+		e++;
 	}
 
 	// Case of failure
@@ -850,7 +871,6 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t r, fmpz_t card) {
 
 	MG_point_clear(&R);
 	MG_point_clear(&Q);
-	fmpz_clear(e);
 	fmpz_clear(cofactor);
 	fmpz_clear(val);
 

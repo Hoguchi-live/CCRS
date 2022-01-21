@@ -47,7 +47,7 @@ int main() {
 		     Cardinals
 	**********************************/
 	// Card over extensions
-	fmpz_t card, card_quad, r, r_quad;
+	fmpz_t card,card_quad, r, r_quad;
 
 	fmpz_init(card);
 	fmpz_init(card_quad);
@@ -70,7 +70,7 @@ int main() {
 	MG_point_init(&P, &E);
 	fmpz_init(l);
 
-	fmpz_set_ui(l, 5);
+	fmpz_set_ui(l, 7);
 
 	int ret = MG_curve_rand_torsion(&P, l, r, card);
 	printf("\nTorsion returned %d\n", ret);
@@ -98,7 +98,7 @@ int main() {
 	fmpz_init_set_ui(k, 1);
 	TN_curve_init(&E_for, &F);
 
-	radical_isogeny_5(&E_for, &E_TN, k);
+	radical_isogeny_7(&E_for, &E_TN, k);
 	TN_j_invariant(&j_inv, &E_for);
 	printf("\n\nTN--radical-->TN: \n");
 	TN_curve_print(&E_for);
@@ -108,31 +108,24 @@ int main() {
 	/**********************************
 		Conversion to MG
 	**********************************/
-	MG_curve_t E_for_rec;
-	MG_curve_init(&E_for_rec, &F);
-	ret = TN_get_MG(&E_for_rec, &E_for);
+	MG_curve_t E_for_MG;
+	MG_curve_init(&E_for_MG, &F);
+	ret = TN_get_MG(&E_for_MG, &E_for);
 	printf("\nSuccessfully converted TN->MG: %d\n", ret);
-	MG_curve_print(&E_for_rec);
-	/**********************************
-		Isogeny backward
-	**********************************/
-	// Convert curve over quad
-	fq_ctx_t L;
-	char *Lgen = "h";
-	fq_ctx_init(L, base_p, 1, Lgen);
+	MG_curve_print(&E_for_MG);
 
-	char for_A[] = "3915468794113749017087156486292827787669165333415113841607098158225533242295781327150654194559447513607069017184234939125791683195870243174799630549135375";
-	char for_B[] = "1";
-
-	MG_curve_t E_quad_MG;
-	MG_curve_init(&E_quad_MG, &L);
-	MG_curve_set_str(&E_quad_MG, &L, for_A, for_B, 10);
-
+	MG_j_invariant(&j_inv, &E_for_MG);
+	printf("\nMG target curve gave j_invariant: \n");
+	fq_print_pretty(j_inv, F);
+	printf("\n\n");
+	///**********************************
+	//	MG to TN again
+	//**********************************/
 	//Random torsion point over Fp^2
 	MG_point_t Q, Q_test;
 
-	MG_point_init(&Q, &E_quad_MG);
-	MG_point_init(&Q_test, &E_quad_MG);
+	MG_point_init(&Q, &E_for_MG);
+	MG_point_init(&Q_test, &E_for_MG);
 
 	int ret_quad = MG_curve_rand_torsion_(&Q, l, r, card_quad);
 	printf("\nTorsion returned %d\n", ret_quad);
@@ -145,28 +138,28 @@ int main() {
 		MG -> TN conversion
 	**********************************/
 	fq_t j_inv_quad;
-	TN_curve_t E_TN_quad;
+	TN_curve_t E_for_TN_tors;
 
-	fq_init(j_inv_quad, L);
-	TN_curve_init(&E_TN_quad, &L);
+	fq_init(j_inv_quad, F);
+	TN_curve_init(&E_for_TN_tors, &F);
 
-	MG_get_TN(&E_TN_quad, &E_quad_MG, &Q, l);
-	TN_j_invariant(&j_inv_quad, &E_TN_quad);
+	MG_get_TN(&E_for_TN_tors, &E_for_MG, &Q, l);
+	TN_j_invariant(&j_inv_quad, &E_for_TN_tors);
 	printf("\nMG--->TN gave j_invariant: \n");
-	fq_print_pretty(j_inv_quad, L);
+	fq_print_pretty(j_inv_quad, F);
 	/**********************************
 	 	Isogeny backward
 	**********************************/
 	TN_curve_t E_back;
 
-	TN_curve_init(&E_back, &L);
+	TN_curve_init(&E_back, &F);
 
-	radical_isogeny_5(&E_back, &E_TN_quad, k);
+	radical_isogeny_7(&E_back, &E_for_TN_tors, k);
 	TN_j_invariant(&j_inv_quad, &E_back);
 	printf("\n\nTN--radical-->TN: \n");
 	TN_curve_print(&E_back);
 	printf("\n\nTN--radical-->TN gave j_invariant: \n");
-	fq_print_pretty(j_inv_quad, L);
+	fq_print_pretty(j_inv_quad, F);
 	printf("\n\n");
 
 	/**********************************

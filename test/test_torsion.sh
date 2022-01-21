@@ -8,5 +8,5 @@ gcc	../confs/config.c \
 	../src/Polynomials/roots.c \
 	../src/Isogeny/radical.c \
 	../src/Isogeny/velu.c \
-	test_radical.c \
-	-lgmp -lflint -o test_radical && ./test_radical
+	test_torsion.c \
+	-g -lgmp -lflint -o test_torsion && ./test_torsion
