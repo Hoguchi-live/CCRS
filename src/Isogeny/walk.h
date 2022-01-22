@@ -13,6 +13,7 @@
 
 #include "radical.h"
 #include "../EllipticCurves/arithmetic.h"
+#include "../EllipticCurves/pretty_print.h"
 
 int walk_rad(MG_curve_t *, MG_curve_t *, fmpz_t, fmpz_t);
 

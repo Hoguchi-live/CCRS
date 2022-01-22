@@ -59,10 +59,9 @@ void fq_nth_root_trick_ui(fq_t rop, fq_t op, slong l, const fq_ctx_t F) {
 void radical_isogeny_3(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 
 	fmpz_t l;
-	fq_t a1, a3, b, tmp1, tmp2, tmp3, tmp4, alpha;
+	fq_t a1, a3, tmp1, tmp2, tmp3, tmp4, alpha;
 
 	const fq_ctx_t *F = op->F;
-	fq_init(b, *F);
 	fq_init(a1, *F);
 	fq_init(a3, *F);
 	fq_init(tmp1, *F);
@@ -72,46 +71,45 @@ void radical_isogeny_3(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 	fq_init(alpha, *F);
 	fmpz_init_set_ui(l, 3);
 
-	// Init a1 = 1-c, a3 = -b
+	// a1 = 1-c, a3 = -b
 	fq_set_ui(a1, 1, *F);
 	fq_sub(a1, a1, op->c, *F);
 
-	fq_set(b, op->b, *F);
+	// a3 = -b
+	fq_neg(a3, op->b, *F);
 
 	// Main loop that goes through k isogeny steps
 	for(int step=0; fmpz_cmp_ui(k, step) > 0; step++) {
 
 		//// Extract root of rho = -a3 = b
-		fq_neg(tmp1, b, *F);
+		fq_neg(tmp1, a3, *F);
 		fq_nth_root_trick_ui(alpha, tmp1, 3, *F);
 
-		//// Compute new b = b*alpha - a1
-		fq_mul(tmp1, tmp1, alpha, *F);
-		fq_sub(tmp1, tmp1, a1, *F);
+		//// Compute new a1 = -6*alpha + a1
+		fq_mul_ui(tmp2, alpha, 6, *F);
+		fq_sub(tmp2, a1, tmp2, *F);
 
-		//// Compute new a1' = 3*a1*alpha^2 - a1*alpha + 9*a3
-		fq_mul_ui(tmp2, b, 9, *F);
-		fq_neg(tmp2, tmp2, *F);
+		//// Compute new a3' = 3*a1*alpha^2 - a1*alpha + 9*a3
+		fq_mul_ui(tmp3, a3, 9, *F);
 
-		fq_mul(tmp3, a1, alpha, *F);
-		fq_sub(tmp2, tmp2, tmp3, *F);
+		fq_mul_ui(tmp4, alpha, 3, *F);
+		fq_sub(tmp4, tmp4, a1, *F);
+		fq_mul(tmp4, tmp4, alpha, *F);
+		fq_mul(tmp4, tmp4, a1, *F);
 
-		fq_mul_ui(tmp3, a1, 3, *F);
-		fq_pow_ui(tmp1, alpha, 2, *F);
-		fq_mul(tmp3, tmp3, tmp1, *F);
-		fq_add(tmp2, tmp2, tmp3, *F);
+		fq_add(tmp3, tmp3, tmp4, *F);
 
 		//// Copy buffer
-		fq_set(b, tmp1, *F);
 		fq_set(a1, tmp2, *F);
+		fq_set(a3, tmp3, *F);
 	}
 	//// Set curve
 	fq_neg(tmp1, a1, *F);
 	fq_add_ui(tmp1, tmp1, 1, *F);
-	TN_curve_set(rop, b, tmp1, l, F);
+	fq_neg(tmp2, a3, *F);
+	TN_curve_set(rop, tmp2, tmp1, l, op->F);
 
 	//// Clear
-	fq_clear(b, *F);
 	fq_clear(a1, *F);
 	fq_clear(a3, *F);
 	fq_clear(tmp1, *F);
@@ -123,6 +121,12 @@ void radical_isogeny_3(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 }
 
 void radical_isogeny_5(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
+
+	// Nothing to do
+	if(fmpz_equal_ui(k, 0)) {
+		TN_curve_set_(rop, op);
+		return;
+	}
 
 	fmpz_t l;
 	fq_t b, alpha, tmp1, tmp2, tmp3, num, den, res;

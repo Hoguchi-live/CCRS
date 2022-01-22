@@ -53,7 +53,7 @@ int main() {
 	MG_curve_t E_tmp1, E_tmp2;
 
 	fq_init(j_inv, F);
-	fmpz_init_set_ui(k, 10);
+	fmpz_init_set_ui(k, 1);
 	fmpz_init_set_ui(l, 3);
 	MG_curve_init(&E_tmp1, &F);
 	MG_curve_init(&E_tmp2, &F);
@@ -63,24 +63,24 @@ int main() {
 	printf("walk_rad returned: %d\n", ec);
 
 	////// Target curve
-	//printf("target curve: ");
-	//MG_curve_print(&E_tmp1);
-	//printf("\n");
+	printf("target curve: ");
+	MG_curve_print(&E_tmp1);
+	printf("\n");
 
-	////// J-invariant
-	//MG_j_invariant(&j_inv, &E_tmp1);
-	//printf("target curve j-invariant: ");
-	//fq_print_pretty(j_inv, F);
-	//printf("\n");
+	//// J-invariant
+	MG_j_invariant(&j_inv, &E_tmp1);
+	printf("target curve j-invariant: ");
+	fq_print_pretty(j_inv, F);
+	printf("\n\n");
 
-	//////////////////////////////////////
+	////////////////////////////////////
 
-	//// Walk back to E
-	//fmpz_neg(k, k);
-	//ec = walk_rad(&E_tmp2, &E_tmp1, l, k);
-	//printf("walk_rad returned: %d\n", ec);
+	/// Walk back to E
+	fmpz_neg(k, k);
+	ec = walk_rad(&E_tmp2, &E_tmp1, l, k);
+	printf("walk_rad returned: %d\n", ec);
 
-	////// Target curve
+	//// Target curve
 	//printf("target curve: ");
 	//MG_curve_print(&E_tmp2);
 	//printf("\n");

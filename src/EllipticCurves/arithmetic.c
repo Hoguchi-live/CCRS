@@ -835,7 +835,7 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	int e = 0;
 
 	// While l*Q != O do Q := l*Q
-	while(!isinfty && 0 <= fmpz_cmp_ui(val, e)) {
+	while(!isinfty && 0 < fmpz_cmp_ui(val, e)) {
 		MG_point_set_(&Q, &R);
 		MG_ladder_iter_(&R, l, &Q);
 		MG_point_isinfty(&isinfty, &R);
@@ -866,10 +866,10 @@ TODO: Check torsion
 */
 void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 
-	fq_t y, b2, b3_, b4, c2, b, c, tmp1, tmp2;
+	fq_t y2, b2, b3_, b4, c2, b, c, tmp1, tmp2;
 
 	const fq_ctx_t *F = op->F;
-	fq_init(y, *F);
+	fq_init(y2, *F);
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
 	fq_init(b2, *F);
@@ -879,7 +879,7 @@ void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 	fq_init(b, *F);
 	fq_init(c, *F);
 
-	// extract y^2 into tmp1
+	// extract y^2 into y2
 	// TODO: make this a function
 	MG_point_normalize(P);
 	fq_pow_ui(tmp1, P->X, 2, *F);
@@ -889,14 +889,14 @@ void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 	fq_mul(tmp1, tmp1, P->X, *F);
 
 	fq_inv(tmp2, op->B, *F);
-	fq_mul(tmp1, tmp1, tmp2, *F);
+	fq_mul(y2, tmp1, tmp2, *F);
 
 	// Computing temporary coefficients
 	// b2 = 3x + A
 	fq_mul_ui(b2, P->X, 3, *F);
 	fq_add(b2, b2, P->E->A, *F);
 	// b3_ = b3 ^ 2 = 4y^2
-	fq_mul_ui(b3_, tmp1, 4, *F);
+	fq_mul_ui(b3_, y2, 4, *F);
 	// b4 = 3x^2 + 2Ax + 1
 	fq_mul(b4, b2, P->X, *F);
 	fq_mul(tmp1, P->X, op->A, *F);
@@ -924,33 +924,30 @@ void MG_get_TN(TN_curve_t *rop, MG_curve_t *op, MG_point_t *P, fmpz_t l){
 		fq_add_ui(c, c, 1, *F);
 	}
 	else {
-		// c1 = 2*b2
-		fq_mul_ui(c, b2, 2, *F);
-		// c = 1-c1
-		fq_sub_ui(c, c, 1, *F);
+		// c = 1-2b4/b3_
+		fq_inv(c, b3_, *F);
+		fq_mul(c, c, b4, *F);
+		fq_mul_ui(c, c, 2, *F);
 		fq_neg(c, c, *F);
+		fq_add_ui(c, c, 1, *F);
 
-		// c3 = b4/b2 = -b
-		fq_inv(b, b2, *F);
-		fq_mul(b, b, b4, *F);
-		fq_neg(b, b, *F);
+		// b = -1/b3^2
+		fq_neg(b, b3_, *F);
+		fq_inv(b, b, *F);
 	}
 
 	TN_curve_set(rop, b, c, l, F);
 
-	//// TEST
-	fq_t j_inv;
-	fq_init(j_inv, *(op->F));
-	TN_j_invariant(&j_inv, rop);
-	fq_print_pretty(j_inv, *(op->F));
-
-
 	// Free memory
-	fq_init(c, *F);
-	fq_init(b, *F);
-	fq_clear(tmp2, *F);
+	fq_clear(y2, *F);
 	fq_clear(tmp1, *F);
-	fq_clear(y, *F);
+	fq_clear(tmp2, *F);
+	fq_clear(b2, *F);
+	fq_clear(b3_, *F);
+	fq_clear(b4, *F);
+	fq_clear(c2, *F);
+	fq_clear(b, *F);
+	fq_clear(c, *F);
 }
 
 /**
@@ -961,7 +958,7 @@ TODO: Check torsion
 */
 int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 
-	fq_t b2, b4, b6, c2, c4, tmp1, tmp2, tmp3, tmp4, root1, root2, alpha, beta;
+	fq_t b2, b4, b6, c2, c4, tmp1, tmp2, alpha;
 	fq_poly_t pol, pol_;
 	fq_poly_factor_t fac;
 
@@ -973,11 +970,7 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 	fq_init(c4, *F);
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
-	fq_init(tmp3, *F);
-	fq_init(root1, *F);
-	fq_init(root2, *F);
 	fq_init(alpha, *F);
-	fq_init(beta, *F);
 	fq_poly_init(pol, *F);
 	fq_poly_init(pol_, *F);
 	fq_poly_factor_init(fac, *F);
@@ -987,9 +980,10 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 	fq_inv_ui(tmp2, 2, *F);
 	fq_mul(tmp1, tmp1, tmp2, *F);
 
-	// Set b2 = (c-1)^2 / 4 - b
+	// Set b2 = (c-1)^2 / 4 - b or (c-1)^2/4 if l = 3
 	fq_pow_ui(tmp2, tmp1, 2, *F);
-	fq_sub(b2, tmp2, op->b, *F);
+	if(fmpz_equal_ui(op->l, 3)) fq_set(b2, tmp2, *F);
+	else if(!fmpz_equal_ui(op->l, 3)) fq_sub(b2, tmp2, op->b, *F);
 
 	// Set b4 = (c-1)b/2
 	fq_mul(b4, tmp1, op->b, *F);
@@ -1009,7 +1003,7 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 
 	//// Factor polynomial, catch errors, discard lead
 	fq_poly_factor(fac, tmp1, pol, *F);
-	if(fac->num < 1) return 0; // pol has no roots in the underlying field!
+	if(fac->num < 2) return 0; // pol has no roots in the underlying field!
 
 	//// Get roots candidates for x
 	fq_t roots[fac->num];
@@ -1049,19 +1043,18 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 			}
 		}
 	}
-	fq_poly_factor_clear(fac, *F);
-	fq_poly_clear(pol, *F);
-	fq_poly_clear(pol_, *F);
-	fq_clear(tmp3, *F);
-	fq_clear(tmp2, *F);
-	fq_clear(tmp1, *F);
-	fq_clear(beta, *F);
-	fq_clear(alpha, *F);
-	fq_clear(c2, *F);
-	fq_clear(c4, *F);
+
 	fq_clear(b2, *F);
 	fq_clear(b4, *F);
 	fq_clear(b6, *F);
+	fq_clear(c2, *F);
+	fq_clear(c4, *F);
+	fq_clear(tmp1, *F);
+	fq_clear(tmp2, *F);
+	fq_clear(alpha, *F);
+	fq_poly_clear(pol, *F);
+	fq_poly_clear(pol_, *F);
+	fq_poly_factor_clear(fac, *F);
 
 	if(ret == 0) return 0; // Error!
 }

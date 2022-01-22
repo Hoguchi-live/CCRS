@@ -459,11 +459,11 @@ void MG_point_clear(MG_point_t *P) {
   Initializes E for use, with context F, and setting its coefficients to zero.
   A corresponding call to TN_curve_clear() must be made after finishing with the TN_curve_t to free the memory used by the curve.
 */
-void TN_curve_init(TN_curve_t *E, const fq_ctx_t *F) {
+void TN_curve_init(TN_curve_t *E, fmpz_t l, const fq_ctx_t *F) {
 
 	fq_init(E->b, *F);
 	fq_init(E->c, *F);
-	fmpz_init(E->l);
+	fmpz_init_set(E->l, l);
 }
 
 /**
@@ -476,6 +476,17 @@ void TN_curve_set(TN_curve_t *E, const fq_t b, const fq_t c, fmpz_t l, const fq_
 	fq_set(E->b, b, *F);
 	fq_set(E->c, c, *F);
 	fmpz_set(E->l, l);
+}
+
+/**
+  Deep copy
+*/
+void TN_curve_set_(TN_curve_t *rop, TN_curve_t *op) {
+
+	rop->F = op->F;
+	fq_set(rop->b, op->b, *(rop->F));
+	fq_set(rop->c, op->c, *(rop->F));
+	fmpz_set(rop->l, op->l);
 }
 
 /**

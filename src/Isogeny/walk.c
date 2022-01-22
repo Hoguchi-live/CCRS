@@ -12,10 +12,10 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	int ec = 1;
 
 	//// Nothing to do
-	if(fmpz_equal_ui(k, 0)) {
-		MG_curve_set_(rop, op);
-		return ec;
-	}
+	//if(fmpz_equal_ui(k, 0)) {
+	//	MG_curve_set_(rop, op);
+	//	return ec;
+	//}
 
 	//// Init variables
 	fmpz_t k_local;
@@ -25,8 +25,8 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 
 	fmpz_init_set(k_local, k);
 	MG_point_init(&P, op);
-	TN_curve_init(&E_TN_tmp1, op->F);
-	TN_curve_init(&E_TN_tmp2, op->F);
+	TN_curve_init(&E_TN_tmp1, l, op->F);
+	TN_curve_init(&E_TN_tmp2, l, op->F);
 	fmpz_init(r);
 
 	//// Direction of the walk
@@ -35,6 +35,7 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 		fmpz_set_ui(r, 1);
 		MG_curve_card_ext(card, op, r);
 		ec = MG_curve_rand_torsion(&P, l, card);
+		printf("walk::MG->TN result: %d\n", ec);
 	}
 	else {
 		// case k<0
@@ -42,10 +43,23 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 		fmpz_neg(k_local, k_local);
 		MG_curve_card_ext(card, op, r);
 		ec = MG_curve_rand_torsion_(&P, l, card);
+		printf("walk::MG->TN result: %d\n", ec);
 	}
 
 	//// Transform op in Tate-normal form
 	MG_get_TN(&E_TN_tmp1, op, &P, l);
+
+	/// TEST
+	fq_t j;
+	fq_init(j, *(op->F));
+	printf("walk::op in MG j-inv: ");
+	MG_j_invariant(&j, op);
+	fq_print_pretty(j, *(op->F));
+	printf("\nwalk::op in TN j-inv: ");
+	TN_j_invariant(&j, &E_TN_tmp1);
+	fq_print_pretty(j, *(op->F));
+	printf("\n");
+	/// TEST
 
 	//// Walk
 	if(fmpz_equal_ui(l, 3)) radical_isogeny_3(&E_TN_tmp2, &E_TN_tmp1, k_local);
@@ -53,8 +67,23 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	else if(fmpz_equal_ui(l, 7)) radical_isogeny_7(&E_TN_tmp2, &E_TN_tmp1, k_local);
 	else return 0;
 
+	/// TEST
+	printf("walk::rop in TN j-inv: ");
+	TN_j_invariant(&j, &E_TN_tmp2);
+	fq_print_pretty(j, *(op->F));
+	printf("\n");
+	/// TEST
+
 	//// Transform result back into Mongomery form
 	ec = TN_get_MG(rop, &E_TN_tmp2);
+	printf("walk::TN get MG success: %d\n", ec);
+
+	/// TEST
+	printf("walk::rop in MG j-inv: ");
+	MG_j_invariant(&j, rop);
+	fq_print_pretty(j, *(op->F));
+	printf("\n\n");
+	/// TEST
 
 	//// Clear
 	fmpz_clear(k_local);
