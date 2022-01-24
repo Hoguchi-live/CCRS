@@ -28,7 +28,6 @@ void remainderCell(fq_poly_bcell_t *rop, fq_t **roots, uint len, uint offset, fq
 		//// Set rop to a unique cell containing the X-root polynomial
 		fq_neg(tmp, (*roots)[offset], *F);
 		fq_poly_set_coeff(p, 0, tmp, *F);
-
 		fq_set_ui(tmp, 1, *F);
 		fq_poly_set_coeff(p, 1, tmp, *F);
 
@@ -45,8 +44,8 @@ void remainderCell(fq_poly_bcell_t *rop, fq_t **roots, uint len, uint offset, fq
 		fq_poly_bcell_init(left, F);
 		fq_poly_bcell_init(right, F);
 
-		remainderCell(left, roots, len/2, offset, F);
-		remainderCell(right, roots, len - len/2, offset + len/2, F);
+		remainderCell(left, roots, len - len/2, offset, F);
+		remainderCell(right, roots, len/2, offset + len - len/2, F);
 
 		//// Compute product of child polynomials
 		fq_poly_mul(p, left->data, right->data, *F);
@@ -67,15 +66,41 @@ void remainderTree(fq_poly_btree_t *T, fq_t **roots, uint len, fq_ctx_t *F) {
 	remainderCell(T->head, roots, len, 0, F);
 }
 
-void fq_poly_multieval(fq_t ** rop, fq_t ** op, fq_poly_t P, uint len, fq_ctx_t *F) {
+void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint *k, fq_ctx_t *F) {
 
+	fq_poly_t Q;
+
+	fq_poly_init(Q, *F);
+
+	//// New polynomial
+	fq_poly_rem(Q, P, c->data, *F);
+
+	if(fq_poly_degree(Q, *F) == 0) {
+
+		fq_poly_get_coeff(res[*k], Q, 0, *F);
+		(*k)++;
+	}
+	else {
+
+		printf("Going Left\n");
+		fq_poly_multieval_fromtree(c->left, res, Q, k, F);
+		printf("Going Right\n");
+		fq_poly_multieval_fromtree(c->right, res, Q, k, F);
+	}
+	fq_poly_clear(Q, *F);
+}
+
+void fq_poly_multieval(fq_t * rop, fq_t ** op, fq_poly_t P, uint len, fq_ctx_t *F) {
+
+	uint k = 0;
 	fq_poly_btree_t T;
 
 	fq_poly_btree_init(&T, F);
 
+	//// Construct tree with modulos
 	remainderTree(&T, op, len, F);
+	//// Evaluate P by remainders
+	fq_poly_multieval_fromtree(T.head, rop, P, &k, F);
 
 	fq_poly_btree_clear(&T);
-
 }
-

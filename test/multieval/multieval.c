@@ -30,7 +30,7 @@ int main() {
 	fq_t *roots;
 	fq_t *res;
 
-	uint len = 4;
+	uint len = 6;
 	fmpz_init_set_ui(p, 7);
 	fq_ctx_init(F, p, 1, "g");
 	fq_init(tmp, F);
@@ -39,6 +39,7 @@ int main() {
 	fq_set_ui(tmp, 1, F);
 	fq_poly_set_coeff(P, 0, tmp, F);
 	fq_poly_set_coeff(P, 1, tmp, F);
+	fq_poly_set_coeff(P, 2, tmp, F);
 
 	res = malloc(sizeof(fq_t)*len);
 	roots = malloc(sizeof(fq_t)*len);
@@ -46,9 +47,11 @@ int main() {
 	for(int i=0; i < len; i++) {
 		fq_init(roots[i], F);
 		fq_set_ui(roots[i], i, F);
+
+		fq_init(res[i], F);
 	}
 
-	fq_poly_multieval(&res, &roots, P, len, &F);
+	//fq_poly_multieval(res, &roots, P, len, &F);
 
 	//// Check results
 	for(int i=0; i < len; i++) {
@@ -61,4 +64,3 @@ int main() {
 		printf("\n");
 	}
 }
-

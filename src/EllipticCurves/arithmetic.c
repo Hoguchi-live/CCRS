@@ -508,60 +508,60 @@ void MG_xDBL(MG_point_t *output, MG_point_t P) {
 	fq_clear(v3, *F);
 }
 
-void MG_ladder_rec(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, const fq_ctx_t *F) {
-
-	// base case
-	if (fmpz_is_one(k)) {
-		fq_set(X0->X, P.X, *F);
-		fq_set(X0->Z, P.Z, *F);
-		MG_xDBL(X1, P);
-	}
-
-	fmpz_t rem;
-	fmpz_t two;
-
-	fmpz_init(rem);
-	fmpz_init_set_ui(two, 2);
-	fmpz_tdiv_qr(k, rem, k, two);	// the value of k is modified here
-
-	fmpz_clear(two);
-
-	MG_ladder_rec(X0, X1, k, P, F); // recursive call
-
-	if (fmpz_is_zero(rem)) {
-		// copy *x0 into tmp
-		MG_point_t *tmp;
-		MG_point_init(tmp, P.E);
-		fq_set(tmp->X, X0->X, *F);
-		fq_set(tmp->Z, X0->Z, *F);
-
-		MG_xDBL(X0, *tmp);
-		MG_xADD(X1, *tmp, *X1, P);
-
-		MG_point_clear(tmp);
-	}
-
-	else {
-		MG_xADD(X0, *X0, *X1, P);
-		MG_xDBL(X1, *X1);
-	}
-
-	// clear memory
-	fmpz_clear(rem);
-}
-
-void MG_ladder(MG_point_t *X0, fmpz_t k, MG_point_t P) {
-
-	const fq_ctx_t *F;
-	F = (P.E)->F;
-
-	MG_point_t X1;
-	MG_point_init(&X1, P.E);
-
-	MG_ladder_rec(X0, &X1, k, P, F);
-
-	MG_point_clear(&X1);
-}
+//void MG_ladder_rec(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, const fq_ctx_t *F) {
+//
+//	// base case
+//	if (fmpz_is_one(k)) {
+//		fq_set(X0->X, P.X, *F);
+//		fq_set(X0->Z, P.Z, *F);
+//		MG_xDBL(X1, P);
+//	}
+//
+//	fmpz_t rem;
+//	fmpz_t two;
+//
+//	fmpz_init(rem);
+//	fmpz_init_set_ui(two, 2);
+//	fmpz_tdiv_qr(k, rem, k, two);	// the value of k is modified here
+//
+//	fmpz_clear(two);
+//
+//	MG_ladder_rec(X0, X1, k, P, F); // recursive call
+//
+//	if (fmpz_is_zero(rem)) {
+//		// copy *x0 into tmp
+//		MG_point_t *tmp;
+//		MG_point_init(tmp, P.E);
+//		fq_set(tmp->X, X0->X, *F);
+//		fq_set(tmp->Z, X0->Z, *F);
+//
+//		MG_xDBL(X0, *tmp);
+//		MG_xADD(X1, *tmp, *X1, P);
+//
+//		MG_point_clear(tmp);
+//	}
+//
+//	else {
+//		MG_xADD(X0, *X0, *X1, P);
+//		MG_xDBL(X1, *X1);
+//	}
+//
+//	// clear memory
+//	fmpz_clear(rem);
+//}
+//
+//void MG_ladder(MG_point_t *X0, fmpz_t k, MG_point_t P) {
+//
+//	const fq_ctx_t *F;
+//	F = (P.E)->F;
+//
+//	MG_point_t X1;
+//	MG_point_init(&X1, P.E);
+//
+//	MG_ladder_rec(X0, &X1, k, P, F);
+//
+//	MG_point_clear(&X1);
+//}
 
 
 void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
@@ -614,42 +614,42 @@ void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 	MG_point_clear(&X1);
 }
 
-void MG_ladder_iter(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, fq_ctx_t *F) {
-	//TODO NEED P AS POINTER
-
-	// Check if k <0
-	//TODO
-
-	// Check if k = 0
-	if(fmpz_is_zero(k)){
-		fq_one(X0->X, *(P.E->F));
-		fq_zero(X0->Z, *(P.E->F));
-		return;
-	}
-
-	// Check if P = O
-	bool isinfty;
-	MG_point_isinfty(&isinfty, &P);
-	if(isinfty) return;
-
-	fq_set(X0->X, P.X, *F);
-	fq_set(X0->Z, P.Z, *F);
-	MG_xDBL(X1, P);
-
-	int l;
-	l = fmpz_sizeinbase(k, 2);
-
-	for (int i = l-2; i>=0; i--) {
-		if (fmpz_tstbit(k, i)) {
-			MG_xADD(X0, *X0, *X1, P);
-			MG_xDBL(X1, *X1);
-		}
-		else {
-			MG_xADD(X1, *X0, *X1, P);
-			MG_xDBL(X0, *X0);
-		}
-	}
-}
+//void MG_ladder_iter(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, fq_ctx_t *F) {
+//	//TODO NEED P AS POINTER
+//
+//	// Check if k <0
+//	//TODO
+//
+//	// Check if k = 0
+//	if(fmpz_is_zero(k)){
+//		fq_one(X0->X, *(P.E->F));
+//		fq_zero(X0->Z, *(P.E->F));
+//		return;
+//	}
+//
+//	// Check if P = O
+//	bool isinfty;
+//	MG_point_isinfty(&isinfty, &P);
+//	if(isinfty) return;
+//
+//	fq_set(X0->X, P.X, *F);
+//	fq_set(X0->Z, P.Z, *F);
+//	MG_xDBL(X1, P);
+//
+//	int l;
+//	l = fmpz_sizeinbase(k, 2);
+//
+//	for (int i = l-2; i>=0; i--) {
+//		if (fmpz_tstbit(k, i)) {
+//			MG_xADD(X0, *X0, *X1, P);
+//			MG_xDBL(X1, *X1);
+//		}
+//		else {
+//			MG_xADD(X1, *X0, *X1, P);
+//			MG_xDBL(X0, *X0);
+//		}
+//	}
+//}
 
 /**
    Sets rop to the frobenius' trace for the CRS base curve.
@@ -1058,4 +1058,3 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 
 	if(ret == 0) return 0; // Error!
 }
-
