@@ -6,6 +6,7 @@ gcc \
 	../../src/EllipticCurves/auxiliary.c \
 	../../src/Polynomials/binary_trees.c \
 	../../src/Polynomials/roots.c \
+	../../src/Polynomials/multieval.c \
 	../../src/Isogeny/radical.c \
 	../../src/Isogeny/velu.c \
 	../../src/Isogeny/walk.c \
