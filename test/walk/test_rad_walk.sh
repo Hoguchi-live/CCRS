@@ -9,6 +9,5 @@ gcc	../../confs/config.c \
 	../../src/Isogeny/radical.c \
 	../../src/Isogeny/velu.c \
 	../../src/Isogeny/walk.c \
-	../../src/Exchange/setup.c \
 	test_rad_walk.c \
 	-g -lgmp -lflint -o test_rad_walk && ./test_rad_walk
