@@ -46,4 +46,3 @@ void fq_poly_btree_set(fq_poly_btree_t *, fq_poly_bcell_t *);
 void fq_poly_btree_clear(fq_poly_btree_t *);
 
 #endif
-
