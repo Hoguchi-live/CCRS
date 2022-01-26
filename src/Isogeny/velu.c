@@ -75,12 +75,18 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	const fq_ctx_t *F;
 	F = (P.E)->F;
 
-	fq_poly_t E0, E1;
-	fq_t R0, R1, M0, M1;
+	fq_poly_t E0, E1, tmp1, tmp2;
+	fq_t R0, R1, M0, M1, tmp;
+
 	fq_init(R0, *F);
 	fq_init(R1, *F);
 	fq_init(M0, *F);
 	fq_init(M1, *F);
+	fq_init(tmp, *F);
+	fq_poly_init(E0, *F);
+	fq_poly_init(E1, *F);
+	fq_poly_init(tmp1, *F);
+	fq_poly_init(tmp2, *F);
 
 	/*
 	fq_poly_t h
@@ -101,18 +107,13 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	*/
 	
 	// computing E0, E1
-		fq_poly_one(E0, *F);
-		fq_poly_one(E1, *F);
-	fq_poly_t tmp1, tmp2;
-	fq_poly_init(tmp1, *F);
-	fq_poly_init(tmp2, *F);
+	fq_poly_one(E0, *F);
+	fq_poly_one(E1, *F);
 	for (uint j=0; j<b; j++) {
 		_F0pF1pF2_F0mF1pF2(&tmp1, &tmp2, P, *F);
 		fq_poly_mul(E0, E0, tmp1, *F);
 		fq_poly_mul(E1, E1, tmp2, *F);
 	}
-	fq_poly_clear(tmp1, *F);
-	fq_poly_clear(tmp2, *F);
 	
 	// computing resultants R0, R1
 	fq_one(R0, *F);
@@ -136,13 +137,12 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	for (uint i=0; i<bprime; i++) {
 		fq_mul(R1, R1, eval[i], *F);
 		fq_clear(eval[i], *F);
+		fq_clear(Ix[i], *F);
 	}
 	
 	// computing M0, M1
 	fq_one(M0, *F);
 	fq_one(M1, *F);
-	fq_t tmp;
-	fq_init(tmp, *F);
 	for (uint i=0; i<lenK; i++) {
 		fq_sub_one(tmp, K[i].X, *F);
 		fq_neg(tmp, tmp, *F);
@@ -169,7 +169,16 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	fq_mul(M0, M0, R0, *F);  // M0 = (d+1)/(d-1)
 	fq_mul_ui(*A2, M0, 2, *F);
 	
-	// TODO: Memory management
+	// Memory management
+	fq_clear(R0, *F);
+	fq_clear(R1, *F);
+	fq_clear(M0, *F);
+	fq_clear(M1, *F);
+	fq_clear(tmp, *F);
+	fq_poly_clear(E0, *F);
+	fq_poly_clear(E1, *F);
+	fq_poly_clear(tmp1, *F);
+	fq_poly_clear(tmp2, *F);
 }
 
 void _F0pF1pF2_F0mF1pF2(fq_poly_t *rop1, fq_poly_t *rop2, MG_point_t P, fq_ctx_t ctx) { 
