@@ -1,24 +1,24 @@
 #include "velu.h"
 
-void KPS(MG_point_t P, int l) {
-	//TODO: comment
-	//TODO: I,J,K as pointers, define, initialize and compute their length b,bprime and lenK in another function
-	
-	MG_curve_t *E = P.E;
-
-	//computing b and bprime
-	int b, bprime;
-	bprime = l-1;
-	b = 1;
-	while ((b+1)*(b+1) <= bprime) {
+void _init_lengths(uint* b, uint* bprime, uint* lenK, uint l) {
+	*bprime = l-1;
+	*b = 1;
+	while (((*b)+1)*((*b)+1) <= *bprime) {
 		b++;
 	}
-	b = b/2;
-	bprime = bprime/(4*b);
+	*b = *b/2;
+	*bprime = (*bprime)/(4*(*b));
+	*lenK = (l-1-4*(*b)*(*bprime))/2;
+}
+
+void KPS(MG_point_t I[], MG_point_t J[], MG_point_t K[], MG_point_t P, uint l, uint b, uint bprime, uint lenK) {
+	// array I of length brpime
+	// array J of length b
+	// array K of length lenK
+	MG_curve_t *E = P.E;
 
 	//computing J = {(2j+1)*P for j = 1, ..., b-1}
 	//if l>17 then bprime >= b >= 2 therefore J has at least two elements
-	MG_point_t J[b];
 	MG_point_t P2; //P2 = 2*P
 	MG_point_init(&P2, E);
 	MG_xDBL(&P2, P);
@@ -31,7 +31,6 @@ void KPS(MG_point_t P, int l) {
 	}
 
 	//computing I = {2b(2i+1)*P for i = 1, ..., bprime-1}
-	MG_point_t I[bprime];
 	MG_point_t P4, P4b; 
 	MG_point_init(&P4, E);
 	MG_xDBL(&P4, P2); //P4 = 4*P
@@ -55,8 +54,6 @@ void KPS(MG_point_t P, int l) {
 	}
 
 	//computing K = {i*P for i = 4*b*bprime+1, ..., l-4, l-2}
-	int lenK = (l-1-4*b*bprime)/2;
-	MG_point_t K[lenK];
 	if (lenK>0) {
 		MG_point_init(&K[lenK-1], E);
 		K[lenK-1] = P2; // (l-2)*P = -2*P
@@ -73,12 +70,20 @@ void KPS(MG_point_t P, int l) {
 	// TODO: Memory management
 }
 
-void xISOG(fq_t *A2, MG_point_t P, int l, MG_point_t I[], MG_point_t J[], MG_point_t K[], int b, int bprime) {
+void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_point_t K[], uint b, uint bprime, uint lenK) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
 
-	fq_poly_t h, E0, E1, R0, R1, M0, M1;
+	fq_poly_t E0, E1;
+	fq_t R0, R1, M0, M1;
+	fq_init(R0, *F);
+	fq_init(R1, *F);
+	fq_init(M0, *F);
+	fq_init(M1, *F);
+
+	/*
+	fq_poly_t h
 	fq_poly_init(h, *F); //TODO: initialize with length brpime = #I
 	fq_poly_one(h, *F);
 
@@ -93,23 +98,115 @@ void xISOG(fq_t *A2, MG_point_t P, int l, MG_point_t I[], MG_point_t J[], MG_poi
 	}
 	fq_poly_clear(f, *F);
 	fq_poly_clear(c, *F);
-}
+	*/
+	
+	// computing E0, E1
+		fq_poly_one(E0, *F);
+		fq_poly_one(E1, *F);
+	fq_poly_t tmp1, tmp2;
+	fq_poly_init(tmp1, *F);
+	fq_poly_init(tmp2, *F);
+	for (uint j=0; j<b; j++) {
+		_F0pF1pF2_F0mF1pF2(&tmp1, &tmp2, P, *F);
+		fq_poly_mul(E0, E0, tmp1, *F);
+		fq_poly_mul(E1, E1, tmp2, *F);
+	}
+	fq_poly_clear(tmp1, *F);
+	fq_poly_clear(tmp2, *F);
+	
+	// computing resultants R0, R1
+	fq_one(R0, *F);
+	fq_one(R1, *F);
 
-void _F0(fq_poly_t *rop, MG_point_t P, fq_ctx_t ctx) {
-	fq_poly_zero(*rop, ctx);
+	fq_t Ix[bprime];
+	fq_t eval[bprime];
+	for (uint i=0; i<bprime; i++) {
+		fq_init(Ix[i], *F);
+		fq_set(Ix[i], I[i].X, *F);
+		//Ix[i] = I[i].X;
+		fq_init(eval[i], *F);
+	}
+
+	fq_poly_multieval(eval, Ix, E0, bprime, F);
+	for (uint i=0; i<bprime; i++) {
+		fq_mul(R0, R0, eval[i], *F);
+	}
+
+	fq_poly_multieval(eval, Ix, E1, bprime, F);
+	for (uint i=0; i<bprime; i++) {
+		fq_mul(R1, R1, eval[i], *F);
+		fq_clear(eval[i], *F);
+	}
+	
+	// computing M0, M1
+	fq_one(M0, *F);
+	fq_one(M1, *F);
 	fq_t tmp;
-	fq_init(tmp, ctx);
-	fq_one(tmp, ctx);
-	fq_poly_set_coeff(*rop, 2, tmp, ctx); //coeff X^2 = 1
-	fq_mul_si(tmp, P.X, -2, ctx);
-	fq_poly_set_coeff(*rop, 1, tmp, ctx); //coeff X^1 = -2*x
-	fq_sqr(tmp, P.X, ctx);
-	fq_poly_set_coeff(*rop, 0, tmp, ctx); //coeff const = x^2
-	fq_clear(tmp, ctx);
+	fq_init(tmp, *F);
+	for (uint i=0; i<lenK; i++) {
+		fq_sub_one(tmp, K[i].X, *F);
+		fq_neg(tmp, tmp, *F);
+		fq_mul(M0, M0, tmp, *F);
+		fq_neg(tmp, K[i].X, *F);
+		fq_sub_one(tmp, tmp, *F);
+		fq_mul(M1, M1, tmp, *F);
+	}
+	
+	// computing
+	fq_mul(M0, M0, R0, *F);
+	fq_mul(M1, M1, R1, *F);
+	fq_div(M0, M0, M1, *F); 
+	fq_pow_ui(M0, M0, 8, *F); // M0 = (M0*R0)/(M1*R1)^8
+	fq_sub_one(R0, (P.E)->A, *F);
+	fq_sub_one(R0, R0, *F);
+	fq_add_ui(R1, (P.E)->A, 2, *F);
+	fq_div(R0, R0, R1, *F);
+	fq_pow_ui(R0, R0, l, *F); // R0 = (A-2)/(A+2)^l
+	fq_mul(M0, M0, R0, *F); // M0 =: d
+	fq_sub_one(R0, M0, *F);
+	fq_neg(R0, R0, *F);
+	fq_add_ui(M0, M0, 1, *F);
+	fq_mul(M0, M0, R0, *F);  // M0 = (d+1)/(d-1)
+	fq_mul_ui(*A2, M0, 2, *F);
+	
+	// TODO: Memory management
 }
 
-void _F1(fq_poly_t *rop, MG_point_t P, fq_ctx_t ctx) {
-}
+void _F0pF1pF2_F0mF1pF2(fq_poly_t *rop1, fq_poly_t *rop2, MG_point_t P, fq_ctx_t ctx) { 
+	fq_poly_zero(*rop1, ctx);
+	fq_poly_zero(*rop2, ctx);
+	fq_t tmp1, tmp2;
+	fq_init(tmp1, ctx);
+	fq_init(tmp2, ctx);
 
-void _F2(fq_poly_t *rop, MG_point_t P, fq_ctx_t ctx) {
+	// tmp1 = x^2 - 2x + 1
+	fq_add_si(tmp1, P.X, -2, ctx); 
+	fq_mul(tmp1, tmp1, P.X, ctx);
+	fq_add_si(tmp1, tmp1, 1, ctx);
+	fq_poly_set_coeff(*rop1, 2, tmp1, ctx);
+	fq_poly_set_coeff(*rop1, 0, tmp1, ctx);
+
+	// tmp1 = x^2 + 2x + 1
+	fq_mul_si(tmp2, P.X, 4, ctx);
+	fq_add(tmp1, tmp1, tmp2, ctx);
+	fq_poly_set_coeff(*rop2, 2, tmp1, ctx);
+	fq_poly_set_coeff(*rop2, 0, tmp1, ctx);
+
+	// tmp1 = -2x^2 - 4Ax - 4x - 2
+	fq_add_si(tmp1, (P.E)->A, 1, ctx);
+	fq_mul_si(tmp1, tmp1, 2, ctx);
+	fq_add(tmp1, tmp1, P.X, ctx);
+	fq_mul(tmp1, tmp1, P.X, ctx);
+	fq_add_si(tmp1, tmp1, 1, ctx);
+	fq_mul_si(tmp1, tmp1, -2, ctx);
+	fq_poly_set_coeff(*rop1, 1, tmp1, ctx);
+	
+	// tmp1 = 2x^2 + 4Ax - 4x + 2
+	fq_mul_si(tmp2, tmp2, 2, ctx);
+	fq_add(tmp1, tmp1, tmp2, ctx);
+	fq_neg(tmp1, tmp1, ctx);
+	fq_poly_set_coeff(*rop2, 1, tmp1, ctx);
+
+	fq_clear(tmp1, ctx);
+	fq_clear(tmp2, ctx);
 }

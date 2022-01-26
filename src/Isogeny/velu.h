@@ -4,5 +4,6 @@
 #include "../EllipticCurves/models.h"
 #include "../EllipticCurves/memory.h"
 #include "../EllipticCurves/arithmetic.h"
+#include "../Polynomials/multieval.h"
 
 #endif
