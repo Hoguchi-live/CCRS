@@ -12,5 +12,7 @@
 void remainderCell(fq_poly_bcell_t *, fq_t **, uint, uint, fq_ctx_t *);
 void remainderTree(fq_poly_btree_t *, fq_t **, uint, fq_ctx_t *);
 void fq_poly_multieval(fq_t *, fq_t **, fq_poly_t, uint, fq_ctx_t *);
+	// NOUVEAU: void fq_poly_multieval(fq_t *, fq_t *, fq_poly_t, uint, fq_ctx_t *);
+	// tableau retour, tableau entree, poly, longueur entree (= longueur retour), *F
 
 #endif

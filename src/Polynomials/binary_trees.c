@@ -64,7 +64,6 @@ int fq_poly_bcell_set_left(fq_poly_bcell_t *b1, fq_poly_bcell_t *b2) {
 */
 void fq_poly_bcell_clear(fq_poly_bcell_t *b) {
 
-	printf("Freeing bcell!\n");
 	if(b == NULL) return;
 
 	fq_poly_clear(b->data, *(b->F));
@@ -102,4 +101,3 @@ void fq_poly_btree_clear(fq_poly_btree_t *t) {
 
 	fq_poly_bcell_clear(t->head);
 }
-

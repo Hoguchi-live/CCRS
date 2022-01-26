@@ -7,29 +7,30 @@
   The offset is used to slice the array (represent the position of element 0).
   This function is not responsible for the handling of the memory associated with the bcells.
 */
-void remainderCell(fq_poly_bcell_t *rop, fq_t **roots, uint len, uint offset, fq_ctx_t *F) {
+void remainderCell(fq_poly_bcell_t *rop, fq_t **roots, uint offset_start, uint offset_end, fq_ctx_t *F) {
 
-	uint new_offset;
+	uint offset_split;
 	fq_t tmp;
 	fq_poly_t p;
 
 	fq_init(tmp, *F);
 	fq_poly_init(p, *F);
 
-	if(len == 0) {
-
-		//// Set rop to a unique cell containing the 1 polynomial
-		fq_set_ui(tmp, 1, *F);
-		fq_poly_set_fq(p, tmp, *F);
-		fq_poly_bcell_set(rop, p);
-	}
-	else if(len == 1) {
+	if(offset_end - offset_start == 0) {
 
 		//// Set rop to a unique cell containing the X-root polynomial
-		fq_neg(tmp, (*roots)[offset], *F);
+		fq_neg(tmp, (*roots)[offset_start], *F);
 		fq_poly_set_coeff(p, 0, tmp, *F);
 		fq_set_ui(tmp, 1, *F);
 		fq_poly_set_coeff(p, 1, tmp, *F);
+
+		//// TEST
+		printf("Building leaf from root: ");
+		fq_print_pretty((*roots)[offset_start], *F);
+		printf(" Polynomial X-r: ");
+		fq_poly_print_pretty(p, "X", *F);
+		printf("\n");
+		//// TEST
 
 		fq_poly_bcell_set(rop, p);
 	}
@@ -44,8 +45,14 @@ void remainderCell(fq_poly_bcell_t *rop, fq_t **roots, uint len, uint offset, fq
 		fq_poly_bcell_init(left, F);
 		fq_poly_bcell_init(right, F);
 
-		remainderCell(left, roots, len - len/2, offset, F);
-		remainderCell(right, roots, len/2, offset + len - len/2, F);
+		offset_split = offset_start + (offset_end - offset_start) / 2;
+
+		printf("Splitting roots in [%d : %d] U [%d : %d]\n", offset_start, offset_split , offset_split +1, offset_end);
+		printf("Going left\n");
+		remainderCell(left, roots, offset_start, offset_split , F);
+		printf("Going right\n");
+		remainderCell(right, roots, offset_split + 1, offset_end , F);
+		printf("\n\n");
 
 		//// Compute product of child polynomials
 		fq_poly_mul(p, left->data, right->data, *F);
@@ -63,10 +70,12 @@ void remainderCell(fq_poly_bcell_t *rop, fq_t **roots, uint len, uint offset, fq
 */
 void remainderTree(fq_poly_btree_t *T, fq_t **roots, uint len, fq_ctx_t *F) {
 
-	remainderCell(T->head, roots, len, 0, F);
+	remainderCell(T->head, roots, 0, len, F);
 }
 
 void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint *k, fq_ctx_t *F) {
+
+	if(c == NULL) return;
 
 	fq_poly_t Q;
 
@@ -77,6 +86,7 @@ void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint
 
 	if(fq_poly_degree(Q, *F) == 0) {
 
+		printf("Found leaf: %d\n", *k);
 		fq_poly_get_coeff(res[*k], Q, 0, *F);
 		(*k)++;
 	}
@@ -100,7 +110,7 @@ void fq_poly_multieval(fq_t * rop, fq_t ** op, fq_poly_t P, uint len, fq_ctx_t *
 	//// Construct tree with modulos
 	remainderTree(&T, op, len, F);
 	//// Evaluate P by remainders
-	fq_poly_multieval_fromtree(T.head, rop, P, &k, F);
+	//fq_poly_multieval_fromtree(T.head, rop, P, &k, F);
 
 	fq_poly_btree_clear(&T);
 }

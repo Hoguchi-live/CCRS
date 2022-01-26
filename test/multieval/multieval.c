@@ -38,8 +38,8 @@ int main() {
 
 	fq_set_ui(tmp, 1, F);
 	fq_poly_set_coeff(P, 0, tmp, F);
-	fq_poly_set_coeff(P, 1, tmp, F);
-	fq_poly_set_coeff(P, 2, tmp, F);
+	//fq_poly_set_coeff(P, 1, tmp, F);
+	//fq_poly_set_coeff(P, 2, tmp, F);
 
 	res = malloc(sizeof(fq_t)*len);
 	roots = malloc(sizeof(fq_t)*len);
@@ -51,7 +51,7 @@ int main() {
 		fq_init(res[i], F);
 	}
 
-	//fq_poly_multieval(res, &roots, P, len, &F);
+	fq_poly_multieval(res, &roots, P, len, &F);
 
 	//// Check results
 	for(int i=0; i < len; i++) {
