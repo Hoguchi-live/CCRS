@@ -305,10 +305,9 @@ void SW_point_rand_ninfty(SW_point_t *P) {
 	fq_clear(x, *F);
 }
 
-void MG_point_rand_ninfty(MG_point_t *P) {
+void MG_point_rand_ninfty(MG_point_t *P, flint_rand_t state) {
 
 	fq_t X, Y, tmp1, tmp2;
-	flint_rand_t state;
 
 	const fq_ctx_t *F = P->E->F;
 
@@ -316,7 +315,6 @@ void MG_point_rand_ninfty(MG_point_t *P) {
 	fq_init(Y, *F);
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
-	flint_randinit(state);
 
 	// Main loop
 	int ret = 0;
@@ -341,7 +339,6 @@ void MG_point_rand_ninfty(MG_point_t *P) {
 	fq_set(P->X, X, *F);
 	fq_set_ui(P->Z, 1, *F);
 
-	flint_randclear(state);
 	fq_clear(tmp2, *F);
 	fq_clear(tmp1, *F);
 	fq_clear(Y, *F);
@@ -354,10 +351,9 @@ void MG_point_rand_ninfty(MG_point_t *P) {
   	ret == 0 ---> ret == 1
   as we want a non-square.
   **/
-void MG_point_rand_ninfty_nsquare(MG_point_t *P) {
+void MG_point_rand_ninfty_nsquare(MG_point_t *P, flint_rand_t state) {
 
 	fq_t X, Y, tmp1, tmp2;
-	flint_rand_t state;
 
 	const fq_ctx_t *F = P->E->F;
 
@@ -365,7 +361,6 @@ void MG_point_rand_ninfty_nsquare(MG_point_t *P) {
 	fq_init(Y, *F);
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
-	flint_randinit(state);
 
 	// Main loop
 	int ret = 1;
@@ -390,7 +385,6 @@ void MG_point_rand_ninfty_nsquare(MG_point_t *P) {
 	fq_set(P->X, X, *F);
 	fq_set_ui(P->Z, 1, *F);
 
-	flint_randclear(state);
 	fq_clear(tmp2, *F);
 	fq_clear(tmp1, *F);
 	fq_clear(Y, *F);
@@ -745,6 +739,7 @@ void MG_curve_card_ext(fmpz_t rop, MG_curve_t *E, fmpz_t r) {
 */
 int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
+	flint_rand_t state;
 	fmpz_t val, l_pow, cofactor, e;
 	MG_point_t Q, R;
 	bool isinfty = 1;
@@ -754,6 +749,7 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	fmpz_init(e);
 	MG_point_init(&Q, P->E);
 	MG_point_init(&R, P->E);
+	flint_randinit(state);
 
 	MG_point_set_infty(&Q);
 
@@ -762,7 +758,7 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	while(isinfty) {
 
-		MG_point_rand_ninfty(&R);
+		MG_point_rand_ninfty(&R, state);
 		MG_ladder_iter_(&Q, cofactor, &R);
 		MG_point_isinfty(&isinfty, &Q);
 	};
@@ -792,6 +788,7 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	fmpz_clear(e);
 	fmpz_clear(cofactor);
 	fmpz_clear(val);
+	flint_randclear(state);
 
 	return 1;
 }
@@ -808,6 +805,7 @@ WIP: only for degree two reduction
 */
 int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
+	flint_rand_t state;
 	fmpz_t val, l_pow, cofactor;
 	MG_point_t Q, R, Q_test;
 	bool isinfty = 1;
@@ -817,6 +815,7 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	MG_point_init(&Q, P->E);
 	MG_point_init(&R, P->E);
 	MG_point_init(&Q_test, P->E);
+	flint_randinit(state);
 
 	MG_point_set_infty(&Q);
 
@@ -825,7 +824,7 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	while(isinfty) {
 
-		MG_point_rand_ninfty_nsquare(&R);
+		MG_point_rand_ninfty_nsquare(&R, state);
 		MG_ladder_iter_(&Q, cofactor, &R);
 		MG_point_isinfty(&isinfty, &Q);
 	};
@@ -854,6 +853,7 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	MG_point_clear(&Q);
 	fmpz_clear(cofactor);
 	fmpz_clear(val);
+	flint_randclear(state);
 
 	return 1;
 }

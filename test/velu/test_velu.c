@@ -47,13 +47,12 @@ int main() {
 		Walk on the 5-graph
 	**********************************/
 	int ec;
-	uint k, l, r;
+	fmpz_t k, l;
 	fq_t j_inv;
 	MG_curve_t E_tmp1;
 
-	k = 1;
-	l = 11;
-	r = 1;
+	fmpz_init_set_ui(l, 17);
+	fmpz_init_set_ui(k, 1);
 	fq_init(j_inv, F);
 	MG_curve_init(&E_tmp1, &F);
 
@@ -63,7 +62,7 @@ int main() {
 
 	clock_t start = clock(), diff;
 	//// Walk
-	ec = walk_velu(&E_tmp1, &E, l, r, k);
+	ec = walk_velu(&E_tmp1, &E, l, k);
 
 	/********************************
 		CLOCK STOP
@@ -87,6 +86,8 @@ int main() {
 		Clear Memory
 	**********************************/
 	MG_curve_clear(&E_tmp1);
+	fmpz_clear(l);
+	fmpz_clear(k);
 
 	fq_ctx_clear(F);
 	fmpz_clear(base_p);

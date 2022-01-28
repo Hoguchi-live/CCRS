@@ -4,41 +4,46 @@ void _init_lengths(uint* b, uint* bprime, uint* lenK, uint l) {
 	*bprime = l-1;
 	*b = 1;
 	while (((*b)+1)*((*b)+1) <= *bprime) {
-		b++;
+		(*b)++;
 	}
 	*b = *b/2;
 	*bprime = (*bprime)/(4*(*b));
 	*lenK = (l-1-4*(*b)*(*bprime))/2;
 }
 
-void KPS(MG_point_t I[], MG_point_t J[], MG_point_t K[], MG_point_t P, uint l, uint b, uint bprime, uint lenK) {
+void KPS(MG_point_t *I, MG_point_t *J, MG_point_t *K, MG_point_t P, uint l, uint b, uint bprime, uint lenK) {
 	// array I of length brpime
 	// array J of length b
 	// array K of length lenK
-	MG_curve_t *E = P.E;
 
+
+	MG_curve_t *E = P.E;
 	MG_point_t P2, P4, P4b;
+
 	MG_point_init(&P2, E);
 	MG_point_init(&P4, E);
 	MG_point_init(&P4b, E);
+
 	MG_xDBL(&P2, P); //P2 = 2*P
 	MG_xDBL(&P4, P2); //P4 = 4*P
-
 
 	//computing J = {(2j+1)*P for j = 1, ..., b-1}
 	//if l>17 then bprime >= b >= 2 therefore J has at least two elements
 
+
+
 	MG_point_set_(&J[0], &P);
-	MG_xADD(&J[1], P, P2, P); //J[1] = 3*P
+	MG_xADD(&(J[1]), P, P2, P); //J[1] = 3*P
+
 
 	for (int j=2; j<b; j++) {
-		MG_xADD(&J[j], J[j-1], P2, J[j-2]);
+		MG_xADD(&(J[j]), J[j-1], P2, J[j-2]);
 	}
-
 
 	//computing I = {2b(2i+1)*P for i = 1, ..., bprime-1}
 
-	//I[0] = 2b*P
+
+	//// Set I[0] = 2b*P
 	if (b%2) {
 		MG_xADD(&I[0], J[b/2], J[b-(b/2)], P2);
 	}
@@ -63,7 +68,7 @@ void KPS(MG_point_t I[], MG_point_t J[], MG_point_t K[], MG_point_t P, uint l, u
 		}
 	}
 
-	for (int i = lenK-3; i>0; i--) {
+	for (int i = lenK-3; i>=0; i--) {
 		MG_xADD(&K[i], K[i+1], P2, K[i+2]);
 	}
 
@@ -231,9 +236,14 @@ void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
 	uint b, bprime, lenK;
 	_init_lengths(&b, &bprime, &lenK, l);
 
+	//// TEST
+	printf("init_length returned b = %d, b' = %d, lenK = %d\n", b, bprime, lenK);
+	//// TEST
+
 	MG_point_t I[bprime];
 	MG_point_t J[b];
 	MG_point_t K[lenK];
+
 	for (int i=0; i<bprime; i++) {
 		MG_point_init(&I[i], P.E);
 	}
@@ -244,8 +254,10 @@ void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
 		MG_point_init(&K[i], P.E);
 	}
 
+	printf("Start KPS\n");
 	KPS(I, J, K, P, l, b, bprime, lenK);
-	xISOG(A2, P, l, I, J, K, b, bprime, lenK);
+	printf("End KPS\n");
+	//xISOG(A2, P, l, I, J, K, b, bprime, lenK);
 
 	for (int i=0; i<bprime; i++) {
 		MG_point_clear(&I[i]);
