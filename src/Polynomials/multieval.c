@@ -7,7 +7,7 @@
   The offset is used to slice the array (represent the position of element 0).
   This function is not responsible for the handling of the memory associated with the bcells.
 */
-void remainderCell(fq_poly_bcell_t *rop, fq_t *roots, uint offset_start, uint offset_end, fq_ctx_t *F) {
+void remainderCell(fq_poly_bcell_t *rop, fq_t *roots, uint offset_start, uint offset_end, const fq_ctx_t *F) {
 
 	uint offset_split;
 	fq_t tmp;
@@ -68,12 +68,12 @@ void remainderCell(fq_poly_bcell_t *rop, fq_t *roots, uint offset_start, uint of
   See remainderCell.
   T should be initialized.
 */
-void remainderTree(fq_poly_btree_t *T, fq_t *roots, uint len, fq_ctx_t *F) {
+void remainderTree(fq_poly_btree_t *T, fq_t *roots, uint len, const fq_ctx_t *F) {
 
 	remainderCell(T->head, roots, 0, len-1, F);
 }
 
-void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint *k, fq_ctx_t *F) {
+void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint *k, const fq_ctx_t *F) {
 
 	fq_poly_t Q;
 
@@ -92,7 +92,7 @@ void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint
 	if(c->left == NULL) {
 
 		fq_poly_get_coeff(res[*k], Q, 0, *F);
-		printf("Found leaf: %d for poly: ", *k);
+		printf("*Found leaf: %d for poly: ", *k);
 		fq_print_pretty(res[*k], *F);
 		printf("\n");
 		(*k)++;
@@ -109,7 +109,7 @@ void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint
 	fq_poly_clear(Q, *F);
 }
 
-void fq_poly_multieval(fq_t * rop, fq_t * op, fq_poly_t P, uint len, fq_ctx_t *F) {
+void fq_poly_multieval(fq_t * rop, fq_t * op, fq_poly_t P, uint len, const fq_ctx_t *F) {
 
 	uint k = 0;
 	fq_poly_btree_t T;
@@ -124,3 +124,4 @@ void fq_poly_multieval(fq_t * rop, fq_t * op, fq_poly_t P, uint len, fq_ctx_t *F
 
 	fq_poly_btree_clear(&T);
 }
+

@@ -11,11 +11,11 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 
 	int ec = 1;
 
-	//// Nothing to do
-	//if(fmpz_equal_ui(k, 0)) {
-	//	MG_curve_set_(rop, op);
-	//	return ec;
-	//}
+	// Nothing to do
+	if(fmpz_equal_ui(k, 0)) {
+		MG_curve_set_(rop, op);
+		return ec;
+	}
 
 	//// Init variables
 	fmpz_t k_local;
@@ -91,6 +91,36 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	TN_curve_clear(&E_TN_tmp1);
 	TN_curve_clear(&E_TN_tmp2);
 	fmpz_clear(r);
+
+	return ec;
+}
+
+/**
+  Take k steps in the l-isogeny graph using the sqrt-velu algorithm.
+TODO: harcode cardinals, update MG_curve_set_ to MG_curve_set. Update with card_ext.
+**/
+int walk_velu(MG_curve_t *rop, MG_curve_t *op, uint l, uint r, uint k) {
+
+	int ec = 1;
+
+	// Nothing to do
+	if(k == 0) {
+		MG_curve_set_(rop, op);
+		return ec;
+	}
+
+	//// Init variables
+	uint b, bprime, lenK;
+
+	//// Compute constants
+	_init_lengths(&b, &bprime, &lenK, l);
+
+	//// TEST
+	printf("Found b = %d, b' = %d\n", b, bprime);
+	//// TEST
+
+	//// Compute I, J and K
+
 
 	return ec;
 }

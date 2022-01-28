@@ -44,6 +44,8 @@ void SW_j_invariant(fq_t *output, SW_curve_t *E) {
 
 void MG_j_invariant(fq_t *output, MG_curve_t *E) {
 
+	if(fq_is_zero(E->A, *(E->F)) && fq_is_zero(E->B, *(E->F))) return;
+
 	fq_t tmp1, tmp2;				// temporary registers
 	fq_t j_invariant;	 		// discriminant, j-invariant
 
@@ -1058,3 +1060,4 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 
 	if(ret == 0) return 0; // Error!
 }
+
