@@ -17,25 +17,28 @@ void KPS(MG_point_t I[], MG_point_t J[], MG_point_t K[], MG_point_t P, uint l, u
 	// array K of length lenK
 	MG_curve_t *E = P.E;
 
+	MG_point_t P2, P4, P4b;
+	MG_point_init(&P2, E);
+	MG_point_init(&P4, E);
+	MG_point_init(&P4b, E);
+	MG_xDBL(&P2, P); //P2 = 2*P
+	MG_xDBL(&P4, P2); //P4 = 4*P
+
+
 	//computing J = {(2j+1)*P for j = 1, ..., b-1}
 	//if l>17 then bprime >= b >= 2 therefore J has at least two elements
-	MG_point_t P2; //P2 = 2*P
-	MG_point_init(&P2, E);
-	MG_xDBL(&P2, P);
-	J[0] = P;
-	MG_point_init(&J[1], E);
+
+	MG_point_set_(&J[0], &P);
 	MG_xADD(&J[1], P, P2, P); //J[1] = 3*P
+
 	for (int j=2; j<b; j++) {
-		MG_point_init(&J[j], E);
 		MG_xADD(&J[j], J[j-1], P2, J[j-2]);
 	}
 
-	//computing I = {2b(2i+1)*P for i = 1, ..., bprime-1}
-	MG_point_t P4, P4b;
-	MG_point_init(&P4, E);
-	MG_xDBL(&P4, P2); //P4 = 4*P
 
-	MG_point_init(&I[0], E); //I[0] = 2b*P
+	//computing I = {2b(2i+1)*P for i = 1, ..., bprime-1}
+
+	//I[0] = 2b*P
 	if (b%2) {
 		MG_xADD(&I[0], J[b/2], J[b-(b/2)], P2);
 	}
@@ -43,32 +46,35 @@ void KPS(MG_point_t I[], MG_point_t J[], MG_point_t K[], MG_point_t P, uint l, u
 		MG_xADD(&I[0], J[b/2], J[b-(b/2)], P4);
 	}
 
-	MG_point_init(&P4b, E);
 	MG_xDBL(&P4b, I[0]); // P4b = 4b*P
-	MG_point_init(&I[1], E);
 	MG_xADD(&I[1], P4b, I[0], I[0]); // I[1] = 6b*P = 4b*P + 2b*P
 
 	for (int i=2; i<bprime; i++) {
-		MG_point_init(&I[i], E);
 		MG_xADD(&I[i], I[i-1], P4b, I[i-2]);
 	}
 
+
 	//computing K = {i*P for i = 4*b*bprime+1, ..., l-4, l-2}
+
 	if (lenK>0) {
-		MG_point_init(&K[lenK-1], E);
 		K[lenK-1] = P2; // (l-2)*P = -2*P
 		if (lenK>1) {
-			MG_point_init(&K[lenK-2], E);
 			K[lenK-2] = P4; // (l-4)*P = -4*P
 		}
 	}
+
 	for (int i = lenK-3; i>0; i--) {
-		MG_point_init(&K[i], E);
 		MG_xADD(&K[i], K[i+1], P2, K[i+2]);
 	}
 
-	// TODO: Memory management
+
+	// Memory management
+
+	MG_point_clear(&P2);
+	MG_point_clear(&P4);
+	MG_point_clear(&P4b);
 }
+
 
 void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_point_t K[], uint b, uint bprime, uint lenK) {
 
@@ -152,7 +158,7 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 		fq_mul(M1, M1, tmp, *F);
 	}
 
-	// computing
+	// computing A2
 	fq_mul(M0, M0, R0, *F);
 	fq_mul(M1, M1, R1, *F);
 	fq_div(M0, M0, M1, *F);
@@ -188,20 +194,20 @@ void _F0pF1pF2_F0mF1pF2(fq_poly_t *rop1, fq_poly_t *rop2, MG_point_t P, const fq
 	fq_init(tmp1, ctx);
 	fq_init(tmp2, ctx);
 
-	// tmp1 = x^2 - 2x + 1
+	// set tmp1 = x^2 - 2x + 1
 	fq_add_si(tmp1, P.X, -2, ctx);
 	fq_mul(tmp1, tmp1, P.X, ctx);
 	fq_add_si(tmp1, tmp1, 1, ctx);
 	fq_poly_set_coeff(*rop1, 2, tmp1, ctx);
 	fq_poly_set_coeff(*rop1, 0, tmp1, ctx);
 
-	// tmp1 = x^2 + 2x + 1
+	// set tmp1 = x^2 + 2x + 1
 	fq_mul_si(tmp2, P.X, 4, ctx);
 	fq_add(tmp1, tmp1, tmp2, ctx);
 	fq_poly_set_coeff(*rop2, 2, tmp1, ctx);
 	fq_poly_set_coeff(*rop2, 0, tmp1, ctx);
 
-	// tmp1 = -2x^2 - 4Ax - 4x - 2
+	// set tmp1 = -2x^2 - 4Ax - 4x - 2
 	fq_add_si(tmp1, (P.E)->A, 1, ctx);
 	fq_mul_si(tmp1, tmp1, 2, ctx);
 	fq_add(tmp1, tmp1, P.X, ctx);
@@ -210,7 +216,7 @@ void _F0pF1pF2_F0mF1pF2(fq_poly_t *rop1, fq_poly_t *rop2, MG_point_t P, const fq
 	fq_mul_si(tmp1, tmp1, -2, ctx);
 	fq_poly_set_coeff(*rop1, 1, tmp1, ctx);
 
-	// tmp1 = 2x^2 + 4Ax - 4x + 2
+	// set tmp1 = 2x^2 + 4Ax - 4x + 2
 	fq_mul_si(tmp2, tmp2, 2, ctx);
 	fq_add(tmp1, tmp1, tmp2, ctx);
 	fq_neg(tmp1, tmp1, ctx);
@@ -218,5 +224,37 @@ void _F0pF1pF2_F0mF1pF2(fq_poly_t *rop1, fq_poly_t *rop2, MG_point_t P, const fq
 
 	fq_clear(tmp1, ctx);
 	fq_clear(tmp2, ctx);
+}
+
+void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
+
+	uint b, bprime, lenK;
+	_init_lengths(&b, &bprime, &lenK, l);
+
+	MG_point_t I[bprime];
+	MG_point_t J[b];
+	MG_point_t K[lenK];
+	for (int i=0; i<bprime; i++) {
+		MG_point_init(&I[i], P.E);
+	}
+	for (int i=0; i<b; i++) {
+		MG_point_init(&J[i], P.E);
+	}
+	for (int i=0; i<lenK; i++) {
+		MG_point_init(&K[i], P.E);
+	}
+
+	KPS(I, J, K, P, l, b, bprime, lenK);
+	xISOG(A2, P, l, I, J, K, b, bprime, lenK);
+
+	for (int i=0; i<bprime; i++) {
+		MG_point_clear(&I[i]);
+	}
+	for (int i=0; i<b; i++) {
+		MG_point_clear(&J[i]);
+	}
+	for (int i=0; i<lenK; i++) {
+		MG_point_clear(&K[i]);
+	}
 }
 
