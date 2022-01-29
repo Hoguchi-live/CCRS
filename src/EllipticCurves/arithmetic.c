@@ -469,6 +469,9 @@ void MG_xADD(MG_point_t *output, MG_point_t P, MG_point_t Q, MG_point_t D) {
 	fq_mul(output->X, D.Z, v3, *F);
 	fq_mul(output->Z, D.X, v1, *F);
 
+	//// NORMALIZE
+	MG_point_normalize(output);
+
 	// clear memory
 	fq_clear(v0, *F);
 	fq_clear(v1, *F);
@@ -497,6 +500,9 @@ void MG_xDBL(MG_point_t *output, MG_point_t P) {
 	fq_mul(v3, v3, v1, *F);
 	fq_add(v3, v3, v2, *F);
 	fq_mul(output->Z, v1, v3, *F);
+
+	//// NORMALIZE
+	MG_point_normalize(output);
 
 	// clear memory
 	fq_clear(v1, *F);
@@ -781,6 +787,7 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	// Case of failure
 	if(!isinfty) return 0;
 
+	MG_point_normalize(&Q);
 	MG_point_set_(P, &Q);
 
 	MG_point_clear(&R);

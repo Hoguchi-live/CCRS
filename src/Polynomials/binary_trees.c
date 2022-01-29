@@ -83,6 +83,7 @@ void fq_poly_btree_init(fq_poly_btree_t *t, const fq_ctx_t *F) {
 
 	t->F = F;
 	t->head = malloc(sizeof(fq_poly_bcell_t));
+	fq_poly_bcell_init(t->head, F);
 }
 
 /**
@@ -101,3 +102,4 @@ void fq_poly_btree_clear(fq_poly_btree_t *t) {
 
 	fq_poly_bcell_clear(t->head);
 }
+

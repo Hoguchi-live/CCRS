@@ -49,41 +49,14 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	//// Transform op in Tate-normal form
 	MG_get_TN(&E_TN_tmp1, op, &P, l);
 
-	/// TEST
-	fq_t j;
-	fq_init(j, *(op->F));
-	printf("walk::op in MG j-inv: ");
-	MG_j_invariant(&j, op);
-	fq_print_pretty(j, *(op->F));
-	printf("\nwalk::op in TN j-inv: ");
-	TN_j_invariant(&j, &E_TN_tmp1);
-	fq_print_pretty(j, *(op->F));
-	printf("\n");
-	/// TEST
-
 	//// Walk
 	if(fmpz_equal_ui(l, 3)) radical_isogeny_3(&E_TN_tmp2, &E_TN_tmp1, k_local);
 	else if(fmpz_equal_ui(l, 5)) radical_isogeny_5(&E_TN_tmp2, &E_TN_tmp1, k_local);
 	else if(fmpz_equal_ui(l, 7)) radical_isogeny_7(&E_TN_tmp2, &E_TN_tmp1, k_local);
 	else return 0;
 
-	/// TEST
-	printf("walk::rop in TN j-inv: ");
-	TN_j_invariant(&j, &E_TN_tmp2);
-	fq_print_pretty(j, *(op->F));
-	printf("\n");
-	/// TEST
-
 	//// Transform result back into Mongomery form
 	ec = TN_get_MG(rop, &E_TN_tmp2);
-	printf("walk::TN get MG success: %d\n", ec);
-
-	/// TEST
-	printf("walk::rop in MG j-inv: ");
-	MG_j_invariant(&j, rop);
-	fq_print_pretty(j, *(op->F));
-	printf("\n\n");
-	/// TEST
 
 	//// Clear
 	fmpz_clear(k_local);
@@ -129,9 +102,12 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 		// case k>0
 		fmpz_set_ui(r, 1);
 		MG_curve_card_ext(card, op, r);
-		printf("Looking for torsion\n");
 		ec = MG_curve_rand_torsion(&P, l, card);
 		printf("walk::torsion result: %d\n", ec);
+
+		printf("Torsion point found: ");
+		MG_point_print(&P);
+		printf("\n\n");
 	}
 	else {
 		// case k<0
@@ -144,11 +120,16 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 
 	//// TEST
 	isogeny_from_torsion(&new_A, P, fmpz_get_ui(l));
-	//printf("walk::isogeny result: %d\n", ec);
+
+	printf("\nnew_A: ");
+	fq_print_pretty(new_A, *(op->F));
 	//// TEST
 
-	//// Clear
+	//// Set output
+	fq_set_ui(new_B, 1, *(op->F));
+	MG_curve_set(rop, op->F, new_A, new_B);
 
+	//// Clear
 	fq_clear(new_A, *(op->F));
 	fq_clear(new_B, *(op->F));
 	fmpz_clear(k_local);

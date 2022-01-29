@@ -29,26 +29,21 @@ void KPS(MG_point_t *I, MG_point_t *J, MG_point_t *K, MG_point_t P, uint l, uint
 
 	//computing J = {(2j+1)*P for j = 1, ..., b-1}
 	//if l>17 then bprime >= b >= 2 therefore J has at least two elements
-
-
-
 	MG_point_set_(&J[0], &P);
 	MG_xADD(&(J[1]), P, P2, P); //J[1] = 3*P
-
 
 	for (int j=2; j<b; j++) {
 		MG_xADD(&(J[j]), J[j-1], P2, J[j-2]);
 	}
 
 	//computing I = {2b(2i+1)*P for i = 1, ..., bprime-1}
-
-
 	//// Set I[0] = 2b*P
-	if (b%2) {
-		MG_xADD(&I[0], J[b/2], J[b-(b/2)], P2);
+	if (b%2 == 0) {
+		MG_xADD(&I[0], J[b/2], J[b-(b/2) - 1], P2);
 	}
 	else {
-		MG_xADD(&I[0], J[b/2], J[b-(b/2)], P4);
+		//MG_xADD(&I[0], J[b/2], J[b-(b/2)], P4);
+		MG_xDBL(&I[0], J[b/2]);
 	}
 
 	MG_xDBL(&P4b, I[0]); // P4b = 4b*P
@@ -144,8 +139,17 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 		fq_mul(R0, R0, eval[i], *F);
 	}
 
+	printf("\nTEST poly E1: \n");
+	fq_poly_print_pretty(E1, "X", *F);
+	printf("\nTEST\n");
 	fq_poly_multieval(eval, Ix, E1, bprime, F);
 	for (uint i=0; i<bprime; i++) {
+		//// TEST
+		printf("\nTEST result eval E1: \n");
+		fq_print_pretty(eval[i], *F);
+		printf("\nTEST\n");
+		//// TEST
+
 		fq_mul(R1, R1, eval[i], *F);
 		fq_clear(eval[i], *F);
 		fq_clear(Ix[i], *F);
@@ -254,10 +258,9 @@ void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
 		MG_point_init(&K[i], P.E);
 	}
 
-	printf("Start KPS\n");
 	KPS(I, J, K, P, l, b, bprime, lenK);
-	printf("End KPS\n");
-	//xISOG(A2, P, l, I, J, K, b, bprime, lenK);
+
+	xISOG(A2, P, l, I, J, K, b, bprime, lenK);
 
 	for (int i=0; i<bprime; i++) {
 		MG_point_clear(&I[i]);

@@ -70,7 +70,7 @@ int main() {
 	diff = clock() - start;
 	int msec = diff * 1000 / CLOCKS_PER_SEC;
 	printf("Time taken %d seconds %d milliseconds\n", msec/1000, msec%1000);
-	printf("walk_rad returned: %d\n", ec);
+	printf("walk_velu returned: %d\n", ec);
 
 	////// Target curve
 	printf("target curve: ");
