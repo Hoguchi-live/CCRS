@@ -104,10 +104,6 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 		MG_curve_card_ext(card, op, r);
 		ec = MG_curve_rand_torsion(&P, l, card);
 		printf("walk::torsion result: %d\n", ec);
-
-		printf("Torsion point found: ");
-		MG_point_print(&P);
-		printf("\n\n");
 	}
 	else {
 		// case k<0
@@ -118,12 +114,7 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 		printf("walk::torsion result: %d\n", ec);
 	}
 
-	//// TEST
 	isogeny_from_torsion(&new_A, P, fmpz_get_ui(l));
-
-	printf("\nnew_A: ");
-	fq_print_pretty(new_A, *(op->F));
-	//// TEST
 
 	//// Set output
 	fq_set_ui(new_B, 1, *(op->F));

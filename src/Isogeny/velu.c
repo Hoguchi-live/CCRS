@@ -116,7 +116,7 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	fq_poly_one(E0, *F);
 	fq_poly_one(E1, *F);
 	for (uint j=0; j<b; j++) {
-		_F0pF1pF2_F0mF1pF2(&tmp1, &tmp2, P, *F);
+		_F0pF1pF2_F0mF1pF2(&tmp1, &tmp2, J[j], *F);
 		fq_poly_mul(E0, E0, tmp1, *F);
 		fq_poly_mul(E1, E1, tmp2, *F);
 	}
@@ -139,17 +139,8 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 		fq_mul(R0, R0, eval[i], *F);
 	}
 
-	printf("\nTEST poly E1: \n");
-	fq_poly_print_pretty(E1, "X", *F);
-	printf("\nTEST\n");
 	fq_poly_multieval(eval, Ix, E1, bprime, F);
 	for (uint i=0; i<bprime; i++) {
-		//// TEST
-		printf("\nTEST result eval E1: \n");
-		fq_print_pretty(eval[i], *F);
-		printf("\nTEST\n");
-		//// TEST
-
 		fq_mul(R1, R1, eval[i], *F);
 		fq_clear(eval[i], *F);
 		fq_clear(Ix[i], *F);
@@ -171,20 +162,23 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	fq_mul(M0, M0, R0, *F);
 	fq_mul(M1, M1, R1, *F);
 	fq_div(M0, M0, M1, *F);
-	fq_pow_ui(M0, M0, 8, *F); // M0 = (M0*R0)/(M1*R1)^8
+	fq_pow_ui(M0, M0, 8, *F); // M0 = [ (M0*R0)/(M1*R1) ]^8
+
 	fq_sub_one(R0, (P.E)->A, *F);
 	fq_sub_one(R0, R0, *F);
 	fq_add_ui(R1, (P.E)->A, 2, *F);
 	fq_div(R0, R0, R1, *F);
-	fq_pow_ui(R0, R0, l, *F); // R0 = (A-2)/(A+2)^l
+	fq_pow_ui(R0, R0, l, *F); // R0 = [ (A-2)/(A+2) ]^l
+
 	fq_mul(M0, M0, R0, *F); // M0 =: d
+
 	fq_sub_one(R0, M0, *F);
 	fq_neg(R0, R0, *F);
 	fq_add_ui(M0, M0, 1, *F);
-	fq_mul(M0, M0, R0, *F);  // M0 = (d+1)/(d-1)
+	fq_div(M0, M0, R0, *F);  // M0 = (d+1)/(d-1)
 	fq_mul_ui(*A2, M0, 2, *F);
 
-	// Memory management
+	// Memory clear
 	fq_clear(R0, *F);
 	fq_clear(R1, *F);
 	fq_clear(M0, *F);
@@ -239,10 +233,6 @@ void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
 
 	uint b, bprime, lenK;
 	_init_lengths(&b, &bprime, &lenK, l);
-
-	//// TEST
-	printf("init_length returned b = %d, b' = %d, lenK = %d\n", b, bprime, lenK);
-	//// TEST
 
 	MG_point_t I[bprime];
 	MG_point_t J[b];
