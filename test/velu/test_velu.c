@@ -28,7 +28,7 @@ int main() {
 
 	// Elliptic curve parameters
 	char base_p_str[] = BASE_p;
-	slong d = 1;
+	slong d = 3;
 	fmpz_t base_p;
 	fmpz_init(base_p);
 	fmpz_set_str(base_p, base_p_str, 0);
@@ -49,12 +49,13 @@ int main() {
 	int ec;
 	fmpz_t k, l;
 	fq_t j_inv;
-	MG_curve_t E_tmp1;
+	MG_curve_t E_tmp1, E_tmp2;
 
-	fmpz_init_set_ui(l, 17);
-	fmpz_init_set_ui(k, 1);
+	fmpz_init_set_ui(l, 19);
+	fmpz_init_set_si(k, 1);
 	fq_init(j_inv, F);
 	MG_curve_init(&E_tmp1, &F);
+	MG_curve_init(&E_tmp2, &F);
 
 	/********************************
 	  	CLOCK START
@@ -63,22 +64,24 @@ int main() {
 	clock_t start = clock(), diff;
 	//// Walk
 	ec = walk_velu(&E_tmp1, &E, l, k);
-
+	diff = clock() - start;
+	//// Walk reverse
+	fmpz_neg(k, k);
+	ec = walk_velu(&E_tmp2, &E_tmp1, l, k);
 	/********************************
 		CLOCK STOP
 	********************************/
-	diff = clock() - start;
 	int msec = diff * 1000 / CLOCKS_PER_SEC;
 	printf("Time taken %d seconds %d milliseconds\n", msec/1000, msec%1000);
 	printf("walk_velu returned: %d\n", ec);
 
 	////// Target curve
 	printf("target curve: ");
-	MG_curve_print(&E_tmp1);
+	MG_curve_print(&E_tmp2);
 	printf("\n");
 
 	//// J-invariant
-	MG_j_invariant(&j_inv, &E_tmp1);
+	MG_j_invariant(&j_inv, &E_tmp2);
 	printf("target curve j-invariant: ");
 	fq_print_pretty(j_inv, F);
 	printf("\n\n");
@@ -86,12 +89,13 @@ int main() {
 		Clear Memory
 	**********************************/
 	MG_curve_clear(&E_tmp1);
+	MG_curve_clear(&E_tmp2);
 	fmpz_clear(l);
 	fmpz_clear(k);
+	fq_clear(j_inv, F);
 
 	fq_ctx_clear(F);
 	fmpz_clear(base_p);
 	MG_curve_clear(&E);
 
 }
-

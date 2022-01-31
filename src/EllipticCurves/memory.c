@@ -205,6 +205,7 @@ void SW_point_clear(SW_point_t *P) {
 */
 void MG_curve_init(MG_curve_t *E, const fq_ctx_t *F) {
 
+	E->F = F;
 	fq_init(E->A, *F);
 	fq_init(E->B, *F);
 }
@@ -583,4 +584,3 @@ void TN_curve_clear(TN_curve_t *E) {
 	fq_clear(E->c, *(E->F));
 	fmpz_clear(E->l);
 }
-

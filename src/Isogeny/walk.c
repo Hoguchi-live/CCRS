@@ -83,13 +83,14 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	}
 
 	//// Init variables
-	//// Init variables
 	fq_t new_A, new_B;
 	fmpz_t k_local;
 	MG_point_t P;
 	TN_curve_t E_TN_tmp1, E_TN_tmp2;
 	fmpz_t card, r;
 
+	fmpz_init(r);
+	fmpz_init(card);
 	fq_init(new_A, *(op->F));
 	fq_init(new_B, *(op->F));
 	fmpz_init_set(k_local, k);
@@ -102,19 +103,28 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 		// case k>0
 		fmpz_set_ui(r, 1);
 		MG_curve_card_ext(card, op, r);
-		ec = MG_curve_rand_torsion(&P, l, card);
-		printf("walk::torsion result: %d\n", ec);
+
+		//// Main loop
+		for(int i = 0; fmpz_cmp_ui(k_local, i) > 0; i++) {
+			ec = MG_curve_rand_torsion(&P, l, card);
+			printf("walk::torsion result: %d\n", ec);
+			isogeny_from_torsion(&new_A, P, fmpz_get_ui(l));
+		}
 	}
 	else {
 		// case k<0
 		fmpz_set_ui(r, 2);
 		fmpz_neg(k_local, k_local);
 		MG_curve_card_ext(card, op, r);
-		ec = MG_curve_rand_torsion_(&P, l, card);
-		printf("walk::torsion result: %d\n", ec);
+
+		//// Main loop
+		for(int i = 0; fmpz_cmp_ui(k_local, i) > 0; i++) {
+			ec = MG_curve_rand_torsion_(&P, l, card);
+			printf("walk::torsion result: %d\n", ec);
+			isogeny_from_torsion(&new_A, P, fmpz_get_ui(l));
+		}
 	}
 
-	isogeny_from_torsion(&new_A, P, fmpz_get_ui(l));
 
 	//// Set output
 	fq_set_ui(new_B, 1, *(op->F));
@@ -127,8 +137,8 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	MG_point_clear(&P);
 	TN_curve_clear(&E_TN_tmp1);
 	TN_curve_clear(&E_TN_tmp2);
+	fmpz_clear(card);
 	fmpz_clear(r);
 
 	return ec;
 }
-

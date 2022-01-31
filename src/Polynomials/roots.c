@@ -27,6 +27,7 @@
 */
 int fq_sqr_from_polyfact(fq_t rop, fq_t op, const fq_ctx_t F) {
 
+	int ec = 1;
 	fq_t one, tmp, lead;
 	fq_poly_t pol;
 	fq_poly_factor_t fac;
@@ -35,19 +36,18 @@ int fq_sqr_from_polyfact(fq_t rop, fq_t op, const fq_ctx_t F) {
 	fq_init(tmp, F);
 	fq_init(lead, F);
 	fq_poly_init(pol, F);
-	fq_poly_factor_init(fac, F);
+	fq_poly_factor_init(fac, F); //// Memory leak (Valgrind)
 
-	fq_neg(tmp, op, F);
+	fq_neg(tmp, op, F);	//// Memory leak (Valgrind)
 
-	fq_set_ui(one, 1, F);
+	fq_set_ui(one, 1, F);	//// Memory leak (Valgrind)
 	fq_poly_set_coeff(pol, 2, one, F);
-	fq_poly_set_coeff(pol, 0, tmp, F);
+	fq_poly_set_coeff(pol, 0, tmp, F); //// Memory leak (Valgrind)
 
-	fq_poly_factor(fac, lead, pol, F);
+	fq_poly_factor(fac, lead, pol, F); //// Memory leak (Valgrind)
 
-	if(fac->num < 2) return 0;
-
-	fq_poly_get_coeff(rop, fac->poly, 0, F);
+	if(fac->num < 2) ec = 0;
+	else fq_poly_get_coeff(rop, fac->poly, 0, F);
 
 	fq_poly_factor_clear(fac, F);
 	fq_poly_clear(pol, F);
@@ -55,6 +55,5 @@ int fq_sqr_from_polyfact(fq_t rop, fq_t op, const fq_ctx_t F) {
 	fq_clear(tmp, F);
 	fq_clear(one, F);
 
-	return 1;
+	return ec;
 }
-

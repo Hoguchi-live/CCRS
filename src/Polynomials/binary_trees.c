@@ -70,6 +70,7 @@ void fq_poly_bcell_clear(fq_poly_bcell_t *b) {
 
 	if(b->right != NULL) fq_poly_bcell_clear(b->right);
 	if(b->left != NULL) fq_poly_bcell_clear(b->left);
+	free(b);
 }
 
 /*******************************
@@ -102,4 +103,3 @@ void fq_poly_btree_clear(fq_poly_btree_t *t) {
 
 	fq_poly_bcell_clear(t->head);
 }
-

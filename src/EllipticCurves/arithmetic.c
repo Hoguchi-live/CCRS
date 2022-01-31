@@ -253,9 +253,7 @@ bool MG_point_isinfty_(MG_point_t *P) {
 */
 void MG_point_normalize(MG_point_t *P) {
 
-	bool isinfty;
-	MG_point_isinfty(&isinfty, P);
-	if(!isinfty) {
+	if(!fq_is_zero(P->Z, *(P->E->F))) {
 		fq_div(P->X, P->X, P->Z, *(P->E->F));
 		fq_one(P->Z, *(P->E->F));
 	}
@@ -812,6 +810,7 @@ WIP: only for degree two reduction
 */
 int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
+	int ec = 0;
 	flint_rand_t state;
 	fmpz_t val, l_pow, cofactor;
 	MG_point_t Q, R, Q_test;
@@ -852,9 +851,8 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	}
 
 	// Case of failure
-	if(!isinfty) return 0;
-
-	MG_point_set_(P, &Q);
+	if(!isinfty) ec = 0;
+	else ec = 1; MG_point_set_(P, &Q);
 
 	MG_point_clear(&R);
 	MG_point_clear(&Q);
@@ -862,7 +860,7 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 	fmpz_clear(val);
 	flint_randclear(state);
 
-	return 1;
+	return ec;
 }
 
 /******************************
@@ -1067,4 +1065,3 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 
 	if(ret == 0) return 0; // Error!
 }
-

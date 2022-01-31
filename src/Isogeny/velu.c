@@ -28,9 +28,11 @@ void KPS(MG_point_t *I, MG_point_t *J, MG_point_t *K, MG_point_t P, uint l, uint
 	MG_xDBL(&P4, P2); //P4 = 4*P
 
 	//computing J = {(2j+1)*P for j = 1, ..., b-1}
-	//if l>17 then bprime >= b >= 2 therefore J has at least two elements
 	MG_point_set_(&J[0], &P);
-	MG_xADD(&(J[1]), P, P2, P); //J[1] = 3*P
+
+	// If l>17 then bprime >= b >= 2 therefore J has at least two elements
+	// If l = 11 or 13, then b = 1, bprime >= 2
+	if(l >= 17) MG_xADD(&(J[1]), P, P2, P); //J[1] = 3*P
 
 	for (int j=2; j<b; j++) {
 		MG_xADD(&(J[j]), J[j-1], P2, J[j-2]);
@@ -57,9 +59,9 @@ void KPS(MG_point_t *I, MG_point_t *J, MG_point_t *K, MG_point_t P, uint l, uint
 	//computing K = {i*P for i = 4*b*bprime+1, ..., l-4, l-2}
 
 	if (lenK>0) {
-		K[lenK-1] = P2; // (l-2)*P = -2*P
+		MG_point_set_(&(K[lenK-1]), &P2); // (l-2)*P = -2*P
 		if (lenK>1) {
-			K[lenK-2] = P4; // (l-4)*P = -4*P
+			MG_point_set_(&(K[lenK-2]), &P4); // (l-4)*P = -4*P
 		}
 	}
 
@@ -262,4 +264,3 @@ void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
 		MG_point_clear(&K[i]);
 	}
 }
-
