@@ -1,0 +1,61 @@
+*** Config structure ***
+ Finite field Fp^d 
+p = 12037340738208845034383383978222801137092029451270197923071397735408251586669938291587857560356890516069961904754171956588530344066457839297755929645858769
+d = 1
+ Base elliptic curve BY^2 = X^3 + AX^2 + X
+A = 10861338504649280383859950140772947007703646408372831934324660566888732797778932142488253565145603672591944602210571423767689240032829444439469242521864171
+B = 1
+ l-primes 
+nb_primes = 24
+************************
+*** Key structure ***
+3 ---> 10
+5 ---> 10
+7 ---> 10
+11 ---> 10
+13 ---> 10
+17 ---> 10
+103 ---> 10
+523 ---> 10
+821 ---> 10
+523 ---> 10
+1723 ---> 10
+19 ---> 10
+661 ---> 10
+1013 ---> 10
+1181 ---> 10
+31 ---> 10
+61 ---> 10
+1321 ---> 10
+29 ---> 10
+71 ---> 10
+547 ---> 10
+881 ---> 10
+37 ---> 10
+1693 ---> 10
+*********************
+VERBOSE::apply_key:Taking 10 step(s) in the 3-isogeny graph using [radical isogeny] algorithm resulted in error code 1 (success)   0.004300 
+VERBOSE::apply_key:Taking 10 step(s) in the 5-isogeny graph using [radical isogeny] algorithm resulted in error code 1 (success)   0.004600 
+VERBOSE::apply_key:Taking 10 step(s) in the 7-isogeny graph using [radical isogeny] algorithm resulted in error code 1 (success)   0.004200 
+VERBOSE::apply_key:Taking 10 step(s) in the 11-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.021500 
+VERBOSE::apply_key:Taking 10 step(s) in the 13-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.032500 
+VERBOSE::apply_key:Taking 10 step(s) in the 17-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.039700 
+VERBOSE::apply_key:Taking 10 step(s) in the 103-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.021800 
+VERBOSE::apply_key:Taking 10 step(s) in the 523-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.023300 
+VERBOSE::apply_key:Taking 10 step(s) in the 821-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.023300 
+VERBOSE::apply_key:Taking 10 step(s) in the 523-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.022700 
+VERBOSE::apply_key:Taking 10 step(s) in the 1723-isogeny graph using [sqrt-Velu] algorithm resulted in error code 0 (failure)   0.001700 
+VERBOSE::apply_key:Taking 10 step(s) in the 19-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.286000 
+VERBOSE::apply_key:Taking 10 step(s) in the 661-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.291100 
+VERBOSE::apply_key:Taking 10 step(s) in the 1013-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.460500 
+VERBOSE::apply_key:Taking 10 step(s) in the 1181-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.471400 
+VERBOSE::apply_key:Taking 10 step(s) in the 31-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   1.576400 
+VERBOSE::apply_key:Taking 10 step(s) in the 61-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.814700 
+VERBOSE::apply_key:Taking 10 step(s) in the 1321-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   0.852000 
+VERBOSE::apply_key:Taking 10 step(s) in the 29-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   4.677000 
+VERBOSE::apply_key:Taking 10 step(s) in the 71-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   2.378000 
+VERBOSE::apply_key:Taking 10 step(s) in the 547-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   2.330500 
+VERBOSE::apply_key:Taking 10 step(s) in the 881-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   3.312900 
+VERBOSE::apply_key:Taking 10 step(s) in the 37-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   6.629100 
+VERBOSE::apply_key:Taking 10 step(s) in the 1693-isogeny graph using [sqrt-Velu] algorithm resulted in error code 1 (success)   6.653900 
+VERBOSE::apply_key:Total user-time: 309s

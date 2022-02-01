@@ -47,7 +47,7 @@ cfg_t* cfg_init_set() {
 	//// BASE FIELD
 	fq_ctx_t *F;
 	fmpz_t base_p;
-	char *Fgen = "g";
+	char *Fgen = "x";
 	char base_p_str[] = BASE_p;
 
 	fmpz_init(base_p);
@@ -69,11 +69,26 @@ cfg_t* cfg_init_set() {
 	cfg->E = E;
 
 	//// GLOBAL PROTOCOL PARAMETERS
-	uint l_PRIMES_int[NB_PRIMES] = {3, 5, 7, 11, 13, 17, 19};
-	uint l_PRIMES_LBOUNDS[NB_PRIMES] = {1000, 1000, 1000, 100, 100, 100, 10};
-	uint l_PRIMES_HBOUNDS[NB_PRIMES] = {1000, 1000, 1000, 100, 100, 100, 10};
-	uint l_PRIMES_R[NB_PRIMES] = {1, 1, 1, 1, 1, 1, 3};
-	uint l_PRIMES_BKW[NB_PRIMES] = {1, 1, 1, 1, 1, 1, 1};
+	uint l_PRIMES_int[NB_PRIMES] = {3, 5, 7, 11, 13, 17, 103, 523, 821, 947, 1723,    19, 661,     1013, 1181,     31, 61, 1321,
+					29, 71, 547,
+					881,
+					37, 1693};
+	uint l_PRIMES_LBOUNDS[NB_PRIMES] = {1000, 1000, 1000, 100, 100, 100, 100, 100, 100, 100, 100, 10, 10, 10, 10,    10, 10, 10,
+					5, 5, 5,
+					5,
+					5, 5};
+	uint l_PRIMES_HBOUNDS[NB_PRIMES] = {1000, 1000, 1000, 100, 100, 100, 100, 100, 100, 100, 100, 10, 10, 10, 10,    10, 10, 10,
+					5, 5, 5,
+					5,
+					5, 5};
+	uint l_PRIMES_R[NB_PRIMES] =   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,    3, 3,    4, 4,   5, 5, 5,
+					7, 7, 7,
+					8,
+					9, 9};
+	uint l_PRIMES_BKW[NB_PRIMES] = {1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,    1, 0,    0, 0,   1, 1, 0,
+					1, 1, 0,
+					0,
+					1, 0};
 
 	//// Alloc lprimes array
 	cfg->lprimes = (lprime_t *)malloc(sizeof(lprime_t) * NB_PRIMES);
@@ -111,6 +126,17 @@ cfg_t* cfg_init_set() {
 		lprime_set(&(cfg->lprimes)[i], l_fmpz, type, lbound, hbound, r, bkw);
 	}
 
+	//// BASE FIELD EXTENSIONS
+	//// Alloc fields array
+	cfg->fields = (fq_ctx_t *)malloc(sizeof(fq_ctx_t) * MAX_EXTENSION_DEGREE);
+	char gen[] = "x";
+
+	//// Initialize extensions
+	for(int i=1; i < MAX_EXTENSION_DEGREE + 1; i++) {
+
+		fq_ctx_init( (cfg->fields)[i-1], base_p, i , gen);
+	}
+
 	//// RANDOM SEED FOR KEY GENERATION
 	cfg->seed = 0;
 
@@ -137,6 +163,9 @@ void cfg_clear(cfg_t *op) {
 	//// Free l-primes
 	for(int i = 0; i < NB_PRIMES; i++) lprime_clear( &(op->lprimes)[i] );
 	free(op->lprimes);
+
+	//// Free fields
+	for(int i = 0; i < MAX_EXTENSION_DEGREE; i++) fq_ctx_clear( (op->fields)[i] );
 
 	//// Free structures
 	MG_curve_clear(op->E);

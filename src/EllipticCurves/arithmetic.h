@@ -9,7 +9,15 @@
 #include "auxiliary.h"
 #include "pretty_print.h"
 
+#include <gmp.h>
+#include <flint/fmpz.h>
+#include <flint/fq.h>
+
 #include "../Polynomials/roots.h"
+
+// Base field embedding
+void MG_curve_update_field(MG_curve_t *, MG_curve_t *, const fq_ctx_t *);
+void MG_curve_update_field_(MG_curve_t *, const fq_ctx_t *);
 
 // Elliptic curves
 void SW_j_invariant(fq_t *, SW_curve_t *);
@@ -52,4 +60,3 @@ int MG_curve_rand_torsion_(MG_point_t *, fmpz_t, fmpz_t);
 void MG_get_TN(TN_curve_t *, MG_curve_t *, MG_point_t *, fmpz_t);
 int TN_get_MG(MG_curve_t *, TN_curve_t *);
 #endif
-

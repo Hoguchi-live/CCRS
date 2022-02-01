@@ -18,7 +18,8 @@
 #define BASE_B	"1"
 #define BASE_t	"-147189550172528104900422131912266898599387555512924231762107728432541952979290"
 
-#define NB_PRIMES 7
+#define NB_PRIMES 24
+#define MAX_EXTENSION_DEGREE 9
 
 /**
   Type for l-primes.
@@ -43,7 +44,11 @@ typedef struct cfg_t{
 
 	//// l-primes parameters
 	uint nb_primes; 		// number of l-primes used
-	lprime_t* lprimes;		// the l-primes ordered in an lprime_t array
+	lprime_t *lprimes;		// the l-primes ordered in an lprime_t array
+
+	//// Base field and its extensions up to degree 9
+	//// Fp is redundant but it is only a pointer
+	fq_ctx_t *fields;
 
 	//// Random seed
 	uint seed;

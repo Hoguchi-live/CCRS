@@ -12,6 +12,7 @@
 #include <flint/fmpz.h>
 #include <flint/fq.h>
 
-void print_verbose_walk_rad(uint, fmpz_t, fmpz_t, int);
+void print_verbose_walk_rad(uint, fmpz_t, fmpz_t, int, int);
+void print_verbose_walk_total_time(int);
 
 #endif

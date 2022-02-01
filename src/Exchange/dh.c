@@ -11,8 +11,8 @@
 */
 int apply_key(MG_curve_t *rop, MG_curve_t *op, key__t *key, cfg_t *cfg) {
 
-	int ec = 1;
-	int r = 1;
+	uint ec = 1;
+	uint r = 1;
 	lprime_t *lp;
 	fmpz_t *steps;
 	MG_curve_t tmp1, tmp2;
@@ -25,17 +25,35 @@ int apply_key(MG_curve_t *rop, MG_curve_t *op, key__t *key, cfg_t *cfg) {
 	//// Init tmp1 at base curve op
 	MG_curve_set_(&tmp1, op);
 
+	int total_time = 0;
 	for(int i = 0; i < key->nb_primes; i++) {
+
 
 		lp = (key->lprimes) + i;
 		steps = (key->steps) + i;
+		if(lp->r != r) {// Upgrade the base field
+			r = lp->r;
+			MG_curve_update_field_(&tmp1, cfg->fields + r - 1);
+			MG_curve_update_field_(&tmp2, cfg->fields + r - 1);
+		}
+
+		clock_t start = clock(), diff; // Clock start
 
 		if( lp->type == 1 ) ec = walk_rad(&tmp2, &tmp1, lp->l, *steps);
 		else ec = walk_velu(&tmp2, &tmp1, lp->l, *steps);
+
+		diff = clock() - start; // Clock stop
+		int msec = diff * 1000 / CLOCKS_PER_SEC;
+		total_time = total_time + msec;
+
 		#ifdef VERBOSE
-		print_verbose_walk_rad(lp->type, lp->l, *steps, ec);
+		print_verbose_walk_rad(lp->type, lp->l, *steps, ec, msec);
 		#endif
 	}
+
+	#ifdef VERBOSE
+	print_verbose_walk_total_time(total_time);
+	#endif
 
 	MG_curve_set_(rop, &tmp2);
 

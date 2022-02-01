@@ -3,7 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
+#include "../../src/EllipticCurves/arithmetic.h"
 #include "../../src/EllipticCurves/models.h"
 #include "../../src/EllipticCurves/memory.h"
 #include "../../src/Isogeny/walk.h"

@@ -15,4 +15,4 @@ gcc	../../confs/config.c \
 	../../src/Exchange/dh.c \
 	../../src/Exchange/info.c \
 	exchange.c \
-	-g -DVERBOSE -lgmp -lflint -o exchange && ./exchange
+	-g -O3 -DVERBOSE -lgmp -lflint -o exchange && ./exchange

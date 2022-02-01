@@ -25,6 +25,7 @@ key__t *key_init_(cfg_t *cfg) {
 
 void keygen(key__t *key, cfg_t *cfg) {
 
+	lprime_t *lp;
 	fmpz_t mod;
 	fmpz_t steps;
 	flint_rand_t state;
@@ -36,10 +37,14 @@ void keygen(key__t *key, cfg_t *cfg) {
 
 	for(int i = 0; i < key->nb_primes; i++) {
 
-		// direction (0 backward, 1 forward)
-		if(rand() % 2) {
-			fmpz_set_ui(mod, (key->lprimes)[i].hbound + 1);
+		lp = key->lprimes + i;
+
+		// random direction: 0 backward, 1 forward (if available)
+		if( (lp->bkw == 0) || (rand() % 2) ) {
+			fmpz_set_ui(mod, lp->hbound + 1);
 			fmpz_randtest_mod(steps, state, mod);
+
+			fmpz_set_ui(steps, 1);
 
 			fmpz_set((key->steps)[i], steps);
 		}
@@ -47,6 +52,8 @@ void keygen(key__t *key, cfg_t *cfg) {
 			fmpz_set_ui(mod, (key->lprimes)[i].hbound + 1);
 			fmpz_randtest_mod(steps, state, mod);
 			fmpz_neg(steps, steps);
+
+			fmpz_set_ui(steps, 1);
 
 			fmpz_set((key->steps)[i], steps);
 		}

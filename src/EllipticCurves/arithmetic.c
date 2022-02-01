@@ -1,6 +1,44 @@
 // @file arithmetic.c
 #include "arithmetic.h"
 
+/**
+  Embed elliptic curve E's base field in F_p^r if possible
+  rop must be initialized over L.
+*/
+void MG_curve_update_field(MG_curve_t *rop, MG_curve_t *op, const fq_ctx_t *L) {
+
+	char *str_A, *str_B;
+	char *Lgen = "x";
+
+	//// Get string representation (with generator "x") of curve parameters
+	str_A = fq_get_str_pretty(op->A, *(op->F));
+	str_B = fq_get_str_pretty(op->B, *(op->F));
+
+	//// Try to embed A and B in L
+	MG_curve_set_str(rop, L, str_A, str_B, 10);
+}
+
+/**
+  Inline version of the previous function.
+*/
+void MG_curve_update_field_(MG_curve_t *op, const fq_ctx_t *L) {
+
+	//// Copy op curve
+	MG_curve_t tmp;
+	MG_curve_init(&tmp, op->F);
+	MG_curve_set_(&tmp, op);
+
+	fq_clear(op->A, *(op->F));
+	fq_clear(op->B, *(op->F));
+
+	fq_init(op->A, *L);
+	fq_init(op->B, *L);
+
+	MG_curve_update_field(op, &tmp, L);
+
+	MG_curve_clear(&tmp);
+}
+
 void SW_j_invariant(fq_t *output, SW_curve_t *E) {
 
 	fq_t tmp1, tmp2, tmp3;				// temporary registers
