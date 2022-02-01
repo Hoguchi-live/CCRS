@@ -28,7 +28,7 @@ int main() {
 
 	// Elliptic curve parameters
 	char base_p_str[] = BASE_p;
-	slong d = 3;
+	slong d = 5;
 	fmpz_t base_p;
 	fmpz_init(base_p);
 	fmpz_set_str(base_p, base_p_str, 0);
@@ -51,7 +51,7 @@ int main() {
 	fq_t j_inv;
 	MG_curve_t E_tmp1, E_tmp2;
 
-	fmpz_init_set_ui(l, 19);
+	fmpz_init_set_ui(l, 31);
 	fmpz_init_set_si(k, 1);
 	fq_init(j_inv, F);
 	MG_curve_init(&E_tmp1, &F);

@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../../src/EllipticCurves/models.h"
+#include "../../src/EllipticCurves/memory.h"
+
 #include <gmp.h>
 #include <flint/fmpz.h>
 #include <flint/fq.h>
@@ -15,7 +18,7 @@
 #define BASE_B	"1"
 #define BASE_t	"-147189550172528104900422131912266898599387555512924231762107728432541952979290"
 
-#define NB_PRIMES 3
+#define NB_PRIMES 7
 
 /**
   Type for l-primes.
@@ -26,8 +29,8 @@ typedef struct lprime_t{
 
 	uint type; 		// Unused (0), Radical (1) or Velu (2)
 	uint lbound, hbound;	// Bounds for the walk
-	uint lorder, horder;	// Bounds on orders of the eigenvalues
-	uint r;			//
+	//uint lorder, horder;	// Bounds on orders of the eigenvalues (not needed with x-only arithmetic)
+	uint r;			// Working extension degree
 	uint bkw;		// 1 if backward walking possible
 } lprime_t ;
 
@@ -36,21 +39,24 @@ typedef struct cfg_t{
 
 	//// Base curve parameters
 	const fq_ctx_t *F;		// base field
-	fq_t A, B, t;		// base curve parameters
-	MG_curve_t E;		//base curve
+	MG_curve_t *E;		//base curve
 
 	//// l-primes parameters
 	uint nb_primes; 		// number of l-primes used
-	lprime_t** lprimes;		// the l-primes
+	lprime_t* lprimes;		// the l-primes ordered in an lprime_t array
+
+	//// Random seed
+	uint seed;
 } cfg_t;
 
 
 void lprime_init(lprime_t *);
 lprime_t *lprime_init_();
-void lprime_set(lprime_t *, fmpz_t, uint, uint, uint, uint, uint, uint, uint);
+void lprime_set(lprime_t *, fmpz_t, uint, uint, uint, uint, uint);
 void lprime_clear(lprime_t *);
 
-cfg_t *cfg_init(uint, fq_t, fq_t, const fq_ctx_t *);
+cfg_t *cfg_init_set();
+void cfg_print(cfg_t *);
+void cfg_clear(cfg_t *);
 
 #endif
-
