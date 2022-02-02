@@ -1,2 +1,8 @@
+docs/
+exchange
 test/trash
+test/multieval
+test/velu
+test/walk
 *vgcore*
+.*
