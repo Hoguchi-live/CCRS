@@ -17,7 +17,7 @@ int apply_key(MG_curve_t *rop, MG_curve_t *op, key__t *key, cfg_t *cfg) {
 	fmpz_t *steps;
 	MG_curve_t tmp1, tmp2;
 
-	const fq_ctx_t *F = cfg->F;
+	const fq_ctx_t *F = (cfg->fields);
 
 	MG_curve_init(&tmp1, F);
 	MG_curve_init(&tmp2, F);
@@ -47,14 +47,21 @@ int apply_key(MG_curve_t *rop, MG_curve_t *op, key__t *key, cfg_t *cfg) {
 		total_time = total_time + msec;
 
 		#ifdef VERBOSE
-		print_verbose_walk_rad(lp->type, lp->l, *steps, ec, msec);
+		if(!fmpz_is_zero(*steps)) print_verbose_walk_rad(lp->type, lp->l, *steps, ec, msec);
 		#endif
+		#ifdef TIMING
+		print_timing_json(lp->l, ((float)msec)/(10*1000));
+		#endif
+
+		MG_curve_set_(&tmp1, &tmp2);
 	}
 
 	#ifdef VERBOSE
 	print_verbose_walk_total_time(total_time);
 	#endif
 
+	//// Coerce the output back to the base field
+	MG_curve_update_field_(&tmp2, cfg->fields);
 	MG_curve_set_(rop, &tmp2);
 
 	MG_curve_clear(&tmp1);
@@ -62,3 +69,4 @@ int apply_key(MG_curve_t *rop, MG_curve_t *op, key__t *key, cfg_t *cfg) {
 
 	return ec;
 }
+

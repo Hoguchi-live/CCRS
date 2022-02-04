@@ -27,3 +27,10 @@ void print_verbose_walk_total_time(int total_time){
 
 	printf("VERBOSE::apply_key:Total user-time: %ds\n", total_time/1000);
 }
+
+void print_timing_json(fmpz_t l, float msec) {
+	printf("\"");
+	fmpz_print(l);
+	printf("\":%f,\n", msec);
+}
+

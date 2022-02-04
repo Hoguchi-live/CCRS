@@ -22,6 +22,7 @@ def load_data():
 
 L, T = load_data()
 
+
 """
     Function to minimize: worst time case for generating the key
     This one is for python
@@ -84,12 +85,16 @@ def optimize():
         elif 0.05 <= f and f < 0.5:
             x[i].value = 500
             x[i].lower = 0
-            x[i].upper = 10000
+            x[i].upper = 1000
         elif 0.005 <= f and f < 0.05:
             x[i].value = 5000
             x[i].lower = 0
-            x[i].upper = 100000
+            x[i].upper = 10000
         elif 0.001 <= f and f < 0.005:
+            x[i].value = 10000
+            x[i].lower = 0
+            x[i].upper = 100000
+        elif 0.0001 <= f and f < 0.001:
             x[i].value = 10000
             x[i].lower = 0
             x[i].upper = 100000
@@ -111,22 +116,21 @@ def optimize():
     m.solve(disp=True)
     return x
 
-res = optimize()
-print(res)
 
 def save_result(res):
-    y = [round(u[0]) for u in res]
 
+    print(res)
     d = dict()
-    j = 0
-    for i in range(len(FORWARD)):
-        l = L[i]
-        d[l] = {"forward": y[i]}
-        if L_DICT[l]["backward"] != -1:
-            d[l]["backward"] = y[len(FORWARD):][j]
-            j += 1
-        else:
-            d[l]["backward"] = 0
+    for i in range(len(L)):
+        d[L[i]] = round(int(res[i].value[0]))
+
 
     with open(PATH_OUT, "w") as f:
         json.dump(d, f)
+
+def main():
+    L, T = load_data()
+    res = optimize()
+    save_result(res);
+
+main()

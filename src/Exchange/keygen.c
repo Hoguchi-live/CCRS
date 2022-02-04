@@ -23,17 +23,16 @@ key__t *key_init_(cfg_t *cfg) {
 }
 
 
-void keygen(key__t *key, cfg_t *cfg) {
+void keygen(key__t *key, cfg_t *cfg, uint seed, flint_rand_t state) {
 
 	lprime_t *lp;
 	fmpz_t mod;
 	fmpz_t steps;
-	flint_rand_t state;
 
 	fmpz_init(mod);
 	fmpz_init(steps);
-	srand(cfg->seed);
-	flint_randinit(state); // Should depend on cfg->seed
+	//srand(cfg->seed);	// unsafe
+	srand(seed);
 
 	for(int i = 0; i < key->nb_primes; i++) {
 
@@ -44,16 +43,22 @@ void keygen(key__t *key, cfg_t *cfg) {
 			fmpz_set_ui(mod, lp->hbound + 1);
 			fmpz_randtest_mod(steps, state, mod);
 
-			fmpz_set_ui(steps, 1);
+			if(fmpz_equal_ui(lp->l, 947) || fmpz_equal_ui(lp->l, 1723))  fmpz_set_ui(steps, 0);
+			else fmpz_set_ui(steps, 10); /// HACK
+			//fmpz_set_ui(steps, 10);
 
 			fmpz_set((key->steps)[i], steps);
+
 		}
 		else {
 			fmpz_set_ui(mod, (key->lprimes)[i].hbound + 1);
 			fmpz_randtest_mod(steps, state, mod);
 			fmpz_neg(steps, steps);
 
-			fmpz_set_ui(steps, 1);
+			//if(!fmpz_equal_ui(lp->l, 19)) fmpz_set_ui(steps, 0);
+			//else fmpz_set_ui(steps, 100);
+			if(fmpz_equal_ui(lp->l, 947) || fmpz_equal_ui(lp->l, 1723))  fmpz_set_ui(steps, 0);
+			else fmpz_set_ui(steps, 10); //// HACK
 
 			fmpz_set((key->steps)[i], steps);
 		}
@@ -61,19 +66,22 @@ void keygen(key__t *key, cfg_t *cfg) {
 
 	fmpz_clear(mod);
 	fmpz_clear(steps);
-	flint_randclear(state);
 }
 
-key__t *keygen_(cfg_t *cfg) {
+key__t *keygen_(cfg_t *cfg, uint seed, flint_rand_t state) {
 	key__t *key = key_init_(cfg);
-	keygen(key, cfg);
+	keygen(key, cfg, seed, state);
 	return key;
 }
 
 void key_clear(key__t *key) {
 
+	//for(int i = 0; i < key->nb_primes; i++) lprime_clear( &(key->lprimes)[i] );
 	free(key->lprimes);
+
+	//for(int i = 0; i < key->nb_primes; i++) fmpz_clear( &(key->steps)[i] );
 	free(key->steps);
+	free(key);
 }
 
 void key_print(key__t *key){
@@ -87,3 +95,4 @@ void key_print(key__t *key){
 	}
 	printf("*********************\n");
 }
+

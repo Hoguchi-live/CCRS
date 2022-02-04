@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "setup.h"
 
@@ -19,9 +20,10 @@ typedef struct key__t {
 
 void key_init(key__t *, cfg_t *);
 key__t *key_init_(cfg_t *);
-void keygen(key__t *, cfg_t *);
-key__t *keygen_(cfg_t *);
+void keygen(key__t *, cfg_t *, uint, flint_rand_t);
+key__t *keygen_(cfg_t *, uint, flint_rand_t);
 void key_clear(key__t *);
 
 void key_print(key__t *);
 #endif
+

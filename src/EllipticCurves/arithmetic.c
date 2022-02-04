@@ -502,11 +502,13 @@ void MG_xADD(MG_point_t *output, MG_point_t P, MG_point_t Q, MG_point_t D) {
 	fq_sqr(v3, v3, *F);
 	fq_sub(v1, v1, v2, *F);
 	fq_sqr(v1, v1, *F);
+
+	//// NORMALIZE X = X/Z
 	fq_mul(output->X, D.Z, v3, *F);
 	fq_mul(output->Z, D.X, v1, *F);
 
-	//// NORMALIZE
-	MG_point_normalize(output);
+	//fq_one(output->, *F);
+
 
 	// clear memory
 	fq_clear(v0, *F);
@@ -538,7 +540,7 @@ void MG_xDBL(MG_point_t *output, MG_point_t P) {
 	fq_mul(output->Z, v1, v3, *F);
 
 	//// NORMALIZE
-	MG_point_normalize(output);
+	//MG_point_normalize(output);
 
 	// clear memory
 	fq_clear(v1, *F);
@@ -795,7 +797,7 @@ int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	MG_point_set_infty(&Q);
 
-	fmpz_val_q(val, cofactor, card, l);
+	fmpz_val_q(val, cofactor, card, l); // Possible optimization?
 	if(fmpz_is_zero(val)) return 0;
 
 	while(isinfty) {
@@ -1103,3 +1105,4 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 
 	if(ret == 0) return 0; // Error!
 }
+

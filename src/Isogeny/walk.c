@@ -75,7 +75,7 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	int ec = 1;
 
 	//// Nothing to do
-	if(k == 0) {
+	if(fmpz_equal_ui(k, 0)) {
 		MG_curve_set_(rop, op);
 		return ec;
 	}
@@ -139,3 +139,4 @@ int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 
 	return ec;
 }
+

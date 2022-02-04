@@ -39,7 +39,6 @@ typedef struct lprime_t{
 typedef struct cfg_t{
 
 	//// Base curve parameters
-	const fq_ctx_t *F;		// base field
 	MG_curve_t *E;		//base curve
 
 	//// l-primes parameters
@@ -65,3 +64,4 @@ void cfg_print(cfg_t *);
 void cfg_clear(cfg_t *);
 
 #endif
+

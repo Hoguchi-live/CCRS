@@ -44,19 +44,27 @@ cfg_t* cfg_init_set() {
 	//// Alloc config struct
 	cfg_t *cfg = malloc(sizeof(cfg_t));
 
-	//// BASE FIELD
-	fq_ctx_t *F;
+	//// BASE FIELD EXTENSIONS
+	//// Alloc fields array
+	cfg->fields = (fq_ctx_t *)malloc(sizeof(fq_ctx_t) * MAX_EXTENSION_DEGREE);
+	char gen[] = "x";
+
+	//// Initialize extensions
 	fmpz_t base_p;
-	char *Fgen = "x";
 	char base_p_str[] = BASE_p;
 
 	fmpz_init(base_p);
 	fmpz_set_str(base_p, base_p_str, 0);
 
-	F = malloc(sizeof(fq_ctx_t));
-	fq_ctx_init(*F, base_p, 1, Fgen);
+	for(int i=1; i < MAX_EXTENSION_DEGREE + 1; i++) {
 
-	cfg->F = F;
+		fq_ctx_init( (cfg->fields)[i-1], base_p, i , gen);
+	}
+
+
+	//// BASE FIELD
+	fq_ctx_t *F;
+	F = &((cfg->fields)[0]);
 
 	//// BASE CURVE PARAMETERS
 	MG_curve_t *E;
@@ -69,23 +77,38 @@ cfg_t* cfg_init_set() {
 	cfg->E = E;
 
 	//// GLOBAL PROTOCOL PARAMETERS
-	uint l_PRIMES_int[NB_PRIMES] = {3, 5, 7, 11, 13, 17, 103, 523, 821, 947, 1723,    19, 661,     1013, 1181,     31, 61, 1321,
-					29, 71, 547,
-					881,
-					37, 1693};
-	uint l_PRIMES_LBOUNDS[NB_PRIMES] = {1000, 1000, 1000, 100, 100, 100, 100, 100, 100, 100, 100, 10, 10, 10, 10,    10, 10, 10,
+	uint l_PRIMES_int[NB_PRIMES] = {3, 5, 7,     11, 13, 17, 103,     523, 821, 947, 1723,    //degree 1
+					19, 661,    // degree 3
+					1013, 1181,     // degree 4
+					31, 61, 1321, // degree 5
+					29, 71, 547, // degree 7
+					881, // degree 8
+					37, 1693}; // degree 9
+	uint l_PRIMES_LBOUNDS[NB_PRIMES] = {1000, 1000, 1000,     100, 100, 100, 100,     100, 100, 100, 100,
+					10, 10,
+					10, 10,
+					10, 10, 10,
 					5, 5, 5,
 					5,
 					5, 5};
-	uint l_PRIMES_HBOUNDS[NB_PRIMES] = {1000, 1000, 1000, 100, 100, 100, 100, 100, 100, 100, 100, 10, 10, 10, 10,    10, 10, 10,
+	uint l_PRIMES_HBOUNDS[NB_PRIMES] = {1000, 1000, 1000,     100, 100, 100, 100,     100, 100, 100, 100,
+					10, 10,
+					10, 10,
+					10, 10, 10,
 					5, 5, 5,
 					5,
 					5, 5};
-	uint l_PRIMES_R[NB_PRIMES] =   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,    3, 3,    4, 4,   5, 5, 5,
+	uint l_PRIMES_R[NB_PRIMES] =   {1, 1, 1,     1, 1, 1, 1,     1, 1, 1, 1,
+					3, 3,
+					4, 4,
+					5, 5, 5,
 					7, 7, 7,
 					8,
 					9, 9};
-	uint l_PRIMES_BKW[NB_PRIMES] = {1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1,    1, 0,    0, 0,   1, 1, 0,
+	uint l_PRIMES_BKW[NB_PRIMES] = {1, 1, 1,     1, 1, 1, 1,     0, 0, 0, 0,
+					1, 0,
+					0, 0,
+					1, 1, 0,
 					1, 1, 0,
 					0,
 					1, 0};
@@ -126,16 +149,6 @@ cfg_t* cfg_init_set() {
 		lprime_set(&(cfg->lprimes)[i], l_fmpz, type, lbound, hbound, r, bkw);
 	}
 
-	//// BASE FIELD EXTENSIONS
-	//// Alloc fields array
-	cfg->fields = (fq_ctx_t *)malloc(sizeof(fq_ctx_t) * MAX_EXTENSION_DEGREE);
-	char gen[] = "x";
-
-	//// Initialize extensions
-	for(int i=1; i < MAX_EXTENSION_DEGREE + 1; i++) {
-
-		fq_ctx_init( (cfg->fields)[i-1], base_p, i , gen);
-	}
 
 	//// RANDOM SEED FOR KEY GENERATION
 	cfg->seed = 0;
@@ -147,18 +160,24 @@ cfg_t* cfg_init_set() {
 
 void cfg_print(cfg_t *cfg) {
 
+	fq_ctx_t *F = &((cfg->fields)[0]);
+
 	printf("*** Config structure ***\n Finite field Fp^d \np = ");
-	fmpz_print(fq_ctx_prime(*(cfg->F)));
-	printf("\nd = %d", fq_ctx_degree(*(cfg->F)));
+	fmpz_print(fq_ctx_prime(*F));
+	printf("\nd = %d", fq_ctx_degree(*F));
 	printf("\n Base elliptic curve BY^2 = X^3 + AX^2 + X\nA = ");
-	fq_print_pretty(cfg->E->A, *(cfg->F));
+	fq_print_pretty(cfg->E->A, *F);
 	printf("\nB = ");
-	fq_print_pretty(cfg->E->B, *(cfg->F));
+	fq_print_pretty(cfg->E->B, *F);
 	printf("\n l-primes \nnb_primes = %d\n", cfg->nb_primes);
 	printf("************************\n");
 }
 
 void cfg_clear(cfg_t *op) {
+
+	//// Free structures
+	MG_curve_clear(op->E);
+	free(op->E);
 
 	//// Free l-primes
 	for(int i = 0; i < NB_PRIMES; i++) lprime_clear( &(op->lprimes)[i] );
@@ -166,8 +185,8 @@ void cfg_clear(cfg_t *op) {
 
 	//// Free fields
 	for(int i = 0; i < MAX_EXTENSION_DEGREE; i++) fq_ctx_clear( (op->fields)[i] );
+	free(op->fields);
 
-	//// Free structures
-	MG_curve_clear(op->E);
-	fq_ctx_clear(*((fq_ctx_t*)(op->F)));
+	free(op);
 }
+

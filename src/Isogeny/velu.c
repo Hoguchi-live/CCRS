@@ -118,6 +118,8 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	fq_poly_one(E0, *F);
 	fq_poly_one(E1, *F);
 	for (uint j=0; j<b; j++) {
+		//// NORMALIZE
+		MG_point_normalize(J+j);
 		_F0pF1pF2_F0mF1pF2(&tmp1, &tmp2, J[j], *F);
 		fq_poly_mul(E0, E0, tmp1, *F);
 		fq_poly_mul(E1, E1, tmp2, *F);
@@ -131,6 +133,8 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	fq_t eval[bprime];
 	for (uint i=0; i<bprime; i++) {
 		fq_init(Ix[i], *F);
+		/// NORMALIZE
+		MG_point_normalize(I+i);
 		fq_set(Ix[i], I[i].X, *F);
 		//Ix[i] = I[i].X;
 		fq_init(eval[i], *F);
@@ -152,6 +156,8 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	fq_one(M0, *F);
 	fq_one(M1, *F);
 	for (uint i=0; i<lenK; i++) {
+		//// NORMALIZE
+		MG_point_normalize(K+i);
 		fq_sub_one(tmp, K[i].X, *F);
 		fq_neg(tmp, tmp, *F);
 		fq_mul(M0, M0, tmp, *F);
@@ -264,3 +270,4 @@ void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
 		MG_point_clear(&K[i]);
 	}
 }
+
