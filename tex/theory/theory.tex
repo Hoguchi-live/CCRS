@@ -4,8 +4,6 @@
 In this section we introduce the necessary mathematical material surrounding the CRS protocol.
 It is assumed the reader has some familiarities with elliptic curves and their arithmetic.
 Still, we recall the fundamentals in order to underline some important aspect of the algorithms.
-We fix once and for all a prime number $p$.
-Unless indicated otherwise we assume throughout the section that curves are defined over $\FF_p$, the field with $p$ elements.
 
 %The \textit{Montgomery} and \textit{Tate normal} forms are introduced
 
@@ -19,7 +17,7 @@ Recall the standard definition of an elliptic curve over $k$:
 \end{definition}
 This presentation of the curve is usually called the \textit{Weierstrass} form.
 It is said to be in \textit{short Weierstrass} form if the coefficients $a_1$, $a_2$ and $a_3$ are null.
-The following proposition allow one to only consider short Weierstrass equations except for some fields.
+The following proposition allow one to only consider short Weierstrass equations most of the time.
 \begin{proposition}
 	An elliptic curve $E$ over a field $k$ of caracteristic different from 2 and 3 is isomorphic to an elliptic curve in short Weierstrass form.
 \end{proposition}
@@ -38,7 +36,7 @@ It also has a fast scalar multiplication which we talk about in the next section
 	with $A, B\in k$ satisfying $b\neq 0$ and $A^2\neq 4$.
 \end{definition}
 All Mongomery curves admit a short Weierstrass model via the variable change $x := x/B$ and $y := y/B$.
-The following proposition show which short Weierstrass curves admit a Montgomery model.
+The following proposition shows which short Weierstrass curves admit a Montgomery model.
 \begin{proposition}
 	The elliptic curve $y^2 = x^3 + ax + b$ over a field $k$ admits a Montgomery model if
 	\begin{itemize}
@@ -65,7 +63,7 @@ One easily show that they are isomorphic at best over $k(\sqrt{B/B'})$.
 Hence they are isomorphic over $k$ if and only if $B/B'$ is a quadratic residue.
 We call $E_{A, B'}$ a \textit{quadratic twist} of $\MG$.
 
-The next and last model of elliptic curve is called the \textit{Tate normal} form.
+The next and last model of elliptic curve we use is called the \textit{Tate normal} form.
 It will be used when dealing with radical isogenies.
 \begin{definition}
 	An Elliptic curve in \textit{Tate normal} form over a field $k$ is an elliptic curve $E$ given by a polynomial $F\in k[x, y]$ of the form
@@ -123,10 +121,256 @@ As we will see with $x$-only arithmetic, over Mongomery curves it is better to u
 Setting $\alpha = b_3^3$ and $\beta = b_3^2$ we find a presentation which only involves $y^2$.
 In the end we find $b = -1/b_3^2$ and $c = 1 - 2b_4 / b_3^2$.
 This will avoid us extracting a square root of $x^3 + ax^2 + 1$ to get a $y$ value.
+This used to be a time-consuming task in the previous implementation that slowed down the computations.
+Following these steps in reverse order transforms a Tate normal form into a Montgomery curve.
 
+\subsection{Isogenies}
+We fix once and for all a prime number $p$.
+Unless indicated otherwise we assume throughout the section that curves are defined over $\FF_q$, a field of caracteristic $p$ with $q$ elements.
+Recall the definition of an isogeny, which is essentialy an homomorphism between varieties preserving the group structure.
+\begin{definition}
+	Let $E$ and $E'$ be two elliptic curves defined over $\FFp$.
+	An isogeny $\phi:E\rightarrow E'$ is a non-trivial algebraic map sending $O_E$ to $O_{E'}$.
+\end{definition}
+The isogenies from $E$ to $E$, together with the trivial map form a ring called the endomorphism ring of $E$ and noted $\End (E)$.
+For a positive integer $m$, the \textit{multiplication-by-m} map over $E$ is an endomorphism sending a point $P$ to the sum of $m$ copies of $P$.
+This map will be denoted by $[m]$.
+\begin{example}
+Of interest in the CRS protocol is the \textit{Frobenius} endomorphism:
+	\[
+		\pi: (x, y)\in E\mapsto (x^q, y^q)\in E.
+	\]
+This endomorphism satisfies the relation $\pi ^2 -t\pi + q = 0$, where $t$ is the trace of $E$.
+This trace is linked to the cardinality of $E(\FFq)$ via $\# E(\FFq) = q+1 -t$ and can be computed effectively using the PARI/GP library.
+When the trace is divisible by $p$, we say that the curve is \textit{supersingular}.
+Otherwise it is called \textit{ordinary}.
+The CRS protocol only uses ordinary curves.
+\end{example}
+The \textit{degree} of an isogeny is its degree as an algebraic map.
+For instance, the multiplication-by-$m$ map is of degree $m^2$ when $m\wedge p = 1$.
+The degree of the frobenius endomorphism is $q$.
+We say an isogeny of degree $l$ is an $l$\textit{-isogeny}.
 
+For the purpose of CRS, we mainly consider \textit{separable} isogenies between elliptic curves.
+These include isogenies of degree coprime to $p$ and are in one-to-one correspondance with their kernels up to isomorphism.
+This means that for any finite subgroup $G$ of $E$ of order $l$, there is a unique elliptic curve (up to isomorphism) denoted $E/G$ and an $l$-isogeny
+\[
+	E\rightarrow E/G
+\]
+whose kernel is $G$.
+Recall finally that for each $l$-isogeny $\phi:E\rightarrow E'$, there is a unique $l$-isogeny $\hat{\phi}:E'\rightarrow E$ called the \textit{dual isogeny} such that
+\[
+	\phi \circ \hat{\phi} = [l]_{E'} \ \text{and} \ \hat{\phi} \circ \phi = [l]_{E}.
+\]
+The important thing to remember from this is that being $l$-isogenous is a \textit{symmetric relation} and being isogenous is an \textit{equivalence relation}.
+Isogenous curves share some common properties.
+For instance, they both have the same number of points over $\FFq$ and thus also have the same trace.
+This brings us to the core component of the CRS protocol.
 
+\subsection{Isogeny graphs}
+For an integer $l$, the $l$-\textit{isogeny graph} over a field $k$ is the graph whose vertices are elliptic curve isomorphism classes (over $k$) and whose edges represent $l$-isogenies.
+Recall that for $l$ coprime to $p$, the $l$-torsion group of $E$ denoted $E[l]$ is isomorphic to $\Z/l\Z\times\Z/l\Z$.
+This way, if $l$ is prime and different from $p$, $E[l]$ contains $l+1$ distinct cyclic subgroups of order $l$.
+This in turns mean that there are exactly $l+1$ (separable) $l$-isogenies whose domain is $E$.
+Thus, a connected component in the $l$-isogeny graph over $\overbar{\FFq}$ is an $l+1$-regular graph.
 
+As mentionned before, isomorphism classes are determined by $j$-invariant over $\overbar{\FFq}$.
+However in CRS we will use isogeny graphs over $\FFq$ which gives more complex structures.
+Let us analyze the isogeny graph in this case, starting by computing the incidence degree of the graph's vertices.
+We consider a prime $l$ different from $p$.
 
+It can be shown that an isogeny is defined over $\FFq$ if and only if the frobenius $\pi$ stabilizes its kernel.
+We are only interested in cyclic isogenies, those with cyclic kernels.
+As such can see the action of $\pi$ on the kernel as a scalar multiplication due to the fact that $\pi$ commutes with multiplication-by-$m$ maps.
+Notice further that $E[l] = \Z/l\Z\times\Z/l\Z$ is a 2-dimentional $\FF_l$-vector space.
+The problem is hence reduced to understanding the stable subspaces of $\pi$ as an endomorphism of $E[l]$.
+This calls for a study of the eigenvalues of $\pi$, whose characteristic polynomial is $X^2-tX+q$ mod $l$.
+Counting the stable subgroups, we get:
+\begin{itemize}
+	  \item If $\pi$ has no eigenvalues, then $E$ has no $l$-isogenies.
+	  \item If $\pi$ has one eigenvalue of geometric multiplicity one, there is exactly one $l$-isogeny from $E$.
+	  \item If $\pi$ has one eigenvalue of geometric multiplicity two, there are exactly $l+1$ $l$-isogenies from $E$.
+	  \item If $\pi$ has two distinct eigenvalues, there are exactly two $l$-isogenies from $E$.
+\end{itemize}
+Only that last case is of interest for use.
+We call primes $l$ that satisfy this condition \textit{Elkies} primes.
+Note that since isogenous curves have same trace, their frobenius has same characteristic polynomial.
+As such, isogenous curves have the same Elkies primes.
+This implies that for $l$ an Elkies prime connected components of the $l$-isogeny graph over $\FFq$ are $2$-cycles.
 
+\subsection{The structure of $\End(E)$}
+In this part we show that endomorphism rings of ordinary curves are orders in imaginary quadratic fields.
+Let $E$ be an ordinary elliptic curve over $\FFq$ with Frobenius element $\pi$.
+Remember that the ring $\Z$ embeds in $\End(E)$ via multiplication-by-$m$ elements.
+As such we will identify elements $[m]$ and $m$.
+Let us start with the definition of an order in an algebra;
+\begin{definition}
+	Let $A$ be a finite dimentional algebra over $\Q$. A subring $\mathcal{O}$ of $A$ is an \textit{order} if:
+	\begin{itemize}
+		\item $\mathcal{O}\otimes\Q = A$.
+		\item $\mathcal{O}$ is a $\Z$-lattice in $A$.
+	\end{itemize}
+\end{definition}
+This essentialy means that $\mathcal{O}$ is a free abelian group containing a $\Q$-basis of $A$.
+The following theorem gives the remarkably simple classification of endomorphism rings of elliptic curves.
+The heavy lifting of the proof is done using Tate-modules theory.
+See [theorem Silverman III.9.3].
+\begin{theorem}
+	Let $E$ be an elliptic curve over a field $k$.
+	Then $\End(E)$ is either $\Z$, an order in an imaginary quadratic field or an order in a quaternion algebra.
+\end{theorem}
+We now show that our ordinary elliptic curve $E$ falls in the second category.
+For that we need some generalities about $\End(E)$.
+\begin{proposition}
+	The ring $\End(E)$ is torsion free of characteristic $0$ and has no non-trivial zero divisors.
+\end{proposition}
+\begin{proof}
+	Recall that for $m\neq 0$, the multiplication-by-$m$ map $[m]$ is non-constant.
+	Take $\phi\in\End(E)$ and $m$ such that
+	\[
+		[m]\circ\phi = [0].
+	\]
+	The multiplicativity of the degree map gives
+	\[
+		\degg([m])\degg(\phi) = 0.
+	\]
+	Thus either $m = [0]$ or $\phi = [0]$ and $\End(E)$ is torsion free of caracteristic $0$.
+	Now suppose for $\phi, \psi\in\End(E)$ that $\phi\circ\psi = [0]$.
+	Then taking the degree,
+	\[\degg(\phi)\degg(\psi) = 0.\]
+	Thus either $\phi = [0]$ or $\psi = [0]$ and $\End(E)$ has no non-trivial zero divisors.
+\end{proof}
+The following lemma already shows that $\Z\subsetneq\End(E)$.
+\begin{lemma}
+	The Frobenius endomorphism $\pi\in\End(E)$ is not in $\Z$.
+\end{lemma}
+\begin{proof}
+	Assume the converse so that $\pi = [n]$ for some integer $n$.
+	Then taking the degree gives
+	\[q=\degg(\pi) = \degg([n]) = n^2.\]
+	This implies that $d :=[\FFq:\FFp]$ is even and that $n = \pm p^{d/2}$.
+	Hence using the roots-coefficients relations on the characteristic polynomial of $\pi$ we get $t=0$ mod $p$, which is absurd as $E$ is ordinary.
+\end{proof}
+Let $\End^0(E) := \End(E)\otimes\Q$.
+The next lemma will be used to show that every isogeny of $\End^0(E)$ commutes with $\pi$.
+\begin{lemma}
+	Let $n\geq 1$. There exist $a, b\in\Z$ satisfying $a\neq 0$ mod $p$, $b = 0$ mod $p$ and such that
+	\[
+		\pi^n = a\pi + b.
+	\]
+\end{lemma}
+\begin{proof}
+	We use induction on $n$.
+	The case for $n = 1$ is verified for $a = 1$ and $b=0$.
+	Assume the lemma holds for every $1 \leq m \leq n$.
+	Then using the fact that $\pi ^ 2 -t\pi + q = 0$,  we have for some $a,b\in\Z$ satisfying the hypothesis
+	\[
+		\pi^{n+1} = \pi(a\pi + b) = b\pi + a(t\pi-q).
+	\]
+	Rearranging the equation one gets
+	\[
+		\pi^{n+1} = c\pi + d
+	\]
+	where $c = at+b$ and $d=-aq$.
+	These verify the conditions since $c = at\neq 0$ mod $p$, $E$ being ordinary,  and $d = 0$ mod $p$.
+\end{proof}
+This lemma shows that $\pi^n\notin\Q$ for any integer $n\geq 1$.
+Now any element of $\End^0(E)$ can be written as $m\phi$ with $m\in\Q$ and $\phi\in\End(E)$.
+Being a rational map, the isogeny $\phi$ is defined over a finite extension of $\FFq$, say $\FF_{q^d}$.
+Writting $\phi$ in its reduced form $(r(x), ys(x))$ we have
+\[
+	\phi\pi^d = (r(x^{q^d}), y^{q^d}s(x^{q^d})) = (r(x)^{q^d}, (ys(x))^{q^d}) = \pi^d\phi.
+\]
+Hence every element of $\End^0(E)$ commutes with $\pi^d$ for some $d\geq 1$.
+And this last element is in fact in $\Q(\pi)$ according to the previous lemma.
+The next lemma shows that this is enough to prove the inclusion $\End^0(E)\subset\Q(\pi)$, hence the equality.
+\begin{lemma}
+	Let $\alpha, \beta\in \End^0(E)$. If these elements commute and $\alpha\notin\Q$ then $\beta\in\Q(\alpha)$.
+\end{lemma}
+\begin{proof}
+	Introduce the $\Q$-linear trace map $T:\alpha\in\End^0(E) \mapsto \alpha + \hat{\alpha}\in\Q$.
+	Its codomain being justified by equalities
+	\[T\alpha = 1 - \alpha\hat{\alpha} -(\alpha-1)\widehat{(\alpha-1)} = 1-[\degg(\alpha)] - [\degg(\alpha-1)]\in\Q.\]
+	We may replace $\alpha$ by $\alpha-\frac{1}{2}T\alpha$ to have $T\alpha = 0$.
+	Since $T\alpha=0$ and $\End^0(E)$ is without non-trivial zero divisors, we get $\alpha^2\in\Q^{*}$.
+	Replacing $\beta$ by $\beta-\frac{1}{2}T\beta-\frac{1}{2\alpha^2}T(\alpha\beta)\alpha$, we can assume further that
+	\[
+		T\beta = T\alpha\beta = 0.
+	\]
+	The combined equations $T\alpha=T\beta=T(\alpha\beta)=0$ now give $\alpha\beta = -\beta\alpha$.
+	All the substitutions were done while keeping the commutativity hypothesis thus we have $2\alpha\beta=0$.
+	As $\End^0(E)$ is without non-trivial zero divisors, we find $\beta=0\in\Q(\alpha)$ since $\alpha\notin\Q$.
+\end{proof}
+In the end we have proved that $\End(E)\otimes\Q = \Q(\pi)$.
+The field $\Q(\pi)$ is quadratic imaginary as the Frobenius' characteristic polynomial is of degree $2$.
+Another way to think of this field is to see it as $\Q(\sqrt{\discr})$ where $\discr$ is the discriminant of the characteristic polynomial of the Frobenius.
+This concludes the proof that ordinary curves have endomorphism rings isomorphic to orders in imaginary quadratic fields.
+
+\subsection{The group action}
+In this section we focus on defining the group action that will be used to exchange keys Diffie-Hellman style.
+We keep our notations.
+The previous section showed that $\End(E)$ is an order in $\Q(\discr)$.
+Using isogeny-volcanos theory, one can show that for Elkies primes $l$, two $l$-isogenous curves have the same endomorphism ring.
+As such we label $\OO$ the endomorphism ring of $E$ and we say that a curve with endomorphism ring $\OO$ has \textit{complex multiplication} (CM) by $\OO$.
+
+Recall that by a \textit{fractional ideal} $\af$ we mean a $\OO$-submodule of $\Q(\sqrt{\discr})$.
+This fractional ideal is said to be \textit{invertible} if there exists another fractional ideal $\bff$ such that $\af\bff = \OO$.
+For such an invertible ideal $\af$, we define the $\af$-torsion subgroup of $E$ as
+\[
+	E[\af] = \left\{ P\in E\ |\ \sigma P = O \text{ for all } \sigma\in\af\right\}.
+\]
+This defines a subgroup of $E$ and hence the kernel of a unique isogeny denoted $\phi_{\af}$.
+Its codomain will be denoted as $\af\cdot E$ to underline a group action.
+
+Let $\Ell$ be the set of elliptic curves with complex multiplication by $\OO$ up to isomorphism.
+One can extend the $\af$-torsion construction into an action of the fractional ideals of $\OO$ on $\Ell$.
+Principal ideals then act trivially under this action and thus induce an action of the class group of $\OO$, denoted $\Cl$, on $\Ell$.
+The \textit{main theorem of complex multiplication} states that this action is simply transitive, hence a bijection
+\[
+	\text{Ideal class of }\af\text{ in }\Cl \mapsto \text{Isomorphism class of } \af\cdot E\text{ in } \Ell.
+\]
+This bijection implies that the space on the left has $h(\OO)$ elements, where $h(\OO)$ is the class number of $\OO$.
+Over $\FFq$ this space decomposes into two components corresponding to curves and their quadratic twist.
+Under this bijection, ideal norms correspond to isogeny degrees.
+
+Now to walk on this $\Ell$ space, recall that for an Elkies prime $l$, the Frobenius restricted to $E[l]$ has two distinct eigenvalues $\lambda$ and $\mu$.
+Let $\af = (\pi-\lambda, l)$ and $\hat{\af} = (\pi-\mu, l)$ be two ideals in $\Cl$.
+The space $E[\af]$ is the eigenspace of $\pi$ which defines an $l$-isogeny $\phi_{\af}$.
+It turns out that $\af\hat{\af} = \hat{\af}\af = (l)$ in $\Cl$.
+As such, these fractional ideals are inverse of each other and the corresponding isogenies are dual of one another.
+These two eigenvalues hence define the two direction on the $l$-isogeny cycle independently of the curve $E$.
+We now have a way to take steps in the isogeny graph.
+
+\subsection{The key-exchange protocol}
+We describe the CRS key-exchange protocol using the group action of the previous section.
+As a set of vertices, we use $X=\Ell$ for some order $\OO$ and $q$.
+Let $G=\Cl$ and $S$ be a set of ideal of $G$ with small norms.
+Consider the directed graph $\mathcal{G}$ whose vertices are the points of $X$.
+We connect two vertices (classes of curves) $[E]$ and $[E']$  if and only if there is an element of $S$ such that $s\cdot E = E'$.
+If $S$ is sufficiently large, i.e. it generates the group $\Cl$, then the graph will be connected.
+
+In a nutshell, the keyspace is a very large graph composed of cycles whose vertices are elliptic curves.
+To walk on this graph means to take a certain path made of isogenies of various degrees on this graph.
+This is all backed up by the main CM theorem states that the operation of taking steps is commutative and bijective.
+A secret key can then be a walk on the graph starting from a fixed curve and the corresponding public key the destination curve.
+The problem of creating a connecting isogeny between the starting curve and the destination one is believed to be quantum-hard, hence the security.
+
+To set up the protocol, a good order $\OO$ is needed.
+For quantum security using this protocol, a keyspace of size at least $256$ bits is required.
+Estimating the class number is a very hard problem but on average
+\[
+	h(\OO) \approx 0.461\sqrt{\left|\discr\right|}.
+\]
+Since the keyspace is of size $\# X= \# \Ell = h(\OO)$ and $\discr\sim q$, we have to look for a curve over $\FFq$ with $q$ around $512$ bits.
+This is complicated by the fact that we need a generating set $S$ of ideals with small norm.
+Thousands of computer hours have been spent generating some usable protocol parameters: sufficiently many primes of small norm and a large enough keyspace.
+To actually take a step $\af$ starting from a vertex $[E]$ in this graph we explicitly generate the kernel $E[\af]$ and compute the resulting isogeny.
+
+The kernels correspond to random points of order $l$.
+Generating these is the most time-consuming part of our implementation and will be described in the next section.
+To effectively compute isogenies from these points two methodes are used.
+The fastest, using \textit{radical isogenies}, transform the starting curve in Montgomery form into a Tate normal curve.
+Then one can iterate very efficiently over small rational expessions and take $k$ steps in the graph in one go.
+This is only possible for primes $3$, $5$ and $7$.
+The second one, $\sqrt{}$\textit{Velu} cleverly uses some structure on the kernel polynomials and fast multi-evaluation to take one step at a time.
 \end{document}
