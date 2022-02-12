@@ -122,6 +122,7 @@ Setting $\alpha = b_3^3$ and $\beta = b_3^2$ we find a presentation which only i
 In the end we find $b = -1/b_3^2$ and $c = 1 - 2b_4 / b_3^2$.
 This will avoid us extracting a square root of $x^3 + ax^2 + 1$ to get a $y$ value.
 This used to be a time-consuming task in the previous implementation that slowed down the computations.
+Following these steps in reverse order transforms a Tate normal form into a Montgomery curve.
 
 \subsection{Isogenies}
 We fix once and for all a prime number $p$.
@@ -140,8 +141,7 @@ Of interest in the CRS protocol is the \textit{Frobenius} endomorphism:
 		\pi: (x, y)\in E\mapsto (x^q, y^q)\in E.
 	\]
 This endomorphism satisfies the relation $\pi ^2 -t\pi + q = 0$, where $t$ is the trace of $E$.
-This trace is linked to the cardinality of $E(\FFq)$ by $\# E(\FFq) = q+1 -t$.
-It can be computed effectively using the PARI/GP library for instance.
+This trace is linked to the cardinality of $E(\FFq)$ via $\# E(\FFq) = q+1 -t$ and can be computed effectively using the PARI/GP library.
 When the trace is divisible by $p$, we say that the curve is \textit{supersingular}.
 Otherwise it is called \textit{ordinary}.
 The CRS protocol only uses ordinary curves.
@@ -283,7 +283,7 @@ Writting $\phi$ in its reduced form $(r(x), ys(x))$ we have
 \]
 Hence every element of $\End^0(E)$ commutes with $\pi^d$ for some $d\geq 1$.
 And this last element is in fact in $\Q(\pi)$ according to the previous lemma.
-The next lemma shows that this is enough to prove that $\End^0(E)\subset\Q(\pi)$, hence the equality.
+The next lemma shows that this is enough to prove the inclusion $\End^0(E)\subset\Q(\pi)$, hence the equality.
 \begin{lemma}
 	Let $\alpha, \beta\in \End^0(E)$. If these elements commute and $\alpha\notin\Q$ then $\beta\in\Q(\alpha)$.
 \end{lemma}
@@ -303,6 +303,74 @@ The next lemma shows that this is enough to prove that $\End^0(E)\subset\Q(\pi)$
 \end{proof}
 In the end we have proved that $\End(E)\otimes\Q = \Q(\pi)$.
 The field $\Q(\pi)$ is quadratic imaginary as the Frobenius' characteristic polynomial is of degree $2$.
+Another way to think of this field is to see it as $\Q(\sqrt{\discr})$ where $\discr$ is the discriminant of the characteristic polynomial of the Frobenius.
 This concludes the proof that ordinary curves have endomorphism rings isomorphic to orders in imaginary quadratic fields.
 
+\subsection{The group action}
+In this section we focus on defining the group action that will be used to exchange keys Diffie-Hellman style.
+We keep our notations.
+The previous section showed that $\End(E)$ is an order in $\Q(\discr)$.
+Using isogeny-volcanos theory, one can show that for Elkies primes $l$, two $l$-isogenous curves have the same endomorphism ring.
+As such we label $\OO$ the endomorphism ring of $E$ and we say that a curve with endomorphism ring $\OO$ has \textit{complex multiplication} (CM) by $\OO$.
+
+Recall that by a \textit{fractional ideal} $\af$ we mean a $\OO$-submodule of $\Q(\sqrt{\discr})$.
+This fractional ideal is said to be \textit{invertible} if there exists another fractional ideal $\bff$ such that $\af\bff = \OO$.
+For such an invertible ideal $\af$, we define the $\af$-torsion subgroup of $E$ as
+\[
+	E[\af] = \left\{ P\in E\ |\ \sigma P = O \text{ for all } \sigma\in\af\right\}.
+\]
+This defines a subgroup of $E$ and hence the kernel of a unique isogeny denoted $\phi_{\af}$.
+Its codomain will be denoted as $\af\cdot E$ to underline a group action.
+
+Let $\Ell$ be the set of elliptic curves with complex multiplication by $\OO$ up to isomorphism.
+One can extend the $\af$-torsion construction into an action of the fractional ideals of $\OO$ on $\Ell$.
+Principal ideals then act trivially under this action and thus induce an action of the class group of $\OO$, denoted $\Cl$, on $\Ell$.
+The \textit{main theorem of complex multiplication} states that this action is simply transitive, hence a bijection
+\[
+	\text{Ideal class of }\af\text{ in }\Cl \mapsto \text{Isomorphism class of } \af\cdot E\text{ in } \Ell.
+\]
+This bijection implies that the space on the left has $h(\OO)$ elements, where $h(\OO)$ is the class number of $\OO$.
+Over $\FFq$ this space decomposes into two components corresponding to curves and their quadratic twist.
+Under this bijection, ideal norms correspond to isogeny degrees.
+
+Now to walk on this $\Ell$ space, recall that for an Elkies prime $l$, the Frobenius restricted to $E[l]$ has two distinct eigenvalues $\lambda$ and $\mu$.
+Let $\af = (\pi-\lambda, l)$ and $\hat{\af} = (\pi-\mu, l)$ be two ideals in $\Cl$.
+The space $E[\af]$ is the eigenspace of $\pi$ which defines an $l$-isogeny $\phi_{\af}$.
+It turns out that $\af\hat{\af} = \hat{\af}\af = (l)$ in $\Cl$.
+As such, these fractional ideals are inverse of each other and the corresponding isogenies are dual of one another.
+These two eigenvalues hence define the two direction on the $l$-isogeny cycle independently of the curve $E$.
+We now have a way to take steps in the isogeny graph.
+
+\subsection{The key-exchange protocol}
+We describe the CRS key-exchange protocol using the group action of the previous section.
+As a set of vertices, we use $X=\Ell$ for some order $\OO$ and $q$.
+Let $G=\Cl$ and $S$ be a set of ideal of $G$ with small norms.
+Consider the directed graph $\mathcal{G}$ whose vertices are the points of $X$.
+We connect two vertices (classes of curves) $[E]$ and $[E']$  if and only if there is an element of $S$ such that $s\cdot E = E'$.
+If $S$ is sufficiently large, i.e. it generates the group $\Cl$, then the graph will be connected.
+
+In a nutshell, the keyspace is a very large graph composed of cycles whose vertices are elliptic curves.
+To walk on this graph means to take a certain path made of isogenies of various degrees on this graph.
+This is all backed up by the main CM theorem states that the operation of taking steps is commutative and bijective.
+A secret key can then be a walk on the graph starting from a fixed curve and the corresponding public key the destination curve.
+The problem of creating a connecting isogeny between the starting curve and the destination one is believed to be quantum-hard, hence the security.
+
+To set up the protocol, a good order $\OO$ is needed.
+For quantum security using this protocol, a keyspace of size at least $256$ bits is required.
+Estimating the class number is a very hard problem but on average
+\[
+	h(\OO) \approx 0.461\sqrt{\left|\discr\right|}.
+\]
+Since the keyspace is of size $\# X= \# \Ell = h(\OO)$ and $\discr\sim q$, we have to look for a curve over $\FFq$ with $q$ around $512$ bits.
+This is complicated by the fact that we need a generating set $S$ of ideals with small norm.
+Thousands of computer hours have been spent generating some usable protocol parameters: sufficiently many primes of small norm and a large enough keyspace.
+To actually take a step $\af$ starting from a vertex $[E]$ in this graph we explicitly generate the kernel $E[\af]$ and compute the resulting isogeny.
+
+The kernels correspond to random points of order $l$.
+Generating these is the most time-consuming part of our implementation and will be described in the next section.
+To effectively compute isogenies from these points two methodes are used.
+The fastest, using \textit{radical isogenies}, transform the starting curve in Montgomery form into a Tate normal curve.
+Then one can iterate very efficiently over small rational expessions and take $k$ steps in the graph in one go.
+This is only possible for primes $3$, $5$ and $7$.
+The second one, $\sqrt{}$\textit{Velu} cleverly uses some structure on the kernel polynomials and fast multi-evaluation to take one step at a time.
 \end{document}
