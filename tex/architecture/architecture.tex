@@ -1,0 +1,56 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+
+
+\subsection{Montgomery curve arithmetic}
+
+\newcommand{\x}{\textbf{x}}
+\newcommand{\funct}[1]{\texttt{\detokenize{#1}}}
+We chose to implement  the Montgomery curve arithmetic as described by Craig Costello and Benjamin Smith \cite{}. 
+It is called x-only arithmetic because any finite projective point $P = (X:Y:Z)$ of $E$ can be mapped to a point $\x(P)=(X:Z)=(X/Z:1)\in\PP^1$ if $Z\neq0$ or to $\x(P)=(1:0)$ if $Z=0$.
+Any operation on a finite point $P$ is done after discarding its $Y$ coordinate. This coordinate can be recovered later if needed.
+
+\begin{lemma}Assume $X_{P-Q}\neq0$.
+	 
+	 If $P\neq Q$ then  \begin{equation}\left\{\begin{array}{l}
+	 	X_{P+Q} = Z_{P-Q}[(X_P-Z_P)(X_Q+Z_Q) + (X_P+Z_P)(X_Q-Z_Q)]^2\\
+	 	Z_{P+Q} = X_{P-Q}[(X_P-Z_P)(X_Q+Z_Q) - (X_P+Z_P)(X_Q-Z_Q)]^2
+	 \end{array}\right.\end{equation}
+ 
+ 	If $P=Q$ then \begin{equation}\label{xdbleq}\left\{\begin{array}{l}
+ 		X_{[2]P}=(X_P + Z_P)^2(X_P - Z_P)^2 \\
+ 		Z_{[2]P}=(4 X_P Z_P)[(X_P - Z_P)^2 + \frac{A+2}{4}(4 X_P Z_P)]
+ 	\end{array}\right.\end{equation}
+\end{lemma}
+
+Using this lemma, we provide three generic pseudo-operations on Montgomery curve points that constitute the framework for x-only arithmetic in our implementation : addition, doubling and scalar multiplication.
+
+These algorithms are called pseudo-operations because they operate over the quotient set of the curve $E$ by the partition 
+$\lbrace\lbrace P, -P\rbrace, P\in E\rbrace$. e.g. every point is identified with its opposite. This identification is implied in the following paragraphs.
+
+\paragraph{xADD}The pseudo-addition or differential addition \funct{MG_xADD} returns $P+Q$ given $P,Q\in E$ and their difference $P-Q$ using the formula.
+Our implementation of xADD uses 4 multiplications, 2 squaring,  3 additions and 3 subtractions in $\FF_p$, for a total of  12 base operations over $\FF_p$.
+However the point addition xADD requires to first compute the difference $P-Q$, therefore it cannot be used as a generic point addition algorithm but can only be used in the specific context of a differential addition chain.
+
+\paragraph{xDBL}The pseudo-doubling \funct{MG_xDBL} computes $[2]P$ from input $P$.  The cost is 3 additions, 2 squaring, 2 subtractions, 3 multiplications and 1 division in $\FF_p$, for a total of 11 operations. When calling xDBL multiple times for points on the same curve, one could cache or precompute the value $\frac{A+2}{4}$ from equation \eqref{xdbleq} and therefore shave off 1 addition and 1 division from the cost of every subsequent calls to xDBL.
+
+\paragraph{Montgomery Ladder} \funct{MG_ladder} computes the point multiplication $[k]P$ calling xADD and xDBL. Write $k=\sum_{i=0}^{l-1}k_i2^i$. The Montgomery Ladder follows a differential addition chain of length $2l-1$ wherein the difference of consecutive terms is constant. The execution of \funct{MG_ladder} requires $l$ calls to xDBL and $l-1$ calls to xADD.
+\begin{minted}[frame=lines, linenos, ]{c}
+P0 = P
+P1 = xDBL(P)
+for(int i=l-2; i>=0, i--) {
+	if(k[i]==0){
+		P1 = xADD(P0, P1, P)
+		P0 = xDBL(P0)
+	}
+	else{
+		P0 = xADD(P0, P1, P)
+		P1 = xDBL(P1)
+	}
+}
+return P0
+\end{minted}
+In the specific case of the Montgomery Ladder
+Note that the Montgomery ladder can be implemented using a conditional constant-time swap to prevent branching or timing attacks.
+\end{document}
