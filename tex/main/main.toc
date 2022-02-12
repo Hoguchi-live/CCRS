@@ -2,3 +2,6 @@
 \contentsline {section}{\numberline {1}Introduction}{2}{}%
 \contentsline {section}{\numberline {2}Theoretical background}{3}{}%
 \contentsline {subsection}{\numberline {2.1}Elliptic curves and models}{3}{}%
+\contentsline {subsection}{\numberline {2.2}Isogenies}{5}{}%
+\contentsline {subsection}{\numberline {2.3}Isogeny graphs}{6}{}%
+\contentsline {subsection}{\numberline {2.4}The structure of $\text {End}(E)$}{7}{}%

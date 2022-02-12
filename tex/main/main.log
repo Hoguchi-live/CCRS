@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.2.11)  11 FEB 2022 18:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.2.11)  12 FEB 2022 17:55
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -934,7 +934,7 @@ Package: xstring 2021/07/21 v1.84 String manipulations (CT)
 runsystem(mkdir -p _minted-main)...executed.
 
  (./macros.sty
-\c@theoreme=\count362
+\c@theorem=\count362
 \c@lemma=\count363
 \c@coro=\count364
 \c@exercise=\count365
@@ -1050,38 +1050,45 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 (../introduction/../introduction/introduction.tex [2])
-(../theory/../theory/theory.tex [3] [4])
+(../theory/../theory/theory.tex [3] [4]
+Overfull \hbox (1.52081pt too wide) in paragraph at lines 149--153
+[]\OT1/cmr/m/n/12 The \OT1/cmr/m/it/12 de-gree \OT1/cmr/m/n/12 of an isogeny is
+ its de-gree as an al-ge-braic map. For in-stance, the multiplication-
+ []
+
+[5] [6] [7] [8])
 
 Package glossaries Warning: No \printglossary or \printglossaries found. 
 (Remove \makeglossaries if you don't want any glossaries.) 
 This document will not have a glossary.
 
-[5] (./main.aux) ) 
+[9] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 30080 strings out of 478353
- 620125 string characters out of 5854635
- 1009166 words of memory out of 5000000
- 47638 multiletter control sequences out of 15000+600000
- 412983 words of font info for 64 fonts, out of 8000000 for 9000
+ 30088 strings out of 478353
+ 620172 string characters out of 5854635
+ 1011193 words of memory out of 5000000
+ 47644 multiletter control sequences out of 15000+600000
+ 413601 words of font info for 66 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 125i,8n,131p,1160b,258s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 125i,8n,131p,1160b,249s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.
 enc}</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-dist/f
 onts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></us
-r/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><
-/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/tex
-mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/f
-onts/type1/public/cm-super/sfrm1200.pfb>
-Output written on main.pdf (5 pages, 157309 bytes).
+lic/amsfonts/cm/cmmi6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></us
+r/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><
+/usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texmf-dist/fonts/t
+ype1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/publ
+ic/cm-super/sfrm1200.pfb>
+Output written on main.pdf (9 pages, 190417 bytes).
 PDF statistics:
- 94 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
+ 113 PDF objects out of 1000 (max. 8388607)
+ 71 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 
