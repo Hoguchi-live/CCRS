@@ -8,10 +8,10 @@
 \newcommand{\x}{\textbf{x}}
 \newcommand{\funct}[1]{\texttt{\detokenize{#1}}}
 We chose to implement  the Montgomery curve arithmetic as described by Craig Costello and Benjamin Smith \cite{}. 
-It is called x-only arithmetic because any finite projective point $P = (X:Y:Z)$ of $E$ can be mapped to a point $\x(P)=(X:Z)=(X/Z:1)\in\PP^1$ if $Z\neq0$ or to $\x(P)=(1:0)$ if $Z=0$.
+It is called x-only arithmetic because any finite projective point $P = (X:Y:Z)$ of $E$ can be mapped to a point $\x(P)=(X:Z)=(X/Z:1)\in\PP^1$ if $Z\neq0$ or to $\x(P)=(1:0)$ if $Z=0$. We write $\x(P)=(X_P, Z_P)$.
 Any operation on a finite point $P$ is done after discarding its $Y$ coordinate. This coordinate can be recovered later if needed.
 
-\begin{lemma}Assume $X_{P-Q}\neq0$.
+\begin{lemma}[Addition and duplication formulas on Montgomery Curves]Let $P,Q\in E(\FF_q)$.  Assume $X_{P-Q}\neq0$.
 	 
 	 If $P\neq Q$ then  \begin{equation}\left\{\begin{array}{l}
 	 	X_{P+Q} = Z_{P-Q}[(X_P-Z_P)(X_Q+Z_Q) + (X_P+Z_P)(X_Q-Z_Q)]^2\\
@@ -30,10 +30,10 @@ These algorithms are called pseudo-operations because they operate over the quot
 $\lbrace\lbrace P, -P\rbrace, P\in E\rbrace$. e.g. every point is identified with its opposite. This identification is implied in the following paragraphs.
 
 \paragraph{xADD}The pseudo-addition or differential addition \funct{MG_xADD} returns $P+Q$ given $P,Q\in E$ and their difference $P-Q$ using the formula.
-Our implementation of xADD uses 4 multiplications, 2 squaring,  3 additions and 3 subtractions in $\FF_p$, for a total of  12 base operations over $\FF_p$.
+Our implementation of xADD uses 4 multiplications, 2 squaring,  3 additions and 3 subtractions in $\FF_q$, for a total of  12 base operations over $\FF_q$.
 However the point addition xADD requires to first compute the difference $P-Q$, therefore it cannot be used as a generic point addition algorithm but can only be used in the specific context of a differential addition chain.
 
-\paragraph{xDBL}The pseudo-doubling \funct{MG_xDBL} computes $[2]P$ from input $P$.  The cost is 3 additions, 2 squaring, 2 subtractions, 3 multiplications and 1 division in $\FF_p$, for a total of 11 operations. When calling xDBL multiple times for points on the same curve, one could cache or precompute the value $\frac{A+2}{4}$ from equation \eqref{xdbleq} and therefore shave off 1 addition and 1 division from the cost of every subsequent calls to xDBL.
+\paragraph{xDBL}The pseudo-doubling \funct{MG_xDBL} computes $[2]P$ from input $P$.  The cost is 3 additions, 2 squaring, 2 subtractions, 3 multiplications and 1 division in $\FF_q$, for a total of 11 operations. When calling xDBL multiple times for points on the same curve, one could cache or precompute the value $\frac{A+2}{4}$ from equation \eqref{xdbleq} and therefore shave off 1 addition and 1 division from the cost of every subsequent calls to xDBL.
 
 \paragraph{Montgomery Ladder} \funct{MG_ladder} computes the point multiplication $[k]P$ calling xADD and xDBL. Write $k=\sum_{i=0}^{l-1}k_i2^i$. The Montgomery Ladder follows a differential addition chain of length $2l-1$ wherein the difference of consecutive terms is constant. The execution of \funct{MG_ladder} requires $l$ calls to xDBL and $l-1$ calls to xADD.
 \begin{minted}[frame=lines, linenos, ]{c}
@@ -51,6 +51,51 @@ for(int i=l-2; i>=0, i--) {
 }
 return P0
 \end{minted}
-In the specific case of the Montgomery Ladder
-Note that the Montgomery ladder can be implemented using a conditional constant-time swap to prevent branching or timing attacks.
+In the specific case of the Montgomery Ladder the two operations xADD and xDBL could be merged into a single function to avoid repeated computations.
+Note that the Montgomery ladder can leak a lot of information via side channel attacks but it can be implemented using a conditional constant-time swap to prevent branching or timing attacks for instance.
+
+\subsection{$\sqrt{}$\textit{-Velu} algorithm}
+
+\begin{lemma}
+	Let $E:y^2=x^3+Ax^2+x$ be an elliptic curve over $\FF_q$ and $P\in E[l]$ and let $\phi:E\rightarrow E'$ with kernel $\langle P \rangle$.
+	The geometry parameter $A'$ of $E' : y^2=x^3+A'x^2+x$ can be computed using the following formulas
+	\begin{equation}\label{veluform}\begin{array}{l}
+			h_S(X) = \prod_{s\in S}(X-\x([s]P))\text{, where }S=\{1,3, \ldots, l-2\} \\
+			d = \left(\frac{A-2}{A+2}\right)^l \left( \frac{h_S(1)}{h_S(-1)}\right)^8\\
+			A'=2\frac{1+d}{1-d}
+		\end{array}\end{equation}
+
+\end{lemma}
+To construct the isogeny given $P$, we implemented two algorithms \funct{KPS} and \funct{xISOG}. We use the improvements described in \cite{} and \cite{} on the classic Vélu formulae to implement \funct{KPS} and \funct{xISOG}.
+\paragraph{KPS} The procedure \funct{KPS} splits $S$ in three subsets $I,J,K$, each of size $O(\sqrt{l})$ such that $S = K\cup(I+J)\cup(I-J)$ with a nice structure with regards to the group operation as described in \cite{}.
+\[\begin{array}{l}I = \{2b(2i+1)|0\leq i<b'\} \\
+J = \{2j+1|0\leq j<b\} \\
+K=\{4bb'+1, \ldots, l-4, l-2\}\end{array}\]
+where $b=\lfloor \sqrt{l-1}/2\rfloor,\, b'=\lfloor (m+1)/4b \rfloor$ if $b>0$ or else $b'=0$.\\
+These 3 sets are differential addition chains for they each are in arithmetic progression thus we can use the fast x-only arithmetic xADD to compute each $\x([k]P)$ for $k\in I\cup J\cup K$
+
+\paragraph{xISOG} This algorithm returns the geometry parameter $A'$ from equation \eqref{veluform}. This computation requires the three sets $\mathcal{I}=\{\x([k]P), k\in I\}$, $\mathcal{J}=\{\x([k]P), k\in J\}$, $\mathcal{K}=\{\x([k]P), k\in K\}$ from \funct{KPS}. 
+We define the following polynomials \[\begin{array}{l}
+	F_0(Z,X)=(Z-X)^2\\
+	F_1(Z,X)=-2(Z^2X+(X^2+2AX+1)Z+X)\\
+	F_2(Z,X)=(XZ-1)^2\\
+	h_\mathcal{I}=\prod_{x_i\in\mathcal{I}}(Z-x_i)\\
+\end{array}\]
+Step 1 : Compute \[\begin{array}{l}
+	E_0 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)+F_1(Z,x_j)+F_2(Z,x_j))\\
+	E_1 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)-F_1(Z,x_j)+F_2(Z,x_j))\\
+\end{array}\]
+Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval}. 
+\[\begin{array}{l}
+	R_0 = Res_Z(h_\mathcal{I},E_0) = \funct{fq_poly_multieval}(\mathcal{I}, E_0)\\
+	R_1 = Res_Z(h_\mathcal{I},E_1) = \funct{fq_poly_multieval}(\mathcal{I}, E_1)\
+\end{array}\]
+Step 3 : Compute the missing factors from $h_S=h_{\mathcal{I}\pm \mathcal{J}}h_\mathcal{K}$ which is straight forward and deduce $d$ and $A'$ using equation \eqref{veluform} :
+ \[\begin{array}{l}
+	M_0 = \prod_{x_k\in\mathcal{K}}(1-x_k)\\
+	M_1 = \prod_{x_k\in\mathcal{K}}(-1-x_k)\\
+	d = \left(\frac{A-2}{A+2}\right)^l \left( \frac{M_0R_0}{M_1R_1}\right)^8\\
+	A'=2\frac{1+d}{1-d}
+ \end{array}\]
+
 \end{document}
