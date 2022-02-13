@@ -37,17 +37,21 @@ int apply_key(MG_curve_t *rop, MG_curve_t *op, key__t *key, cfg_t *cfg) {
 			MG_curve_update_field_(&tmp2, cfg->fields + r - 1);
 		}
 
+		#ifdef TIMING
 		clock_t start = clock(), diff; // Clock start
+		#endif
 
 		if( lp->type == 1 ) ec = walk_rad(&tmp2, &tmp1, lp->l, *steps);
 		else ec = walk_velu(&tmp2, &tmp1, lp->l, *steps);
 
+		#ifdef TIMING
 		diff = clock() - start; // Clock stop
 		int msec = diff * 1000 / CLOCKS_PER_SEC;
 		total_time = total_time + msec;
+		#endif
 
 		#ifdef VERBOSE
-		if(!fmpz_is_zero(*steps)) print_verbose_walk_rad(lp->type, lp->l, *steps, ec, msec);
+		if(!fmpz_is_zero(*steps)) print_verbose_walk(lp->type, lp->l, *steps, ec, msec);
 		#endif
 		#ifdef TIMING
 		print_timing_json(lp->l, ((float)msec)/(10*1000));

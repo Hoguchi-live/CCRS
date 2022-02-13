@@ -1,14 +1,21 @@
 // @file setup.c
 #include "setup.h"
 
-/******************************
-  	   l-prime
-******************************/
+/*********************************************
+   l-primes memory management
+*********************************************/
+/**
+  Initializes op for use.
+  A corresponding call to lprime_clear() must be made after finishing with the lprime_t to free the memory.
+*/
 void lprime_init(lprime_t *op){
 
 	fmpz_init(op->l);
 }
 
+/**
+  Returns a pointer to an initialized lprime_t.
+*/
 lprime_t *lprime_init_(){
 
 	lprime_t *rop = malloc(sizeof(lprime_t));
@@ -16,6 +23,9 @@ lprime_t *lprime_init_(){
 	return rop;
 }
 
+/**
+ Sets op to the lprime l with given type (0:unused, 1:radical, 2:velu), bounds, degree and possibility of backward walking.
+*/
 void lprime_set(lprime_t *op, fmpz_t l, uint type, uint lbound, uint hbound, uint r, uint bkw){
 
 	fmpz_set(op->l, l);
@@ -27,24 +37,27 @@ void lprime_set(lprime_t *op, fmpz_t l, uint type, uint lbound, uint hbound, uin
 	op->bkw = bkw;
 }
 
+/**
+  Clears the given lprime, releasing any memory used. It must be reinitialised in order to be used again.
+*/
 void lprime_clear(lprime_t *op) {
 
 	fmpz_clear(op->l);
 }
 
-/******************************
-  	   config
-******************************/
+/*********************************************
+   Config memory management
+*********************************************/
 /**
   Returns a pointer to a cfg_t config context.
-  Everything is hardcoded here.
+  Every global parameters are hardcoded here.
 */
 cfg_t* cfg_init_set() {
 
 	//// Alloc config struct
 	cfg_t *cfg = malloc(sizeof(cfg_t));
 
-	//// BASE FIELD EXTENSIONS
+	//// Extensions of the base field
 	//// Alloc fields array
 	cfg->fields = (fq_ctx_t *)malloc(sizeof(fq_ctx_t) * MAX_EXTENSION_DEGREE);
 	char gen[] = "x";
@@ -61,12 +74,11 @@ cfg_t* cfg_init_set() {
 		fq_ctx_init( (cfg->fields)[i-1], base_p, i , gen);
 	}
 
-
-	//// BASE FIELD
+	//// Base field shortcut
 	fq_ctx_t *F;
 	F = &((cfg->fields)[0]);
 
-	//// BASE CURVE PARAMETERS
+	//// Base curve parameters
 	MG_curve_t *E;
 
 	E = malloc(sizeof(MG_curve_t));
@@ -133,7 +145,7 @@ cfg_t* cfg_init_set() {
 
 		switch(l) {
 			case 3: case 5: case 7:
-				type = 1;	//radical isogeny TODO: SHOULD USE ENUM
+				type = 1;	//radical isogeny
 				lbound = l_PRIMES_LBOUNDS[i];
 				hbound = l_PRIMES_HBOUNDS[i];
 				r = l_PRIMES_R[i];
@@ -141,7 +153,7 @@ cfg_t* cfg_init_set() {
 
 				break;
 			default:
-				type = 2;
+				type = 2;	// Sqrt-Velu
 				lbound = l_PRIMES_LBOUNDS[i];
 				hbound = l_PRIMES_HBOUNDS[i];
 				r = l_PRIMES_R[i];
@@ -153,7 +165,7 @@ cfg_t* cfg_init_set() {
 	}
 
 
-	//// RANDOM SEED FOR KEY GENERATION
+	//// Random seed for key generation
 	cfg->seed = 0;
 
 	fmpz_clear(l_fmpz);
@@ -161,6 +173,9 @@ cfg_t* cfg_init_set() {
 	return cfg;
 }
 
+/**
+  Prints a compact representation of the global configuration to stdout.
+*/
 void cfg_print(cfg_t *cfg) {
 
 	fq_ctx_t *F = &((cfg->fields)[0]);
@@ -176,17 +191,20 @@ void cfg_print(cfg_t *cfg) {
 	printf("************************\n");
 }
 
+/**
+  Clears the given configuration, releasing any memory used. It must be reinitialised in order to be used again.
+*/
 void cfg_clear(cfg_t *op) {
 
-	//// Free structures
+	//// Clear the base curve
 	MG_curve_clear(op->E);
 	free(op->E);
 
-	//// Free l-primes
+	//// Clear l-primes and free the array
 	for(int i = 0; i < NB_PRIMES; i++) lprime_clear( &(op->lprimes)[i] );
 	free(op->lprimes);
 
-	//// Free fields
+	//// Clear the fields and free the array
 	for(int i = 0; i < MAX_EXTENSION_DEGREE; i++) fq_ctx_clear( (op->fields)[i] );
 	free(op->fields);
 

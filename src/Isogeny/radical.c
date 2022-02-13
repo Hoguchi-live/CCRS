@@ -59,6 +59,9 @@ void fq_nth_root_trick_ui(fq_t rop, fq_t op, slong l, const fq_ctx_t F) {
 	fmpz_clear(ll);
 }
 
+/**
+  Sets rop as the target curve of k steps starting from op in the 3-isogeny graph
+*/
 void radical_isogeny_3(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 
 	fmpz_t l;
@@ -123,6 +126,9 @@ void radical_isogeny_3(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 	fmpz_clear(l);
 }
 
+/**
+  Sets rop as the target curve of k steps starting from op in the 5-isogeny graph
+*/
 void radical_isogeny_5(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 
 	// Nothing to do
@@ -203,6 +209,9 @@ void radical_isogeny_5(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 	for(int i=0; i< 4; i++) fq_clear(alpha_pow[i], *F);
 }
 
+/**
+  Sets rop as the target curve of k steps starting from op in the 7-isogeny graph
+*/
 void radical_isogeny_7(TN_curve_t *rop, TN_curve_t *op, fmpz_t k) {
 
 	fmpz_t l;

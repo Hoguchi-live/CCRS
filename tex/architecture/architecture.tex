@@ -50,6 +50,15 @@ Applying a key to an elliptic curve is done through the single function located 
 Auxiliary files \texttt{info.c/h} are there to print live information during the exchange  and to get timings for optimization.
 
 
+
+
+
+
+
+
+
+
+
 \subsection{C structures and memory management}
 This section will first introduce the different custom types used in the code to handle context and mathematical objects.
 We have made the choice to clearly represent in C the objects we use.
@@ -121,6 +130,60 @@ This is the case for instance with binary trees, $l$-primes, keys and config typ
 The main reason was for allocating memory for arrays of custom data and/or not having to pre-declare objects.
 Sometimes both approaches were used.
 This can be seen in \texttt{Exchange/keygen.c} with \tF{key_init} initializing a declared key and \tF{key_init_} returning a pointer to an initialized key.
+
+
+
+
+
+
+
+
+\subsection{Radical isogenies}
+In the CRS algorithm, taking $k$ steps in the $l$-isogeny graph is equivalent to computing a chain of isogenies of degree $l$.
+As such, we want to find the image curve of a composition
+\[
+	E\rightarrow E_1\rightarrow E_2\rightarrow \dots\rightarrow E_{k-1}\rightarrow E_k.
+\]
+Radical formulas allow us to do just that very efficiently for small $l$ primes.
+For a given elliptic curve $E$ and a point $P\in E$ of order $l$, Velu's formulas \cite produce expressions for the curve $E/<P>$.
+In article \cite formulas are given to produce a point $Q\in E/<P>$ such that the composition
+\[
+	E\rightarrow E/<P> \rightarrow E/<Q>
+\]
+is of degree $l^2$.
+Iterating this approach provides rational, low-degree formulas for the target curve found after $k$ steps in the graph.
+The only requirement is a point of order $l$ and the initial curve in Tate normal form.
+Looking such a point is described in section 3.6.
+The explicit formulas transforming a Montgomery curve into its Tate normal model and back were given in part 2.1.
+This is done in the code with functions \tF{MG_get_TN} and \tF{TN_get_MG}.
+The radical formulas are implemented in file \texttt{isogeny/radical.c}.
+
+Some $l$-th root extraction is required and we use a little trick to only use fast exponentiation.
+Let $l$ be a prime equal to $3$, $5$ or $7$.
+Assume we want to look for the $l$-th root of element $x\in\FFp$.
+In our case, we have $p + 1 = 0$ mod $ 2l$ for these three values, write $p+1 = 2lk$ for some integer $k$.
+Setting $e=(p + 1) / 2l$, one finds $(x^e)^l = \pm x$.
+We test the correct root via fast exponentiation and return a $l$-th root of $x$.
+
+As an example, if $E$ is in Tate normal form
+\[
+	Y^2 + (1-c)XY -bY = X^3 -bX^2
+\]
+for a point of order $5$, which implies $b=c$,  the curve resulting from a single step (using this point) has expression
+\[
+	Y^2 + (1-b')XY -b'Y = X^3 -b'X^2
+\]
+with
+\[
+	b' = \alpha\frac{\alpha^4 + 3\alpha^3 + 4\alpha^2 + 2\alpha + 1 }{\alpha^4 - 3\alpha^3 + 4\alpha^2 - 2\alpha + 1}
+\]
+where $\alpha$ is a $5$-th root of $b$.
+It is immediately understandable why iterating $k$ times over $b$ is several orders of magnitude faster than using Velu's formulas involving torsion-point generation at each step.
+
+
+
+
+
 
 \subsection{Montgomery curve arithmetic}
 

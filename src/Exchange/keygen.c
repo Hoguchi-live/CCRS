@@ -15,6 +15,9 @@ void key_init(key__t *key, cfg_t *cfg) {
 	for(int i = 0; i < key->nb_primes; i++) fmpz_init((key->steps)[i]);
 }
 
+/**
+  Returns an initialized for use with keygen and cfg.
+*/
 key__t *key_init_(cfg_t *cfg) {
 
 	key__t *key = malloc(sizeof(key__t));
@@ -23,6 +26,9 @@ key__t *key_init_(cfg_t *cfg) {
 }
 
 
+/**
+  Sets key to a curve generated via the config cfg and the given seeds.
+*/
 void keygen(key__t *key, cfg_t *cfg, uint seed, flint_rand_t state) {
 
 	lprime_t *lp;
@@ -75,12 +81,19 @@ void keygen(key__t *key, cfg_t *cfg, uint seed, flint_rand_t state) {
 	fmpz_clear(steps);
 }
 
+/**
+  Wrapper returning an initialized and randomly set key.
+*/
 key__t *keygen_(cfg_t *cfg, uint seed, flint_rand_t state) {
 	key__t *key = key_init_(cfg);
 	keygen(key, cfg, seed, state);
 	return key;
 }
 
+
+/**
+  Clears the given key, releasing any memory used. It must be reinitialised in order to be used again.
+*/
 void key_clear(key__t *key) {
 
 	//for(int i = 0; i < key->nb_primes; i++) lprime_clear( &(key->lprimes)[i] );
@@ -91,6 +104,9 @@ void key_clear(key__t *key) {
 	free(key);
 }
 
+/**
+  Prints a compact representation of the key to stdout.
+*/
 void key_print(key__t *key){
 
 	printf("*** Key structure ***\n");

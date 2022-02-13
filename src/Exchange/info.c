@@ -1,7 +1,10 @@
 // @file info.c
 #include "info.h"
 
-void print_verbose_walk_rad(uint type, fmpz_t l, fmpz_t k, int ec, int msec) {
+/**
+  Prints information related to a walk on an l-isogeny graph.
+*/
+void print_verbose_walk(uint type, fmpz_t l, fmpz_t k, int ec, int msec) {
 
 	printf("VERBOSE::apply_key:Taking ");
 	fmpz_print(k);
@@ -22,12 +25,18 @@ void print_verbose_walk_rad(uint type, fmpz_t l, fmpz_t k, int ec, int msec) {
 
 }
 
+/**
+ Prints the total walk time in seconds.
+*/
 void print_verbose_walk_total_time(int total_time){
 
 
 	printf("VERBOSE::apply_key:Total user-time: %ds\n", total_time/1000);
 }
 
+/**
+ Formats the timing results of the walk in a json-friendly output.
+*/
 void print_timing_json(fmpz_t l, float msec) {
 	printf("\"");
 	fmpz_print(l);

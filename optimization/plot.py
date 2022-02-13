@@ -1,6 +1,10 @@
 import json
 import math
 import matplotlib.pyplot as plt
+font = {'family' : 'normal',
+        'size'   : 18}
+
+plt.rc('font', **font)
 
 DIR = "./files/"
 FILENAME = "timings.json"
