@@ -126,7 +126,7 @@ This can be seen in \texttt{Exchange/keygen.c} with \tF{key_init} initializing a
 
 \newcommand{\x}{\textbf{x}}
 \newcommand{\funct}[1]{\texttt{\detokenize{#1}}}
-We chose to implement  the Montgomery curve arithmetic as described by Craig Costello and Benjamin Smith \cite{}. 
+We chose to implement  the Montgomery curve arithmetic as described by Craig Costello and Benjamin Smith \cite{}.
 It is called x-only arithmetic because any finite projective point $P = (X:Y:Z)$ of $E$ can be mapped to a point $\x(P)=(X:Z)=(X/Z:1)\in\PP^1$ if $Z\neq0$ or to $\x(P)=(1:0)$ if $Z=0$. We write $\x(P)=(X_P, Z_P)$.
 Any operation on a finite point $P$ is done after discarding its $Y$ coordinate. This coordinate can be recovered later if needed.
 
@@ -192,7 +192,7 @@ K=\{4bb'+1, \ldots, l-4, l-2\}\end{array}\]
 where $b=\lfloor \sqrt{l-1}/2\rfloor,\, b'=\lfloor (m+1)/4b \rfloor$ if $b>0$ or else $b'=0$.\\
 These 3 sets are differential addition chains for they each are in arithmetic progression thus we can use the fast x-only arithmetic xADD to compute each $\x([k]P)$ for $k\in I\cup J\cup K$
 
-\paragraph{xISOG} This algorithm returns the geometry parameter $A'$ from equation \eqref{veluform}. This computation requires the three sets $\mathcal{I}=\{\x([k]P), k\in I\}$, $\mathcal{J}=\{\x([k]P), k\in J\}$, $\mathcal{K}=\{\x([k]P), k\in K\}$ from \funct{KPS}. 
+\paragraph{xISOG} This algorithm returns the geometry parameter $A'$ from equation \eqref{veluform}. This computation requires the three sets $\mathcal{I}=\{\x([k]P), k\in I\}$, $\mathcal{J}=\{\x([k]P), k\in J\}$, $\mathcal{K}=\{\x([k]P), k\in K\}$ from \funct{KPS}.
 We define the following polynomials \[\begin{array}{l}
 	F_0(Z,X)=(Z-X)^2\\
 	F_1(Z,X)=-2(Z^2X+(X^2+2AX+1)Z+X)\\
@@ -203,7 +203,7 @@ Step 1 : Compute \[\begin{array}{l}
 	E_0 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)+F_1(Z,x_j)+F_2(Z,x_j))\\
 	E_1 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)-F_1(Z,x_j)+F_2(Z,x_j))\\
 \end{array}\]
-Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval}. 
+Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval}.
 \[\begin{array}{l}
 	R_0 = Res_Z(h_\mathcal{I},E_0) = \funct{fq_poly_multieval}(\mathcal{I}, E_0)\\
 	R_1 = Res_Z(h_\mathcal{I},E_1) = \funct{fq_poly_multieval}(\mathcal{I}, E_1)\
@@ -215,5 +215,108 @@ Step 3 : Compute the missing factors from $h_S=h_{\mathcal{I}\pm \mathcal{J}}h_\
 	d = \left(\frac{A-2}{A+2}\right)^l \left( \frac{M_0R_0}{M_1R_1}\right)^8\\
 	A'=2\frac{1+d}{1-d}
  \end{array}\]
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Random $l$-torsion point over extensions}
+The previous algorithm, $\sqrt{}$-Velu, as well as radical isogenies both need a generator of the kernel to compute the associated isogeny.
+Let $\lambda, \mu$ be the eigenvalues of the Frobenius modulo an Elkies prime $l$ and let $r, s$ be their orders and assume $r\leq s$.
+Recall in the section on the \textit{group action} that the ideals we use to take steps in the graph are of the form $\af = (\pi -\lambda, l)$ and $\hat{\af} = (\pi -\mu, l)$.
+By definition, the associated isogeny verifies
+\[
+        \ker\phi_{\af} = \left\{P\in E\ |\ \pi P = \lambda P \text{ and } lP = O \right\} = \left\{P\in E[l]\ |\ \pi P = \lambda P  \right\}.
+\]
+Notice that for a point $P$ in this kernel $\pi^r P = \lambda^r P = P$, hence $P\in E(\FF_{q^r})[l]$.
+Now if $s$ and $r$ are coprime, ie $r$ does not divide $s$, then $\ker\phi_{\hat{\af}} \subset  E(\FF_{q^s})[l]\setminus E(\FF_{q^r})[l]$.
+The description of $E[l]$ as the sum of the two eigenspaces of $\pi$ thus implies that
+\[
+       \ker\phi_{\af}  = E(\FF_{q^r})[l].
+\]
+In this project, we only use primes satisfying the coprimality condition on the orders of the eigenvalues.
+We are thus reduced to generating isogeny kernels from $l$-torsion points living in specified extensions.
+
+Looking for a point $P\in E(\FF_{q^r})[l]$ is conceptualy simple.
+First, precompute the quotient $C := \#E(\FF_{q^r}) / l$.
+Then pick a non-trivial random point $Q\in E(\FF_{q^r})$ and set $P := C\cdot Q$.
+If $P\neq O$, the point $P$ is in $E(\FF_{q^r})[l]$.
+Otherwise pick a new point $Q$.
+
+The probability of hitting such an element is $C/\#E(\FF_{q^r}) = 1/l$ so few tries are needed.
+However the crux of the algorithm is the computation of $C\cdot Q$ using the \textit{Montgomery ladder}.
+The ladder has complexity $O((A(l, r) + D(l, r))\log{l})$ where $A$ and $D$ represent the complexity of the \funct{MG_xADD} and \funct{MG_xDBL} functions over $\FF_{q^r}$ respectively.
+The main issue in practice is the degree of the extension.
+While GMP has optimized algorithms, since $\# E(F_{q^r}) \sim q^r$, we are reaching $10^5$ iterations in the ladder for our $q$ of $512$ bits and $r=9$.
+Still we found a trick to work in extensions of even degree up to $18$.
+
+Assume $r$ is even and written as $r = 2r'$ and suppose we want to find  a point $P\in F : = E(\FF_{q^r})[l]\setminus E(\FF_{q^{r'}})[l]$ (this is the situation above for eigenvalue $\mu$).
+The restriction of $\pi^{r'}$ to $E(\FF_{q^r})[l]$  has eigenvalues $1$ and $-1$.
+It follows that points in $F$ are characterized by equation
+\[
+	\pi^{r'} P = -P.
+\]
+Writing $P=(x, y)$, this is equivalent to saying that $x\in \FF_{q^{r'}}$ and $y\in \FF_{q^{r}}\setminus\FF_{q^{r'}}$.
+Using $x$-only arithmetic on Montgomery curves, this means that we can work in an extension of degree $r/2$ instead of $r$.
+
+The functions \funct{MG_point_rand_ninfty} and \funct{MG_point_rand_ninfty_nsquare} return a random non-trivial point with $x$ in $\FF_{q^{r}}$ and $\FF_{q^{r//2}}$ respectively.
+Following is the pseudo-code for \funct{MG_point_rand_ninfty}.
+\begin{minted}[frame=lines, linenos, ]{c}
+is_square = 0
+while(is_square == 0) {
+	x = random element in Fq^r
+	tmp = x^3 + Ax^2 + x
+	is_square = (is tmp a square in Fp^r?)
+}
+return [x, 1] //Montgomery point
+\end{minted}
+And the \funct{MG_point_rand_ninfty_nsquare} version.
+\begin{minted}[frame=lines, linenos, ]{c}
+is_square = 1
+while(is_square == 1) {
+	x = random element in Fq^r' // r = 2r'
+	tmp = x^3 + Ax^2 + x
+	is_square = (is tmp a square in Fp^r'?)
+}
+return [x, 1] (Montgomery point)
+\end{minted}
+
+
+
+\subsection{Multi-evaluation using remainder trees}
+To compute the resultant in the $\sqrt{}$-Velu algorithm, a binary-tree approach was used.
+Notice first that evaluating a polynomial $P\in k[X]$ at a point $\alpha\in k$ is equivalent to computing the image of $P$ in $k[X]/(X-\alpha)$.
+Suppose now that we want to evaluate a polynomial $P$ at multiple roots $\alpha_0, \cdots,\alpha_n$.
+We first split the roots into two groups $I$, $J$ and compute $P$ mod $\prod_{i\in I} (X-\alpha_i)$ and $P$ mod $\prod_{j\in J} (X-\alpha_j)$.
+We iterate the proceedure until we get to to reducing $P$ mod a single root.
+The only problem is computing all the products efficiently.
+This is done by building a binary tree containing the different products from the bottom up using \funct{remainderCell} in \texttt{Polynomials/multieval.c}.
+This step has complexity $O(\mathbf{M}(n)\log(n))$ with $\mathbf{M}$ a bound function on the polynomial multiplication complexity as there is a multiplication for each cell and the tree has depth $\log_2(n)$.
+After that, the remainders can be computed in $\log_2(n)$ reductions.
+The resulting complexity is quasi-linear in the number of points, as opposed to quadratic for a naive Horner's scheme.
+
+The algorithm is presented here, using the notations from above and setting $Q(i, j) :=\prod_{k=i}^j (X-\alpha_k)$ for $1\leq i\leq j\leq n$.
+\begin{enumerate}
+	\item Set the root of the tree as $P$ mod $Q(1, n)$.
+	\item Add a left child $P$ mod $Q(1, n//2)$ and a right child $P$ mod $Q(n//2 + 1, n)$.
+	\item Recursively repeat step $1$ and $2$ on the childs until reaching a depth of $\log_2n$.
+	\item The leafs of the tree now contain the results of the evaluations.
+\end{enumerate}
+A detailed analysis of the algorithm done in \cite{} gives the following complexity for the whole algorithm.
+\begin{lemma}
+	If $P\in k[X]$ is of degree $l$, its evaluation at $n$ distinct roots runs in
+	\[
+		2\mathbf{M}(l) + 4\mathbf{M}(n)\log(n) + O(l + \mathbf{M}(n)\log\log(n))
+	\]
+operations in $k$.
+\end{lemma}
 
 \end{document}
