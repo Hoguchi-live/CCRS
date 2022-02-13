@@ -500,6 +500,10 @@ int MG_rec_y(fq_t rop, MG_point_t *P){
 	return ret;
 }
 
+/**
+   Sets output to P+Q if D = P-Q
+   output must be initialized.
+*/
 void MG_xADD(MG_point_t *output, MG_point_t P, MG_point_t Q, MG_point_t D) {
 
 	const fq_ctx_t *F;
@@ -533,11 +537,51 @@ void MG_xADD(MG_point_t *output, MG_point_t P, MG_point_t Q, MG_point_t D) {
 	fq_clear(v3, *F);
 }
 
+/**
+   Sets output to 2 times P
+   output must be initialized.
+*/
 void MG_xDBL(MG_point_t *output, MG_point_t P) {
 
 	const fq_ctx_t *F;
 	F = (P.E)->F;
 
+	// Buffers
+	fq_t v1, v2, v3;
+	fq_init(v1, *F);
+	fq_init(v2, *F);
+	fq_init(v3, *F);
+
+	// set v3 = (A+2)/4
+	fq_add_ui(v3, (P.E)->A, 2, *F);
+	fq_div_ui(v3, v3, 4, *F);
+
+	fq_add(v1, P.X, P.Z, *F);
+	fq_sqr(v1, v1, *F);
+	fq_sub(v2, P.X, P.Z, *F);
+	fq_sqr(v2, v2, *F);
+	fq_mul(output->X, v1, v2, *F);
+	fq_sub(v1, v1, v2, *F);
+	fq_mul(v3, v3, v1, *F);
+	fq_add(v3, v3, v2, *F);
+	fq_mul(output->Z, v1, v3, *F);
+
+	// clear memory
+	fq_clear(v1, *F);
+	fq_clear(v2, *F);
+	fq_clear(v3, *F);
+}
+
+/**
+   Same as MG_xDBL but the curve specific doubling constant (A+2)/4 needs to be precomputed
+   output must be initialized.
+*/
+void MG_xDBL_const(MG_point_t *output, MG_point_t P,const fq_t dbl_const) {
+
+	const fq_ctx_t *F;
+	F = (P.E)->F;
+
+	// Buffers
 	fq_t v1, v2, v3;
 	fq_init(v1, *F);
 	fq_init(v2, *F);
@@ -549,11 +593,12 @@ void MG_xDBL(MG_point_t *output, MG_point_t P) {
 	fq_sqr(v2, v2, *F);
 	fq_mul(output->X, v1, v2, *F);
 	fq_sub(v1, v1, v2, *F);
-	fq_add_ui(v3, (P.E)->A, 2, *F);
-	fq_div_ui(v3, v3, 4, *F);
-	fq_mul(v3, v3, v1, *F);
+	fq_mul(v3, dbl_const, v1, *F);
 	fq_add(v3, v3, v2, *F);
 	fq_mul(output->Z, v1, v3, *F);
+
+	//// NORMALIZE
+	//MG_point_normalize(output);
 
 	// clear memory
 	fq_clear(v1, *F);
@@ -561,62 +606,10 @@ void MG_xDBL(MG_point_t *output, MG_point_t P) {
 	fq_clear(v3, *F);
 }
 
-//void MG_ladder_rec(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, const fq_ctx_t *F) {
-//
-//	// base case
-//	if (fmpz_is_one(k)) {
-//		fq_set(X0->X, P.X, *F);
-//		fq_set(X0->Z, P.Z, *F);
-//		MG_xDBL(X1, P);
-//	}
-//
-//	fmpz_t rem;
-//	fmpz_t two;
-//
-//	fmpz_init(rem);
-//	fmpz_init_set_ui(two, 2);
-//	fmpz_tdiv_qr(k, rem, k, two);	// the value of k is modified here
-//
-//	fmpz_clear(two);
-//
-//	MG_ladder_rec(X0, X1, k, P, F); // recursive call
-//
-//	if (fmpz_is_zero(rem)) {
-//		// copy *x0 into tmp
-//		MG_point_t *tmp;
-//		MG_point_init(tmp, P.E);
-//		fq_set(tmp->X, X0->X, *F);
-//		fq_set(tmp->Z, X0->Z, *F);
-//
-//		MG_xDBL(X0, *tmp);
-//		MG_xADD(X1, *tmp, *X1, P);
-//
-//		MG_point_clear(tmp);
-//	}
-//
-//	else {
-//		MG_xADD(X0, *X0, *X1, P);
-//		MG_xDBL(X1, *X1);
-//	}
-//
-//	// clear memory
-//	fmpz_clear(rem);
-//}
-//
-//void MG_ladder(MG_point_t *X0, fmpz_t k, MG_point_t P) {
-//
-//	const fq_ctx_t *F;
-//	F = (P.E)->F;
-//
-//	MG_point_t X1;
-//	MG_point_init(&X1, P.E);
-//
-//	MG_ladder_rec(X0, &X1, k, P, F);
-//
-//	MG_point_clear(&X1);
-//}
-
-
+/**
+   Sets rop to the k times *op using the montgomery ladder double-and-add type procedure.
+   rop must be initialized.
+*/
 void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 	// Check if k <0
 	//TODO
@@ -636,6 +629,12 @@ void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 	MG_point_isinfty(&isinfty, op);
 	if(isinfty) return;
 
+	// Set the doubling constant
+	fq_t dbl_cst;
+	fq_init(dbl_cst, *F);
+	fq_add_ui(dbl_cst, E->A, 2, *F);
+	fq_div_ui(dbl_cst, dbl_cst, 4, *F);
+
 	// Buffers
 	MG_point_t X0, X1;
 
@@ -644,7 +643,7 @@ void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 
 	fq_set(X0.X, op->X, *F);
 	fq_set(X0.Z, op->Z, *F);
-	MG_xDBL(&X1, *op);
+	MG_xDBL_const(&X1, *op, dbl_cst);
 
 	int l;
 	l = fmpz_sizeinbase(k, 2);
@@ -652,11 +651,11 @@ void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 	for (int i = l-2; i>=0; i--) {
 		if (fmpz_tstbit(k, i)) {
 			MG_xADD(&X0, X0, X1, *op);
-			MG_xDBL(&X1, X1);
+			MG_xDBL_const(&X1, X1, dbl_cst);
 		}
 		else {
 			MG_xADD(&X1, X0, X1, *op);
-			MG_xDBL(&X0, X0);
+			MG_xDBL_const(&X0, X0, dbl_cst);
 		}
 	}
 
@@ -665,44 +664,8 @@ void MG_ladder_iter_(MG_point_t *rop, fmpz_t k, MG_point_t *op) {
 
 	MG_point_clear(&X0);
 	MG_point_clear(&X1);
+	fq_clear(dbl_cst, *F);
 }
-
-//void MG_ladder_iter(MG_point_t *X0, MG_point_t *X1, fmpz_t k, MG_point_t P, fq_ctx_t *F) {
-//	//TODO NEED P AS POINTER
-//
-//	// Check if k <0
-//	//TODO
-//
-//	// Check if k = 0
-//	if(fmpz_is_zero(k)){
-//		fq_one(X0->X, *(P.E->F));
-//		fq_zero(X0->Z, *(P.E->F));
-//		return;
-//	}
-//
-//	// Check if P = O
-//	bool isinfty;
-//	MG_point_isinfty(&isinfty, &P);
-//	if(isinfty) return;
-//
-//	fq_set(X0->X, P.X, *F);
-//	fq_set(X0->Z, P.Z, *F);
-//	MG_xDBL(X1, P);
-//
-//	int l;
-//	l = fmpz_sizeinbase(k, 2);
-//
-//	for (int i = l-2; i>=0; i--) {
-//		if (fmpz_tstbit(k, i)) {
-//			MG_xADD(X0, *X0, *X1, P);
-//			MG_xDBL(X1, *X1);
-//		}
-//		else {
-//			MG_xADD(X1, *X0, *X1, P);
-//			MG_xDBL(X0, *X0);
-//		}
-//	}
-//}
 
 /**
    Sets rop to the frobenius' trace for the CRS base curve.

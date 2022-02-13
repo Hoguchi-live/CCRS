@@ -42,6 +42,7 @@ int MG_curve_normalize(MG_curve_t *);
 int MG_rec_y(fq_t, MG_point_t *);
 void MG_xADD(MG_point_t *, MG_point_t, MG_point_t, MG_point_t);
 void MG_xDBL(MG_point_t *, MG_point_t);
+void MG_xDBL_const(MG_point_t *, MG_point_t ,const fq_t);
 
 // Montgomery ladder
 void MG_ladder_rec(MG_point_t *, MG_point_t *, fmpz_t, MG_point_t, const fq_ctx_t *);
