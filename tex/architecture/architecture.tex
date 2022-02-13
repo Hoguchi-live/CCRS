@@ -145,8 +145,8 @@ As such, we want to find the image curve of a composition
 	E\rightarrow E_1\rightarrow E_2\rightarrow \dots\rightarrow E_{k-1}\rightarrow E_k.
 \]
 Radical formulas allow us to do just that very efficiently for small $l$ primes.
-For a given elliptic curve $E$ and a point $P\in E$ of order $l$, Velu's formulas \cite produce expressions for the curve $E/<P>$.
-In article \cite formulas are given to produce a point $Q\in E/<P>$ such that the composition
+For a given elliptic curve $E$ and a point $P\in E$ of order $l$, Velu's formulas \cite{sqrtVelu} produce expressions for the curve $E/<P>$.
+In article \cite{radical} formulas are given to produce a point $Q\in E/<P>$ such that the composition
 \[
 	E\rightarrow E/<P> \rightarrow E/<Q>
 \]
@@ -189,7 +189,7 @@ It is immediately understandable why iterating $k$ times over $b$ is several ord
 
 \newcommand{\x}{\textbf{x}}
 \newcommand{\funct}[1]{\texttt{\detokenize{#1}}}
-We chose to implement  the Montgomery curve arithmetic as described by Craig Costello and Benjamin Smith \cite{}.
+We chose to implement  the Montgomery curve arithmetic as described by Craig Costello and Benjamin Smith \cite{montg}.
 It is called x-only arithmetic because any finite protective point $P = (X:Y:Z)$ of $E$ can be mapped to a point $\x(P)=(X:Z)=(X/Z:1)\in\PP^1$ if $Z\neq0$ or to $\x(P)=(1:0)$ if $Z=0$. We write $\x(P)=(X_P, Z_P)$.
 Any operation on a finite point $P$ is done after discarding its $Y$ coordinate. This coordinate can be recovered later if needed.
 
@@ -247,8 +247,8 @@ Note that the Montgomery ladder can leak a lot of information via side channel a
 		\end{array}\end{equation}
 
 \end{lemma}
-To construct the isogeny given $P$, we implemented two algorithms \funct{KPS} and \funct{xISOG}. We use the improvements described in \cite{} and \cite{} on the classic Vélu formulae to implement \funct{KPS} and \funct{xISOG}.
-\paragraph{KPS} The procedure \funct{KPS} splits $S$ in three subsets $I,J,K$, each of size $O(\sqrt{l})$ such that $S = K\cup(I+J)\cup(I-J)$ with a nice structure with regards to the group operation as described in \cite{}.
+To construct the isogeny given $P$, we implemented two algorithms \funct{KPS} and \funct{xISOG}. We use the improvements described in \cite{sqrtVelu2} and \cite{sqrtVelu} on the classic Vélu formulae to implement \funct{KPS} and \funct{xISOG}.
+\paragraph{KPS} The procedure \funct{KPS} splits $S$ in three subsets $I,J,K$, each of size $O(\sqrt{l})$ such that $S = K\cup(I+J)\cup(I-J)$ with a nice structure with regards to the group operation as described in \cite{sqrtVelu2}.
 \[\begin{array}{l}I = \{2b(2i+1)|0\leq i<b'\} \\
 J = \{2j+1|0\leq j<b\} \\
 K=\{4bb'+1, \ldots, l-4, l-2\}\end{array}\]
@@ -269,7 +269,7 @@ We define the following polynomials \[\begin{array}{l}
 	E_1 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)-F_1(Z,x_j)+F_2(Z,x_j))\\
 \end{array}\]
 Cost: $\#\mathcal{J}(7add+6mult)$ over $\FF_q$
-\item Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval} described in section \ref{multieval}.
+\item Step 2 : Lemma 4.9 of \cite{sqrtVelu} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval} described in section \ref{multieval}.
 \[\begin{array}{l}
 	R_0 = Res_Z(h_\mathcal{I},E_0) = \funct{fq_poly_multieval}(\mathcal{I}, E_0)\\
 	R_1 = Res_Z(h_\mathcal{I},E_1) = \funct{fq_poly_multieval}(\mathcal{I}, E_1)\
@@ -379,7 +379,7 @@ The algorithm is presented here, using the notations from above and setting $Q(i
 	\item Recursively repeat step $1$ and $2$ on the children until reaching a depth of $\log_2n$.
 	\item The leafs of the tree now contain the results of the evaluations.
 \end{enumerate}
-A detailed analysis of the algorithm done in \cite{} gives the following complexity for the whole algorithm.
+A detailed analysis of the algorithm done in \cite{multi} gives the following complexity for the whole algorithm.
 \begin{lemma}
 	If $P\in k[X]$ is of degree $l$, its evaluation at $n$ distinct roots runs in
 	\[
