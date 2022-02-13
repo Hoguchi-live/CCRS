@@ -21,21 +21,22 @@
 #define NB_PRIMES 24
 #define MAX_EXTENSION_DEGREE 9
 
-/**
-  Type for l-primes.
-*/
+/*********************************************
+   l-primes structure
+*********************************************/
 typedef struct lprime_t{
 
 	fmpz_t l;
 
 	uint type; 		// Unused (0), Radical (1) or Velu (2)
 	uint lbound, hbound;	// Bounds for the walk
-	//uint lorder, horder;	// Bounds on orders of the eigenvalues (not needed with x-only arithmetic)
 	uint r;			// Working extension degree
 	uint bkw;		// 1 if backward walking possible
 } lprime_t ;
 
-/// Config
+/*********************************************
+   Global configuration structure
+*********************************************/
 typedef struct cfg_t{
 
 	//// Base curve parameters
@@ -46,7 +47,6 @@ typedef struct cfg_t{
 	lprime_t *lprimes;		// the l-primes ordered in an lprime_t array
 
 	//// Base field and its extensions up to degree 9
-	//// Fp is redundant but it is only a pointer
 	fq_ctx_t *fields;
 
 	//// Random seed

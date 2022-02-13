@@ -1,6 +1,9 @@
 /// @file auxiliary.c
 #include "auxiliary.h"
 
+/**
+  Sets rop to the sum of op and x, where x is a string considered as an element of F.
+*/
 void fq_set_str(fq_t rop, char *s, const fq_ctx_t F) {
 
 	fmpz_t tmp;

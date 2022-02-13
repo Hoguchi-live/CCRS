@@ -291,6 +291,9 @@ void MG_point_isinfty(bool *output, MG_point_t *P) {
 	*output = fq_is_zero(P->Z, *(P->E->F));
 }
 
+/**
+  Returns 1 if P is the point at infinity, 0 otherwise.
+*/
 bool MG_point_isinfty_(MG_point_t *P) {
 
 	return fq_is_zero(P->Z, *(P->E->F));
