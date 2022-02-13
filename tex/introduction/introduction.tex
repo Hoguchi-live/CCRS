@@ -24,10 +24,10 @@ As such, more structure is available for exploitation in an attack of SIDH proto
 This kind of structural attack has been demonstrated against the NTRU protocol and led to Prime-NTRU.
 Another advantage of CRS is that it is truely symmetric compared to SIDH where parties have to agree on specific primes to use.
 
-The main focus of this project was to implement as efficiently as possible the CRS protocol following the 2018 article of Luca De Feo, Jean Kieffer and Benjamin Smith \cite{}.
+The main focus of this project was to implement as efficiently as possible the CRS protocol following the 2018 article of Luca De Feo, Jean Kieffer and Benjamin Smith \cite{mainArticle}.
 Recent publications on the subject of isogeny computation allow for very efficient walking algorithm in the isogeny graphs.
-On the one hand, \textit{radical isogenies} \cite{} are used to take $k$ steps in the $l$-isogeny graph in time complexity $\mathcal{O}(k)$ for primes $3$, $5$ and $7$.
-On the other hand, the $\sqrt{}$\textit{-Velu} algorithm \cite{} is used to take walk in the remaining graphs with time complexity $\mathcal{O}(k\sqrt{l})$.
+On the one hand, \textit{radical isogenies} \cite{radicalPaper} are used to take $k$ steps in the $l$-isogeny graph in time complexity $\mathcal{O}(k)$ for primes $3$, $5$ and $7$.
+On the other hand, the $\sqrt{}$\textit{-Velu} algorithm \cite{sqrtVelu} is used to take walk in the remaining graphs with time complexity $\mathcal{O}(k\sqrt{l})$.
 The reason this subject was choosen specifically is after a previous unoptimized JULIA implementation of these techniques.
 It gave promising results (around 35\% faster than the 2018 implementation) but was neither optimized nor using the expected quadratic-twist symmetry.
 The second issue was completely resolved by our C implementation while drastic optimizations were found.
