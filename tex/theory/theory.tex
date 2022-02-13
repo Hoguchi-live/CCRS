@@ -344,7 +344,8 @@ We now have a way to take steps in the isogeny graph.
 \subsection{The key-exchange protocol}
 We describe the CRS key-exchange protocol using the group action of the previous section.
 As a set of vertices, we use $X=\Ell$ for some order $\OO$ and $q$.
-Let $G=\Cl$ and $S$ be a set of ideal of $G$ with small norms.
+Let $G=\Cl$ and $S$ be a set of ideal $(\pi-\lambda, l)$ with small norms and $\lambda$ of low order mod $l$.
+This is the same as picking small Elikes primes $l$.
 Consider the directed graph $\mathcal{G}$ whose vertices are the points of $X$.
 We connect two vertices (classes of curves) $[E]$ and $[E']$  if and only if there is an element of $S$ such that $s\cdot E = E'$.
 If $S$ is sufficiently large, i.e. it generates the group $\Cl$, then the graph will be connected.
@@ -355,6 +356,22 @@ This is all backed up by the main CM theorem states that the operation of taking
 A secret key can then be a walk on the graph starting from a fixed curve and the corresponding public key the destination curve.
 The problem of creating a connecting isogeny between the starting curve and the destination one is believed to be quantum-hard, hence the security.
 
+Figure 1 shows how a typical exchange happens.
+The parameters in red are one-sided secrets, those in black public and those in green secret shared by Alice and Bob.
+For a key $s$ and an elliptic curve $E$ we write $s\curvearrowright E$ to denote the the curve obtained after walking in the isogeny graph starting from $E$ and using the steps specified by $s$.
+The correctness of the exchange stems from the main theorem of complex multiplication showing that
+\[
+	s_A\curvearrowright E_B = s_A\curvearrowright(s_B\curvearrowright E) = s_B\curvearrowright(s_A\curvearrowright E) = s_B\curvearrowright E_A.
+\]
+
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{dh}
+\caption{Key-exchange using the CRS protocol}
+\end{figure}
+
 To set up the protocol, a good order $\OO$ is needed.
 For quantum security using this protocol, a keyspace of size at least $256$ bits is required.
 Estimating the class number is a very hard problem but on average
@@ -363,7 +380,7 @@ Estimating the class number is a very hard problem but on average
 \]
 Since the keyspace is of size $\# X= \# \Ell = h(\OO)$ and $\discr\sim q$, we have to look for a curve over $\FFq$ with $q$ around $512$ bits.
 This is complicated by the fact that we need a generating set $S$ of ideals with small norm.
-Thousands of computer hours have been spent generating some usable protocol parameters: sufficiently many primes of small norm and a large enough keyspace.
+Thousands of computer hours have been spent generating some usable protocol parameters: sufficiently many primes of small norm, usable eigenvalues and a large enough keyspace.
 To actually take a step $\af$ starting from a vertex $[E]$ in this graph we explicitly generate the kernel $E[\af]$ and compute the resulting isogeny.
 
 The kernels correspond to random points of order $l$.

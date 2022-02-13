@@ -8,7 +8,6 @@
 void MG_curve_update_field(MG_curve_t *rop, MG_curve_t *op, const fq_ctx_t *L) {
 
 	char *str_A, *str_B;
-	char *Lgen = "x";
 
 	//// Get string representation (with generator "x") of curve parameters
 	str_A = fq_get_str_pretty(op->A, *(op->F));
@@ -527,9 +526,6 @@ void MG_xADD(MG_point_t *output, MG_point_t P, MG_point_t Q, MG_point_t D) {
 	fq_mul(output->X, D.Z, v3, *F);
 	fq_mul(output->Z, D.X, v1, *F);
 
-	//fq_one(output->, *F);
-
-
 	// clear memory
 	fq_clear(v0, *F);
 	fq_clear(v1, *F);
@@ -558,9 +554,6 @@ void MG_xDBL(MG_point_t *output, MG_point_t P) {
 	fq_mul(v3, v3, v1, *F);
 	fq_add(v3, v3, v2, *F);
 	fq_mul(output->Z, v1, v3, *F);
-
-	//// NORMALIZE
-	//MG_point_normalize(output);
 
 	// clear memory
 	fq_clear(v1, *F);
@@ -804,7 +797,7 @@ void MG_curve_card_ext(fmpz_t rop, MG_curve_t *E, fmpz_t r) {
 int MG_curve_rand_torsion(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	flint_rand_t state;
-	fmpz_t val, l_pow, cofactor, e;
+	fmpz_t val, cofactor, e;
 	MG_point_t Q, R;
 	bool isinfty = 1;
 
@@ -872,7 +865,7 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	int ec = 0;
 	flint_rand_t state;
-	fmpz_t val, l_pow, cofactor;
+	fmpz_t val, cofactor;
 	MG_point_t Q, R, Q_test;
 	bool isinfty = 1;
 
@@ -912,7 +905,7 @@ int MG_curve_rand_torsion_(MG_point_t *P, fmpz_t l, fmpz_t card) {
 
 	// Case of failure
 	if(!isinfty) ec = 0;
-	else ec = 1; MG_point_set_(P, &Q);
+	else {ec = 1; MG_point_set_(P, &Q);}
 
 	MG_point_clear(&R);
 	MG_point_clear(&Q);
@@ -1124,5 +1117,6 @@ int TN_get_MG(MG_curve_t *rop, TN_curve_t * op){
 	fq_poly_factor_clear(fac, *F);
 
 	if(ret == 0) return 0; // Error!
+	return 1;
 }
 

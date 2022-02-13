@@ -164,7 +164,7 @@ void cfg_print(cfg_t *cfg) {
 
 	printf("*** Config structure ***\n Finite field Fp^d \np = ");
 	fmpz_print(fq_ctx_prime(*F));
-	printf("\nd = %d", fq_ctx_degree(*F));
+	printf("\nd = %ld", fq_ctx_degree(*F));
 	printf("\n Base elliptic curve BY^2 = X^3 + AX^2 + X\nA = ");
 	fq_print_pretty(cfg->E->A, *F);
 	printf("\nB = ");
