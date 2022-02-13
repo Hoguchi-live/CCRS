@@ -77,6 +77,9 @@ cfg_t* cfg_init_set() {
 	cfg->E = E;
 
 	//// GLOBAL PROTOCOL PARAMETERS
+	//// These bounds are much smaller than what would be used in practice
+	//// They are used to produce a working example that does not take too long to run
+	//// The actual optimized bounds can be found in file optimization/files/optimized.json
 	uint l_PRIMES_int[NB_PRIMES] = {3, 5, 7,     11, 13, 17, 103,     523, 821, 947, 1723,    //degree 1
 					19, 661,    // degree 3
 					1013, 1181,     // degree 4

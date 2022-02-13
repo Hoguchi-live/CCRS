@@ -526,7 +526,6 @@ void MG_xADD(MG_point_t *output, MG_point_t P, MG_point_t Q, MG_point_t D) {
 	fq_sub(v1, v1, v2, *F);
 	fq_sqr(v1, v1, *F);
 
-	//// NORMALIZE X = X/Z
 	fq_mul(output->X, D.Z, v3, *F);
 	fq_mul(output->Z, D.X, v1, *F);
 
@@ -596,9 +595,6 @@ void MG_xDBL_const(MG_point_t *output, MG_point_t P,const fq_t dbl_const) {
 	fq_mul(v3, dbl_const, v1, *F);
 	fq_add(v3, v3, v2, *F);
 	fq_mul(output->Z, v1, v3, *F);
-
-	//// NORMALIZE
-	//MG_point_normalize(output);
 
 	// clear memory
 	fq_clear(v1, *F);
