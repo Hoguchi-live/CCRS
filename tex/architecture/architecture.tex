@@ -1,4 +1,4 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../main.tex]{subfilesubs}
 \begin{document}
 
 \subsection{Global architecture of the code}
@@ -54,7 +54,7 @@ Auxiliary files \texttt{info.c/h} are there to print live information during the
 This section will first introduce the different custom types used in the code to handle context and mathematical objects.
 We have made the choice to clearly represent in C the objects we use.
 To that extent we defined a number of structures representing elliptic curves, their points and other less obvious data in memory.
-We followed the GMP/FLINT standard nomenclature identifying types with a "\_t".
+We follow the GMP/FLINT standard nomenclature identifying types with a "\_t".
 
 The file \texttt{EllipticCurves/models.h} defines the three types of elliptic curve models we use.
 These \textit{structs} named respectively \tF{SW_curve_t}, \tF{MG_curve_t} and \tF{TN_curve_t} stand for Short Weierstrass, Montgomery and Tate normal curves.
@@ -69,7 +69,7 @@ These \textit{structs} contain the coordinate of a point on a curve as \tF{fq_t}
 Said curve is linked to the point via a pointer of the respective type.
 
 In file \texttt{Polynomials/binary\_tree.h} we define a binary-tree structure used in the fast-multipoint polynomial evaluation.
-The \textit{struct} type \tF{fq_poly_btree_t} holds a \tF{const fq_ctx_t *}  pointer to keep track of the field of definition of its elements.
+The \textit{struct} type \tF{fq_poly_btree_t} holds a \tF{fq_ctx_t *}  pointer to keep track of the field of definition of its elements.
 It also holds a pointer to the head (or root) cell of the tree.
 This decision to distinguish the whole tree from its cells stems from fear of memory management issues.
 
