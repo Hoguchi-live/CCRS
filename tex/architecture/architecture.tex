@@ -14,7 +14,7 @@ This script accepts two flags:
 	\end{itemize}
 This second flag is used to perform optimization on the $l$-primes bounds.
 
-The \texttt{optimization/} folder contains two pyhon scripts.
+The \texttt{optimization/} folder contains two python scripts.
 The \texttt{optimize.py} script loads a \textit{timings.json} file located in subfolder \texttt{files} and created using the -DTIMING flag.
 It uses the \textit{GEKKO} optimizer to find the best combination of bounds on the steps for each $l$-primes.
 This optimizes the \textit{timing} of the global algorithm while keeping the \textit{keyspace} size above $256$ bits.
@@ -86,7 +86,7 @@ The cells are represented by the \tF{fq_poly_bcell_t} type.
 This structure also holds a pointer to the field $k$ we are working with.
 Most importantly, it holds a \tF{fq_poly_t} which is is a polynomial over $k$.
 The remaining fields are \tF{fq_poly_bcell_t} pointers to the left and right child of this cell.
-Keyword \textit{struct fq\_poly\_bcell\_t} is used to recursively define these childs in the type definition.
+Keyword \textit{struct fq\_poly\_bcell\_t} is used to recursively define these children in the type definition.
 Both should be initialized to \textit{NULL} to represent a leaf of the tree.
 
 File \texttt{Exchange/setup.h} holds the \tF{lprime_t} structure representing $l$-primes.
@@ -114,10 +114,10 @@ This is done to avoid downgrading the base field.
 This way we only upgrade (embed) the base field once per degree (refer to the \tF{MG_curve_update_field} function  in \texttt{Exchange/dh.h} for details).
 
 Memory management was the first concern of this project and as such was dealt with very rapidly.
-Since we are using GMP through FLINT, we decided to use the same \textit{declare, init, set, clear} paradigme.
+Since we are using GMP through FLINT, we decided to use the same \textit{declare, init, set, clear} paradigm.
 That way almost all our functions start by a declaration of the variables used.
 Followed by an initialization, often using an \tF{fq_ctx_t} field.
-Then the data is set and used accordingly then finally the memory is cleard.
+Then the data is set and used accordingly then finally the memory is cleared.
 This is respected by all of our custom types.
 The corresponding management functions are named following the nomenclature \tF{*_init}, \tF{*_set} and \tF{*_clear} where \tF{*} is the type in question.
 Some additional practical functions like \tF{MG_curve_set_si} or \tF{fq_poly_bcell_set_right} allow for shortcuts.
@@ -129,7 +129,7 @@ However there are multiple instances where manual memory allocation was favorabl
 This is the case for instance with binary trees, $l$-primes, keys and config types.
 The main reason was for allocating memory for arrays of custom data and/or not having to pre-declare objects.
 Sometimes both approaches were used.
-This can be seen in \texttt{Exchange/keygen.c} with \tF{key_init} initializing a declared key and \tF{key_init_} returning a pointer to an initalized key.
+This can be seen in \texttt{Exchange/keygen.c} with \tF{key_init} initializing a declared key and \tF{key_init_} returning a pointer to an initialized key.
 
 
 
@@ -190,7 +190,7 @@ It is immediately understandable why iterating $k$ times over $b$ is several ord
 \newcommand{\x}{\textbf{x}}
 \newcommand{\funct}[1]{\texttt{\detokenize{#1}}}
 We chose to implement  the Montgomery curve arithmetic as described by Craig Costello and Benjamin Smith \cite{}.
-It is called x-only arithmetic because any finite projective point $P = (X:Y:Z)$ of $E$ can be mapped to a point $\x(P)=(X:Z)=(X/Z:1)\in\PP^1$ if $Z\neq0$ or to $\x(P)=(1:0)$ if $Z=0$. We write $\x(P)=(X_P, Z_P)$.
+It is called x-only arithmetic because any finite protective point $P = (X:Y:Z)$ of $E$ can be mapped to a point $\x(P)=(X:Z)=(X/Z:1)\in\PP^1$ if $Z\neq0$ or to $\x(P)=(1:0)$ if $Z=0$. We write $\x(P)=(X_P, Z_P)$.
 Any operation on a finite point $P$ is done after discarding its $Y$ coordinate. This coordinate can be recovered later if needed.
 
 \begin{lemma}[Addition and duplication formulas on Montgomery Curves]Let $P,Q\in E(\FF_q)$.  Assume $X_{P-Q}\neq0$.
@@ -214,9 +214,9 @@ $\lbrace\lbrace P, -P\rbrace, P\in E\rbrace$. e.g. every point is identified wit
 Our implementation of xADD uses 4 multiplications, 2 squaring,  3 additions and 3 subtractions in $\FF_q$, for a total of  12 base operations over $\FF_q$.
 However the point addition xADD requires to first compute the difference $P-Q$, therefore it cannot be used as a generic point addition algorithm but can only be used in the specific context of a differential addition chain.
 
-\paragraph{xDBL}The pseudo-doubling \funct{MG_xDBL} computes $[2]P$ from input $P$.  The cost is 3 additions, 2 squaring, 2 subtractions, 3 multiplications and 1 division in $\FF_q$, for a total of 11 operations. When calling xDBL multiple times for points on the same curve, one could cache or precompute the value $\frac{A+2}{4}$ from equation \eqref{xdbleq} and therefore shave off 1 addition and 1 division from the cost of every subsequent calls to xDBL.
+\paragraph{xDBL}The pseudo-doubling \funct{MG_xDBL} computes $[2]P$ from input $P$.  The cost is 3 additions, 2 squaring, 2 subtractions, 3 multiplications and 1 division in $\FF_q$, for a total of 11 operations. When calling xDBL multiple times for points on the same curve, in a Montgomery Ladder for instance, one could cache or precompute the value $\frac{A+2}{4}$ from equation \eqref{xdbleq} and therefore shave off 1 addition and 1 division from the cost of every subsequent calls to xDBL.
 
-\paragraph{Montgomery Ladder} \funct{MG_ladder} computes the point multiplication $[k]P$ calling xADD and xDBL. Write $k=\sum_{i=0}^{l-1}k_i2^i$. The Montgomery Ladder follows a differential addition chain of length $2l-1$ wherein the difference of consecutive terms is constant. The execution of \funct{MG_ladder} requires $l$ calls to xDBL and $l-1$ calls to xADD.
+\paragraph{Montgomery Ladder} \funct{MG_ladder} computes the point multiplication $[k]P$ calling xADD and xDBL. Write $k=\sum_{i=0}^{l-1}k_i2^i$. The Montgomery Ladder follows a differential addition chain of length $2l-1$ wherein the difference of consecutive terms is constant. The execution of \funct{MG_ladder} requires $l$ calls to xDBL and $l-1$ calls to xADD. We give the pseudocode of the Montgomery Ladder:
 \begin{minted}[frame=lines, linenos, ]{c}
 P0 = P
 P1 = xDBL(P)
@@ -269,12 +269,12 @@ We define the following polynomials \[\begin{array}{l}
 	E_1 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)-F_1(Z,x_j)+F_2(Z,x_j))\\
 \end{array}\]
 Cost: $\#\mathcal{J}(7add+6mult)$ over $\FF_q$
-\item Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval}.
+\item Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval} described in section \ref{multieval}.
 \[\begin{array}{l}
 	R_0 = Res_Z(h_\mathcal{I},E_0) = \funct{fq_poly_multieval}(\mathcal{I}, E_0)\\
 	R_1 = Res_Z(h_\mathcal{I},E_1) = \funct{fq_poly_multieval}(\mathcal{I}, E_1)\
 \end{array}\]
-Cost: $O(log(\sqrt{l}))=O(log(l))$ $\FF_q$ multiplications
+Cost: $O(log(\sqrt{l}))=O(log(l))$ $\FF_q[X]$ multiplications
 \item Step 3 : Compute the missing factors from $h_S=h_{\mathcal{I}\pm \mathcal{J}}h_\mathcal{K}$ which is straight forward and deduce $d$ and $A'$ using equation \eqref{veluform} :
  \[\begin{array}{l}
 	M_0 = \prod_{x_k\in\mathcal{K}}(1-x_k)\\
@@ -314,7 +314,7 @@ The description of $E[l]$ as the sum of the two eigenspaces of $\pi$ thus implie
 In this project, we only use primes satisfying the coprimality condition on the orders of the eigenvalues.
 We are thus reduced to generating isogeny kernels from $l$-torsion points living in specified extensions.
 
-Looking for a point $P\in E(\FF_{q^r})[l]$ is conceptualy simple.
+Looking for a point $P\in E(\FF_{q^r})[l]$ is conceptually simple.
 First, precompute the quotient $C := \#E(\FF_{q^r}) / l$.
 Then pick a non-trivial random point $Q\in E(\FF_{q^r})$ and set $P := C\cdot Q$.
 If $P\neq O$, the point $P$ is in $E(\FF_{q^r})[l]$.
@@ -360,12 +360,12 @@ return [x, 1] (Montgomery point)
 
 
 
-\subsection{Multi-evaluation using remainder trees}
+\subsection{Multi-evaluation using remainder trees\label{multieval}}
 To compute the resultant in the $\sqrt{}$-Velu algorithm, a binary-tree approach was used.
 Notice first that evaluating a polynomial $P\in k[X]$ at a point $\alpha\in k$ is equivalent to computing the image of $P$ in $k[X]/(X-\alpha)$.
 Suppose now that we want to evaluate a polynomial $P$ at multiple roots $\alpha_0, \cdots,\alpha_n$.
 We first split the roots into two groups $I$, $J$ and compute $P$ mod $\prod_{i\in I} (X-\alpha_i)$ and $P$ mod $\prod_{j\in J} (X-\alpha_j)$.
-We iterate the proceedure until we get to to reducing $P$ mod a single root.
+We iterate the procedure until we get to to reducing $P$ mod a single root.
 The only problem is computing all the products efficiently.
 This is done by building a binary tree containing the different products from the bottom up using \funct{remainderCell} in \texttt{Polynomials/multieval.c}.
 This step has complexity $O(\mathbf{M}(n)\log(n))$ with $\mathbf{M}$ a bound function on the polynomial multiplication complexity as there is a multiplication for each cell and the tree has depth $\log_2(n)$.
@@ -376,7 +376,7 @@ The algorithm is presented here, using the notations from above and setting $Q(i
 \begin{enumerate}
 	\item Set the root of the tree as $P$ mod $Q(1, n)$.
 	\item Add a left child $P$ mod $Q(1, n//2)$ and a right child $P$ mod $Q(n//2 + 1, n)$.
-	\item Recursively repeat step $1$ and $2$ on the childs until reaching a depth of $\log_2n$.
+	\item Recursively repeat step $1$ and $2$ on the children until reaching a depth of $\log_2n$.
 	\item The leafs of the tree now contain the results of the evaluations.
 \end{enumerate}
 A detailed analysis of the algorithm done in \cite{} gives the following complexity for the whole algorithm.
@@ -397,7 +397,7 @@ At this point they both have access to the global public parameters such as the 
 
 In order to actually share a secret, Alice and Bob first have to generate their private keys.
 This is done through the \funct{keygen} function in \texttt{Exchange/}.
-The \textit{seed} and \textit{state} parameters can be used for reproductivity.
+The \textit{seed} and \textit{state} parameters can be used for reproducibility.
 The function takes for every prime $l$ in the configuration a number of steps to take in the $l$-isogeny graph.
 This number can be negative when walking on the quadratic twist of the curve is possible, i.e. when both eigenvalues have small orders.
 In the end, Alice and Bob both get a random list of steps to take in the different $l$-isogeny graph.

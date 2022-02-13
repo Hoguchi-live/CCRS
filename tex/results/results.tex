@@ -25,14 +25,14 @@ $r$                       & 4    & 4    & 5   & 5   & 5    & 7   & 7    & 7    &
 $t$                       & .12  & .18  & .23 & .21 & .22  & .51 & 1.54 & 1.52 & .67 & 1.12 & 1.25 \\
 $\mathbf{M}$              & 107  & 67   & 54  & 57  & 55   & 23  & 7    & 7    & 18  & 10   & 9
 \end{tabular}
-	\caption{Experimental timings $t$ for each $l$-primes along with optimized bounds on steps $\mathbf{M}$. The working degree of the extensionis $r$.}
+	\caption{Experimental timings $t$ for each $l$-primes along with optimized bounds on steps $\mathbf{M}$. The working degree of the extensions $r$.}
 \end{table}
 These optimized bounds allow one to get a sufficiently large keyspace where the worst timed key takes $270$ seconds to apply.
 This is to be compared with the original $520$ seconds needed in 2018 and the $360$ seconds recorded with a previous JULIA implementation.
 Furthermore, due to an unresolved issue, we could not use primes $947$ and $1723$.
 Both of them had very good step timings of $.01$s and $.028$s respectively.
 They accounted for almost 10 bits of the keyspace which translates to around $12$s of walking.
-Using the original \textit{BMSS} algorithm in conjuction with ours could also increase the number of primes used and smooth out the timing;
+Using the original \textit{BMSS} algorithm in conjunction with ours could also increase the number of primes used and smooth out the timing;
 Overall this $25$\% increase can be mainly attributed to three factors.
 
 \begin{itemize}
