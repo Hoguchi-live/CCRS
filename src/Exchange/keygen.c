@@ -43,9 +43,13 @@ void keygen(key__t *key, cfg_t *cfg, uint seed, flint_rand_t state) {
 			fmpz_set_ui(mod, lp->hbound + 1);
 			fmpz_randtest_mod(steps, state, mod);
 
+			// Overwrite the key when timing
+			#ifdef TIMINGS
+			fmpz_set_ui(steps, 10);
+			#endif
+
+			// These two primes do not work, the reported values might be off in the article
 			if(fmpz_equal_ui(lp->l, 947) || fmpz_equal_ui(lp->l, 1723))  fmpz_set_ui(steps, 0);
-			else fmpz_set_ui(steps, 10); /// HACK
-			//fmpz_set_ui(steps, 10);
 
 			fmpz_set((key->steps)[i], steps);
 
@@ -55,10 +59,12 @@ void keygen(key__t *key, cfg_t *cfg, uint seed, flint_rand_t state) {
 			fmpz_randtest_mod(steps, state, mod);
 			fmpz_neg(steps, steps);
 
-			//if(!fmpz_equal_ui(lp->l, 19)) fmpz_set_ui(steps, 0);
-			//else fmpz_set_ui(steps, 100);
+			// Overwrite the key when timing
+			#ifdef TIMINGS
+			fmpz_set_ui(steps, 10);
+			#endif
+
 			if(fmpz_equal_ui(lp->l, 947) || fmpz_equal_ui(lp->l, 1723))  fmpz_set_ui(steps, 0);
-			else fmpz_set_ui(steps, 10); //// HACK
 
 			fmpz_set((key->steps)[i], steps);
 		}

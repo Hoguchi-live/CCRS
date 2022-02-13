@@ -1,7 +1,126 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
+\subsection{Global architecture of the code}
+Here we introduce the relations between the different files and folders of the code.
+At the top level there are three folders: \texttt{example/}, \texttt{optimization/} and \texttt{src/}
 
+Folder \texttt{example/} holds a working instance of a key-exchange using the algorithm.
+A \textit{bash} script is provided to compile the example.
+This script accepts two flags:
+	\begin{itemize}
+		\item -DVERBOSE which will print some live information on the key-exchange; and
+		\item -DTIMING which will output timings for the isogeny steps in \textit{json} format.
+	\end{itemize}
+This second flag is used to perform optimization on the $l$-primes bounds.
+
+The \texttt{optimization/} folder contains two pyhon scripts.
+The \texttt{optimize.py} script loads a \textit{timings.json} file located in subfolder \texttt{files} and created using the -DTIMING flag.
+It uses the \textit{GEKKO} optimizer to find the best combination of bounds on the steps for each $l$-primes.
+This optimizes the \textit{timing} of the global algorithm while keeping the \textit{keyspace} size above $256$ bits.
+The results can then be found in \texttt{files/}.
+A plotting script is also available to graph the speed of steps against $l$.
+See the third section on results for more details.
+
+Last and most importantly, the \texttt{src/} folder contains all the necessary functions and structures implementing the CRS protocol.
+It is once again divided in four subfolders.
+
+In \texttt{EllipticCurves/} one will find all the functions and structures related to curve manipulation.
+The \texttt{models.h} file holds the type definition of elliptic curves in different forms and their corresponding points.
+All functions related to memory management are located in the \texttt{memory.c/h} files.
+The exact structures holding the elliptic curves are discussed in more details in the next section.
+The \texttt{arithmetic.c/h} files contain all the mathematical functions directly related to the curves.
+For instance the \textit{Montgomery Ladder}, the extraction of random rational torsion points and the model transformation functions are located there.
+The \texttt{auxiliary.c/h} files only serve as shortcuts to unavailable FLINT functions.
+The \texttt{pretty\_print.c/h} files define convenient debugging functions mainly used to check on the key-exchange.
+
+Folder \texttt{Isogeny/} holds the two algorithms used to compute isogenies between elliptic curves.
+The \texttt{radical.c/h} files implement radical isogenies for primes $3$, $5$ and $7$.
+Files \texttt{velu.c/h} account for the $\sqrt{}$-Velu algorithm described further in the paper.
+Finally \texttt{walk.c/h} holds the two handle functions used to walk in the isogeny graph using the aforementioned algorithms.
+
+The \texttt{Polynomial/} folder contains the binary-tree based multi-evaluation algorithm in \texttt{multieval.c/h}.
+The binary-tree structure and functions themselves are defined in file \texttt{binary\_trees.c/h}.
+Alongside with \texttt{roots.c/h} hosting a bruteforce square root extraction algorithm.
+This was necessary as no root-extraction methods are available for large fields in the FLINT library.
+
+Finally the \texttt{Exchange/} folder hosts everything related to the global structure of the CRS protocol.
+The global environment setup is handled in \texttt{setup.c/h} while secret key generation happens in \texttt{keygen.c/h}.
+Applying a key to an elliptic curve is done through the single function located in the \texttt{dh.c} file.
+Auxiliary files \texttt{info.c/h} are there to print live information during the exchange  and to get timings for optimization.
+
+
+\subsection{C structures and memory management}
+This section will first introduce the different custom types used in the code to handle context and mathematical objects.
+We have made the choice to clearly represent in C the objects we use.
+To that extent we defined a number of structures representing elliptic curves, their points and other less obvious data in memory.
+We followed the GMP/FLINT standard nomenclature identifying types with a "\_t".
+
+The file \texttt{EllipticCurves/models.h} defines the three types of elliptic curve models we use.
+These \textit{structs} named respectively \tF{SW_curve_t}, \tF{MG_curve_t} and \tF{TN_curve_t} stand for Short Weierstrass, Montgomery and Tate normal curves.
+Inside these \textit{struct} lies a \tF{const fq_ctx_t *} pointer to the field of definition of the curve.
+A pointer is used in order to not re-instantiate the whole field structure for every curves.
+The multiple \tF{fq_t} parameters respectively named $a$, $b$; $A$, $B$; $b$, $c$ are the respective models' parameters.
+The \tF{fmpz_t} parameter $l$ in the definition of type \tF{TN_curve_t} is used to keep track of the order of the point $(0, 0)$ on the curve.
+These all strictly follow the definitions found in the first part of this paper.
+
+The \textit{structs} named respectively \tF{SW_point_t} and \tF{MG_point_t} represent points on the respective curves.
+These \textit{structs} contain the coordinate of a point on a curve as \tF{fq_t} elements.
+Said curve is linked to the point via a pointer of the respective type.
+
+In file \texttt{Polynomials/binary\_tree.h} we define a binary-tree structure used in the fast-multipoint polynomial evaluation.
+The \textit{struct} type \tF{fq_poly_btree_t} holds a \tF{const fq_ctx_t *}  pointer to keep track of the field of definition of its elements.
+It also holds a pointer to the head (or root) cell of the tree.
+This decision to distinguish the whole tree from its cells stems from fear of memory management issues.
+
+The cells are represented by the \tF{fq_poly_bcell_t} type.
+This structure also holds a pointer to the field $k$ we are working with.
+Most importantly, it holds a \tF{fq_poly_t} which is is a polynomial over $k$.
+The remaining fields are \tF{fq_poly_bcell_t} pointers to the left and right child of this cell.
+Keyword \textit{struct fq\_poly\_bcell\_t} is used to recursively define these childs in the type definition.
+Both should be initialized to \textit{NULL} to represent a leaf of the tree.
+
+File \texttt{Exchange/setup.h} holds the \tF{lprime_t} structure representing $l$-primes.
+A specific structure has been assigned for this task because of the numerous parameters surrounding $l$-primes.
+These consists only of an \tF{fmpz_t} representing $l$ and multiple \textit{unsigned int}.
+Integers \textit{lbound} and \textit{hbound} account for the bounds on the number of steps allowed for the walk on the $l$-isogeny graph.
+It turns out that both upper and lower bounds are equal since we managed to avoid root extraction on the backward direction by using the quadratic twist.
+This structure also holds the extension degree $r$ corresponding to the Frobenius eigenvalue's order mod $l$.
+Finally it also contains a uint serving as a boolean to allow or disallow backward walking.
+This is necessary as some $l$-primes have one eigenvalue of low order but another one of unusably high order.
+
+In this same file, the global configuration type \tF{cfg_t} is defined.
+This type holds the public starting curve as an \tF{MG_curve_t}.
+Furthermore, it contains the number of $l$-primes to use in the protocol as well as the \tF{lprime_t} array holding them.
+The base field and its extensions up to degree $9$  are held in an \tF{fq_ctx_t} array to avoid re-instantiation.
+Finally an unsigned integer defined as a seed for the random key generation.
+This last step allow for debugging but also for timing tests.
+
+In file \texttt{Exchange/keygen.h} one can find the definition of type \tF{key__t} representing a secret CRS key.
+This twisted nomenclature avoids the already defined \tF{key_t} type while remaining as consistent as possible.
+A key holds the number of primes used in the protocol, the list of \tF{lprime_t} used and an \tF{fmpz_t} list holding the bounds on the steps to take for each prime.
+Note that these lists should all be ordered from the smallest working extension degree to the largest.
+The order of the $l$-primes themselves within the same extension degree does not matter.
+This is done to avoid downgrading the base field.
+This way we only upgrade (embed) the base field once per degree (refer to the \tF{MG_curve_update_field} function  in \texttt{Exchange/dh.h} for details).
+
+Memory management was the first concern of this project and as such was dealt with very rapidly.
+Since we are using GMP through FLINT, we decided to use the same \textit{declare, init, set, clear} paradigme.
+That way almost all our functions start by a declaration of the variables used.
+Followed by an initialization, often using an \tF{fq_ctx_t} field.
+Then the data is set and used accordingly then finally the memory is cleard.
+This is respected by all of our custom types.
+The corresponding management functions are named following the nomenclature \tF{*_init}, \tF{*_set} and \tF{*_clear} where \tF{*} is the type in question.
+Some additional practical functions like \tF{MG_curve_set_si} or \tF{fq_poly_bcell_set_right} allow for shortcuts.
+Still they were inspired by the FLINT ecosystem.
+
+Most of our custom initialization and clearing functions are just wrappers for FLINT functions.
+This offers a safer and more comfortable handling of the many objects in the code.
+However there are multiple instances where manual memory allocation was favorable.
+This is the case for instance with binary trees, $l$-primes, keys and config types.
+The main reason was for allocating memory for arrays of custom data and/or not having to pre-declare objects.
+Sometimes both approaches were used.
+This can be seen in \texttt{Exchange/keygen.c} with \tF{key_init} initializing a declared key and \tF{key_init_} returning a pointer to an initalized key.
 
 \subsection{Montgomery curve arithmetic}
 
@@ -12,12 +131,11 @@ It is called x-only arithmetic because any finite projective point $P = (X:Y:Z)$
 Any operation on a finite point $P$ is done after discarding its $Y$ coordinate. This coordinate can be recovered later if needed.
 
 \begin{lemma}[Addition and duplication formulas on Montgomery Curves]Let $P,Q\in E(\FF_q)$.  Assume $X_{P-Q}\neq0$.
-	 
-	 If $P\neq Q$ then  \begin{equation}\left\{\begin{array}{l}
+	 If $P\neq Q$ then  \begin{equation}\label{xaddeq}\left\{\begin{array}{l}
 	 	X_{P+Q} = Z_{P-Q}[(X_P-Z_P)(X_Q+Z_Q) + (X_P+Z_P)(X_Q-Z_Q)]^2\\
 	 	Z_{P+Q} = X_{P-Q}[(X_P-Z_P)(X_Q+Z_Q) - (X_P+Z_P)(X_Q-Z_Q)]^2
 	 \end{array}\right.\end{equation}
- 
+
  	If $P=Q$ then \begin{equation}\label{xdbleq}\left\{\begin{array}{l}
  		X_{[2]P}=(X_P + Z_P)^2(X_P - Z_P)^2 \\
  		Z_{[2]P}=(4 X_P Z_P)[(X_P - Z_P)^2 + \frac{A+2}{4}(4 X_P Z_P)]
@@ -26,10 +144,10 @@ Any operation on a finite point $P$ is done after discarding its $Y$ coordinate.
 
 Using this lemma, we provide three generic pseudo-operations on Montgomery curve points that constitute the framework for x-only arithmetic in our implementation : addition, doubling and scalar multiplication.
 
-These algorithms are called pseudo-operations because they operate over the quotient set of the curve $E$ by the partition 
+These algorithms are called pseudo-operations because they operate over the quotient set of the curve $E$ by the partition
 $\lbrace\lbrace P, -P\rbrace, P\in E\rbrace$. e.g. every point is identified with its opposite. This identification is implied in the following paragraphs.
 
-\paragraph{xADD}The pseudo-addition or differential addition \funct{MG_xADD} returns $P+Q$ given $P,Q\in E$ and their difference $P-Q$ using the formula.
+\paragraph{xADD}The pseudo-addition or differential addition \funct{MG_xADD} returns $P+Q$ given $P,Q\in E$ and their difference $P-Q$ using the formula \eqref{xaddeq}.
 Our implementation of xADD uses 4 multiplications, 2 squaring,  3 additions and 3 subtractions in $\FF_q$, for a total of  12 base operations over $\FF_q$.
 However the point addition xADD requires to first compute the difference $P-Q$, therefore it cannot be used as a generic point addition algorithm but can only be used in the specific context of a differential addition chain.
 

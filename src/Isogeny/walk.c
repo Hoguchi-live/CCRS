@@ -3,7 +3,6 @@
 
 /**
   Take k steps in the l-isogeny graph using radical isogeny.
-TODO: harcode cardinals, update MG_curve_set_ to MG_curve_set. Update with card_ext.
 	MG_get_TN should return an int error code.
 	radical_isogeny should return an int error code.
 **/
@@ -68,7 +67,6 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 
 /**
   Take k steps in the l-isogeny graph using the sqrt-velu algorithm.
-TODO: harcode cardinals, update MG_curve_set_ to MG_curve_set. Update with card_ext.
 **/
 int walk_velu(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 
