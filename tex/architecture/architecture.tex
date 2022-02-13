@@ -190,7 +190,8 @@ To construct the isogeny given $P$, we implemented two algorithms \funct{KPS} an
 J = \{2j+1|0\leq j<b\} \\
 K=\{4bb'+1, \ldots, l-4, l-2\}\end{array}\]
 where $b=\lfloor \sqrt{l-1}/2\rfloor,\, b'=\lfloor (m+1)/4b \rfloor$ if $b>0$ or else $b'=0$.\\
-These 3 sets are differential addition chains for they each are in arithmetic progression thus we can use the fast x-only arithmetic xADD to compute each $\x([k]P)$ for $k\in I\cup J\cup K$
+These 3 sets are differential addition chains for they each are in arithmetic progression thus we can use the fast x-only arithmetic xADD to compute each $\x([k]P)$ for $k\in I\cup J\cup K$.
+Cost: $O(\sqrt{l})$ calls to xADD
 
 \paragraph{xISOG} This algorithm returns the geometry parameter $A'$ from equation \eqref{veluform}. This computation requires the three sets $\mathcal{I}=\{\x([k]P), k\in I\}$, $\mathcal{J}=\{\x([k]P), k\in J\}$, $\mathcal{K}=\{\x([k]P), k\in K\}$ from \funct{KPS}.
 We define the following polynomials \[\begin{array}{l}
@@ -199,22 +200,27 @@ We define the following polynomials \[\begin{array}{l}
 	F_2(Z,X)=(XZ-1)^2\\
 	h_\mathcal{I}=\prod_{x_i\in\mathcal{I}}(Z-x_i)\\
 \end{array}\]
-Step 1 : Compute \[\begin{array}{l}
+\begin{itemize}
+\item Step 1 : Compute \[\begin{array}{l}
 	E_0 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)+F_1(Z,x_j)+F_2(Z,x_j))\\
 	E_1 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)-F_1(Z,x_j)+F_2(Z,x_j))\\
 \end{array}\]
-Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval}.
+Cost: $\#\mathcal{J}(7add+6mult)$ over $\FF_q$
+\item Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval}.
 \[\begin{array}{l}
 	R_0 = Res_Z(h_\mathcal{I},E_0) = \funct{fq_poly_multieval}(\mathcal{I}, E_0)\\
 	R_1 = Res_Z(h_\mathcal{I},E_1) = \funct{fq_poly_multieval}(\mathcal{I}, E_1)\
 \end{array}\]
-Step 3 : Compute the missing factors from $h_S=h_{\mathcal{I}\pm \mathcal{J}}h_\mathcal{K}$ which is straight forward and deduce $d$ and $A'$ using equation \eqref{veluform} :
+Cost: $O(log(\sqrt{l}))=O(log(l))$ $\FF_q$ multiplications
+\item Step 3 : Compute the missing factors from $h_S=h_{\mathcal{I}\pm \mathcal{J}}h_\mathcal{K}$ which is straight forward and deduce $d$ and $A'$ using equation \eqref{veluform} :
  \[\begin{array}{l}
 	M_0 = \prod_{x_k\in\mathcal{K}}(1-x_k)\\
 	M_1 = \prod_{x_k\in\mathcal{K}}(-1-x_k)\\
 	d = \left(\frac{A-2}{A+2}\right)^l \left( \frac{M_0R_0}{M_1R_1}\right)^8\\
 	A'=2\frac{1+d}{1-d}
  \end{array}\]
+Cost: $O(\sqrt{l})$ multiplications
+\end{itemize}
 
 
 
