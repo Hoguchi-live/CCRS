@@ -1,5 +1,8 @@
 #include "velu.h"
 
+/**
+  Computes the lengths b, b', lenK of the three KPS arrays.
+*/
 void _init_lengths(uint* b, uint* bprime, uint* lenK, uint l) {
 	*bprime = l-1;
 	*b = 1;
@@ -11,6 +14,9 @@ void _init_lengths(uint* b, uint* bprime, uint* lenK, uint l) {
 	*lenK = (l-1-4*(*b)*(*bprime))/2;
 }
 
+/**
+  Fills the arrays I,J,K with the multiples of P required by xISOG
+*/
 void KPS(MG_point_t *I, MG_point_t *J, MG_point_t *K, MG_point_t P, uint l, uint b, uint bprime, uint lenK) {
 	// array I of length brpime
 	// array J of length b
@@ -77,7 +83,11 @@ void KPS(MG_point_t *I, MG_point_t *J, MG_point_t *K, MG_point_t P, uint l, uint
 	MG_point_clear(&P4b);
 }
 
-
+/**
+  Sets A2 to the geometry parameter of a degree l MG_curve_t isogenous to the base curve.
+  I,J,K must be pre-computed via KPS.
+  A2 must be initialized.
+*/
 void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_point_t K[], uint b, uint bprime, uint lenK) {
 
 	const fq_ctx_t *F;
@@ -98,7 +108,7 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 
 	/*
 	fq_poly_t h
-	fq_poly_init(h, *F); //TODO: initialize with length brpime = #I
+	fq_poly_init(h, *F);
 	fq_poly_one(h, *F);
 
 	fq_poly_t f, c;
@@ -198,6 +208,10 @@ void xISOG(fq_t *A2, MG_point_t P, uint l, MG_point_t I[], MG_point_t J[], MG_po
 	fq_poly_clear(tmp2, *F);
 }
 
+/**
+   Auxiliary function for xISOG.
+   The two polynomials rop1 and rop2 are computed concurrently to remove unnecessary duplicate computations.
+*/
 void _F0pF1pF2_F0mF1pF2(fq_poly_t *rop1, fq_poly_t *rop2, MG_point_t P, const fq_ctx_t ctx) {
 	fq_poly_zero(*rop1, ctx);
 	fq_poly_zero(*rop2, ctx);
@@ -237,6 +251,11 @@ void _F0pF1pF2_F0mF1pF2(fq_poly_t *rop1, fq_poly_t *rop2, MG_point_t P, const fq
 	fq_clear(tmp2, ctx);
 }
 
+/**
+  Wrapper for xISOG and KPS.
+  Computes Vélu Step curve parameter A2 from the l-torsion point P.
+  A2 must be initialized.
+*/
 void isogeny_from_torsion(fq_t *A2, MG_point_t P, uint l) {
 
 	uint b, bprime, lenK;

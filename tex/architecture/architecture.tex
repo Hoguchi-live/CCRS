@@ -206,12 +206,12 @@ We define the following polynomials \[\begin{array}{l}
 	E_1 = \prod_{x_j\in\mathcal{J}}(F_0(Z,x_j)-F_1(Z,x_j)+F_2(Z,x_j))\\
 \end{array}\]
 Cost: $\#\mathcal{J}(7add+6mult)$ over $\FF_q$
-\item Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval}.
+\item Step 2 : Lemma 4.9 of \cite{} expresses $h_{\mathcal{I}\pm \mathcal{J}}$ as the quotient of two resultants. We compute these resultants efficiently using the remainder tree polynomial multievaluation \funct{fq_poly_multieval} described in section \ref{multieval}.
 \[\begin{array}{l}
 	R_0 = Res_Z(h_\mathcal{I},E_0) = \funct{fq_poly_multieval}(\mathcal{I}, E_0)\\
 	R_1 = Res_Z(h_\mathcal{I},E_1) = \funct{fq_poly_multieval}(\mathcal{I}, E_1)\
 \end{array}\]
-Cost: $O(log(\sqrt{l}))=O(log(l))$ $\FF_q$ multiplications
+Cost: $O(log(\sqrt{l}))=O(log(l))$ $\FF_q[X]$ multiplications
 \item Step 3 : Compute the missing factors from $h_S=h_{\mathcal{I}\pm \mathcal{J}}h_\mathcal{K}$ which is straight forward and deduce $d$ and $A'$ using equation \eqref{veluform} :
  \[\begin{array}{l}
 	M_0 = \prod_{x_k\in\mathcal{K}}(1-x_k)\\
@@ -297,7 +297,7 @@ return [x, 1] (Montgomery point)
 
 
 
-\subsection{Multi-evaluation using remainder trees}
+\subsection{Multi-evaluation using remainder trees\label{multieval}}
 To compute the resultant in the $\sqrt{}$-Velu algorithm, a binary-tree approach was used.
 Notice first that evaluating a polynomial $P\in k[X]$ at a point $\alpha\in k$ is equivalent to computing the image of $P$ in $k[X]/(X-\alpha)$.
 Suppose now that we want to evaluate a polynomial $P$ at multiple roots $\alpha_0, \cdots,\alpha_n$.
