@@ -31,6 +31,6 @@ void print_verbose_walk_total_time(int total_time){
 void print_timing_json(fmpz_t l, float msec) {
 	printf("\"");
 	fmpz_print(l);
-	printf("\":%f,\n", msec);
+	printf("\":%f,", msec);
 }
 

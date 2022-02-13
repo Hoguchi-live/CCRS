@@ -360,7 +360,7 @@ void MG_point_set_(MG_point_t *P, MG_point_t *Q) {
 */
 void MG_point_set_si(MG_point_t *P, const slong X, const slong Z, MG_curve_t *E) {
 
-	fq_t XX, ZZ, zz;
+	fq_t XX, ZZ;
 
 	fq_init(XX, *(E->F));
 	fq_init(ZZ, *(E->F));
@@ -584,3 +584,4 @@ void TN_curve_clear(TN_curve_t *E) {
 	fq_clear(E->c, *(E->F));
 	fmpz_clear(E->l);
 }
+

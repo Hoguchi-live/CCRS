@@ -325,4 +325,31 @@ A detailed analysis of the algorithm done in \cite{} gives the following complex
 operations in $k$.
 \end{lemma}
 
+
+
+\subsection{Exchanging keys}
+Suppose Alice and Bob want to initiate a key-exchange using this CRS protocol.
+Both will first setup their environment using the functions in \texttt{Exchange/setup.c}.
+At this point they both have access to the global public parameters such as the base field, the base curve, the trace of the curve and the $l$-primes.
+
+In order to actually share a secret, Alice and Bob first have to generate their private keys.
+This is done through the \funct{keygen} function in \texttt{Exchange/}.
+The \textit{seed} and \textit{state} parameters can be used for reproductivity.
+The function takes for every prime $l$ in the configuration a number of steps to take in the $l$-isogeny graph.
+This number can be negative when walking on the quadratic twist of the curve is possible, i.e. when both eigenvalues have small orders.
+In the end, Alice and Bob both get a random list of steps to take in the different $l$-isogeny graph.
+To generate their public key, they must apply this key to the public base curve hardcoded in the \texttt{setup.h} file and available in the \funct{cfg_t} structure.
+A call to \funct{apply_key} located in \texttt{Exchange/dh.c} is all that is necessary.
+To minimize the time spent applying a key, we chose to group $l$-primes according to the degree of their eigenvalues in ascending order.
+That way we only have to change our working field $\FF_{q^r}$ to $\FF_{q^{r+1}}$ once per degree.
+At this stage Alice and Bob both posses a curve that they publicly exchange.
+In practice this would be done by exchanging the associated $j$-invariant, not the curve itself.
+
+To compute the shared secret, both parties use the function \funct{apply_key} with their private key on their counterpart's public key.
+The group action highlighted in the theoretical section and its properties ensure that the shared secret is the same for both Alice and Bob.
+More precisely, the shared secret are curves (not necessarily the same) member of the same class of isomorphism (they have the same $j$-invariant).
+
+
+
+
 \end{document}

@@ -22,6 +22,7 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	TN_curve_t E_TN_tmp1, E_TN_tmp2;
 	fmpz_t card, r;
 
+	fmpz_init(card);
 	fmpz_init_set(k_local, k);
 	MG_point_init(&P, op);
 	TN_curve_init(&E_TN_tmp1, l, op->F);
@@ -61,6 +62,7 @@ int walk_rad(MG_curve_t *rop, MG_curve_t *op, fmpz_t l, fmpz_t k) {
 	TN_curve_clear(&E_TN_tmp1);
 	TN_curve_clear(&E_TN_tmp2);
 	fmpz_clear(r);
+	fmpz_clear(card);
 
 	return ec;
 }
