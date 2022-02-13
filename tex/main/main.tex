@@ -12,7 +12,6 @@
 \tableofcontents
 \newpage
 
-%\addcontentsline{toc}{section}{Symbols and abbreviations}
 %\subfile{../notations/notations.tex}
 %\glsaddallunused
 %\setglossarystyle{mylong}
@@ -20,7 +19,8 @@
 %\printglossaries{}
 %\newpage
 
-\section{Introduction}
+\addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
 \subfile{../introduction/introduction.tex}
 %\newpage
 
@@ -36,11 +36,11 @@
 \subfile{../results/results.tex}
 
 \newpage
+\addcontentsline{toc}{section}{Conclusion}
 \section*{Conclusion}
 \subfile{../conclusion/conclusion.tex}
 
-%\addcontentsline{toc}{section}{Bibliography}
-%\bibliography{bibli}{}
-%\bibliographystyle{unsrt}
-%\newpage
+\addcontentsline{toc}{section}{Bibliography}
+\bibliography{bibli}{}
+\bibliographystyle{unsrt}
 \end{document}
