@@ -48,8 +48,8 @@ void MG_curve_clear(MG_curve_t *);
 *********************************************/
 void MG_point_init(MG_point_t *, MG_curve_t *);
 
-void MG_point_set(MG_point_t *, const fq_t, const fq_t, MG_curve_t *); // RENAME _fq
-void MG_point_set_(MG_point_t *, MG_point_t *); // The real one
+void MG_point_set(MG_point_t *, const fq_t, const fq_t, MG_curve_t *);
+void MG_point_set_(MG_point_t *, MG_point_t *);
 void MG_point_set_si(MG_point_t *, const slong, const slong, MG_curve_t *);
 void MG_point_set_ui(MG_point_t *, const ulong, const ulong, MG_curve_t *);
 void MG_point_set_fmpz(MG_point_t *, const fmpz_t, const fmpz_t, MG_curve_t *);

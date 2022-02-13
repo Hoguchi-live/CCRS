@@ -24,14 +24,6 @@ void remainderCell(fq_poly_bcell_t *rop, fq_t *roots, uint offset_start, uint of
 		fq_set_ui(tmp, 1, *F);
 		fq_poly_set_coeff(p, 1, tmp, *F);
 
-		//// TEST
-		//printf("Building leaf from root: ");
-		//fq_print_pretty(roots[offset_start], *F);
-		//printf(" Polynomial X-r: ");
-		//fq_poly_print_pretty(p, "X", *F);
-		//printf("\n");
-		//// TEST
-
 		fq_poly_bcell_set(rop, p);
 	}
 	else {
@@ -47,12 +39,8 @@ void remainderCell(fq_poly_bcell_t *rop, fq_t *roots, uint offset_start, uint of
 
 		offset_split = offset_start + (offset_end - offset_start) / 2;
 
-		//printf("Splitting roots in [%d : %d] U [%d : %d]\n", offset_start, offset_split , offset_split +1, offset_end);
-		//printf("Going left\n");
 		remainderCell(left, roots, offset_start, offset_split , F);
-		//printf("Going right\n");
 		remainderCell(right, roots, offset_split + 1, offset_end , F);
-		//printf("\n\n");
 
 		//// Compute product of child polynomials
 		fq_poly_mul(p, left->data, right->data, *F);
@@ -82,34 +70,14 @@ void fq_poly_multieval_fromtree(fq_poly_bcell_t *c, fq_t *res, fq_poly_t P, uint
 	//// New polynomial
 	fq_poly_rem(Q, P, c->data, *F);
 
-	////// TEST
-	//printf("Poly enter: ");
-	//fq_poly_print_pretty(P, "X", *F);
-	//printf(" Poly data: ");
-	//fq_poly_print_pretty(c->data, "X", *F);
-	//printf(" Poly div: ");
-	//fq_poly_print_pretty(Q, "X", *F);
-	//printf("\n");
-	//// TEST
-
 	if(c->left == NULL) {
 
 		fq_poly_get_coeff(res[*k], Q, 0, *F);
-		//printf("*Found leaf: %d for poly: ", *k);
-		//fq_print_pretty(res[*k], *F);
-		//printf("\n");
 		(*k)++;
 	}
 	else {
-
-		//// TEST
-		//printf("k = %d ", *k);
-		//printf("Going Left\n");
-		//// TEST
 		fq_poly_multieval_fromtree(c->left, res, Q, k, F);
-		//printf("Going Right\n");
 		fq_poly_multieval_fromtree(c->right, res, Q, k, F);
-		//printf("\n");
 	}
 	fq_poly_clear(Q, *F);
 }

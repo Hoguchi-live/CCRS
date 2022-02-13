@@ -12,7 +12,7 @@
 	for e = (p + 1) / (2 * l).
   We get rid of the +/- sign by testing via fast exponentiation.
   A NAS condition for this to work is p + 1 = 0 % 2 * l.
-  This is about 1000 times faster than bruteforcing X^l - op.
+  This is about 1000 times faster than bruteforcing roots of X^l - op.
 **/
 void fq_nth_root_trick(fq_t rop, fq_t op, fmpz_t l, const fq_ctx_t F) {
 
@@ -48,6 +48,9 @@ void fq_nth_root_trick(fq_t rop, fq_t op, fmpz_t l, const fq_ctx_t F) {
 	fmpz_clear(tmp);
 }
 
+/**
+  Unsigned int wrapper for fq_nth_root_trick
+*/
 void fq_nth_root_trick_ui(fq_t rop, fq_t op, slong l, const fq_ctx_t F) {
 
 	fmpz_t ll;

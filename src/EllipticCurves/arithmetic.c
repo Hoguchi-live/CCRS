@@ -19,7 +19,7 @@ void MG_curve_update_field(MG_curve_t *rop, MG_curve_t *op, const fq_ctx_t *L) {
 }
 
 /**
-  Inline version of the previous function.
+  Inline version of the function MG_curve_update_field.
 */
 void MG_curve_update_field_(MG_curve_t *op, const fq_ctx_t *L) {
 
@@ -39,6 +39,9 @@ void MG_curve_update_field_(MG_curve_t *op, const fq_ctx_t *L) {
 	MG_curve_clear(&tmp);
 }
 
+/**
+  Sets output to the j-invariant of short Weierstrass curve E.
+*/
 void SW_j_invariant(fq_t *output, SW_curve_t *E) {
 
 	fq_t tmp1, tmp2, tmp3;				// temporary registers
@@ -79,7 +82,9 @@ void SW_j_invariant(fq_t *output, SW_curve_t *E) {
 	fq_clear(j_invariant, *(E->F));
 }
 
-
+/**
+  Sets output to the j-invariant of Montgomery curve E.
+*/
 void MG_j_invariant(fq_t *output, MG_curve_t *E) {
 
 	if(fq_is_zero(E->A, *(E->F)) && fq_is_zero(E->B, *(E->F))) return;
@@ -112,6 +117,9 @@ void MG_j_invariant(fq_t *output, MG_curve_t *E) {
 	fq_clear(j_invariant, *(E->F));
 }
 
+/**
+  Sets output to the j-invariant of Tate normal curve E.
+*/
 void TN_j_invariant(fq_t *rop, TN_curve_t *E){
 
 	int flag_3 = fmpz_equal_ui(E->l, 3);
@@ -276,6 +284,9 @@ int MG_point_isvalid(bool *output, MG_point_t *P) {
 }
 
 
+/**
+  Sets output to 1 if P is the point at infinity, 0 otherwise.
+*/
 void MG_point_isinfty(bool *output, MG_point_t *P) {
 
 	*output = fq_is_zero(P->Z, *(P->E->F));
@@ -287,7 +298,7 @@ bool MG_point_isinfty_(MG_point_t *P) {
 }
 
 /**
-  Normalizes point coordinate to (X/Z, 1) or (1, 0) if P is infinity.
+  Normalizes point coordinate to (X/Z, 1) or (1, 0) if P is at infinity.
 */
 void MG_point_normalize(MG_point_t *P) {
 
@@ -300,6 +311,10 @@ void MG_point_normalize(MG_point_t *P) {
 	}
 }
 
+/**
+  Returns a non-infinity random point on the underlying curve.
+  P must be initialized.
+*/
 void SW_point_rand_ninfty(SW_point_t *P) {
 
 	fq_t x, y, tmp1, tmp2;
@@ -341,6 +356,10 @@ void SW_point_rand_ninfty(SW_point_t *P) {
 	fq_clear(x, *F);
 }
 
+/**
+  Returns a non-infinity random point on the underlying curve.
+  P must be initialized.
+*/
 void MG_point_rand_ninfty(MG_point_t *P, flint_rand_t state) {
 
 	fq_t X, Y, tmp1, tmp2;
@@ -352,7 +371,7 @@ void MG_point_rand_ninfty(MG_point_t *P, flint_rand_t state) {
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
 
-	// Main loop
+	// Main loop looking for a x such that x^3 + Ax^2 + x is a square
 	int ret = 0;
 	while(ret == 0) {
 		// Find random x in base field
@@ -368,10 +387,10 @@ void MG_point_rand_ninfty(MG_point_t *P, flint_rand_t state) {
 		fq_inv(tmp2, P->E->B, *F);
 		fq_mul(tmp1, tmp1, tmp2, *F);
 
-		// Extract root if exists, otherwise fail with 0. TODO: JUST CHECK IF IT EXISTS?
+		// Extract root if exists, otherwise fail with 0.
 		ret = fq_sqr_from_polyfact(tmp2, tmp1, *F);
 	}
-	// Create corresponding SW_point_t, is not infinity
+	// Create corresponding MG_point_t, is not infinity
 	fq_set(P->X, X, *F);
 	fq_set_ui(P->Z, 1, *F);
 
@@ -382,10 +401,10 @@ void MG_point_rand_ninfty(MG_point_t *P, flint_rand_t state) {
 }
 
 /**
-  Same as MG_point_rand_ninfty but with y being in Fq^2 \ Fq.
+  Same as MG_point_rand_ninfty but forcing y to be in Fq^2 \ Fq.
   The only thing that changes in the algorithm is
   	ret == 0 ---> ret == 1
-  as we want a non-square.
+  as we want a non-square this time.
   **/
 void MG_point_rand_ninfty_nsquare(MG_point_t *P, flint_rand_t state) {
 
@@ -398,7 +417,7 @@ void MG_point_rand_ninfty_nsquare(MG_point_t *P, flint_rand_t state) {
 	fq_init(tmp1, *F);
 	fq_init(tmp2, *F);
 
-	// Main loop
+	// Main loop looking for a x such that x^3 + Ax^2 + x is a non-square
 	int ret = 1;
 	while(ret == 1) {
 		// Find random x in base field
@@ -414,10 +433,10 @@ void MG_point_rand_ninfty_nsquare(MG_point_t *P, flint_rand_t state) {
 		fq_inv(tmp2, P->E->B, *F);
 		fq_mul(tmp1, tmp1, tmp2, *F);
 
-		// Extract root if exists, otherwise fail with 0. TODO: JUST CHECK IF IT EXISTS?
+		// Extract root if exists, otherwise fail with 0.
 		ret = fq_sqr_from_polyfact(tmp2, tmp1, *F);
 	}
-	// Create corresponding SW_point_t, is not infinity
+	// Create corresponding MG_point_t, is not infinity
 	fq_set(P->X, X, *F);
 	fq_set_ui(P->Z, 1, *F);
 
@@ -432,6 +451,7 @@ void MG_point_rand_ninfty_nsquare(MG_point_t *P, flint_rand_t state) {
 ******************************/
 /**
   Try to set B to 1, return 1 if successful, 0 otherwise.
+  This is possible if and only if B admits a square root in the base field.
 **/
 int MG_curve_normalize(MG_curve_t *E){
 	fq_t tmp;
