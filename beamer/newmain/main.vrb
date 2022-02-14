@@ -1,0 +1,20 @@
+\frametitle{Montgomery Ladder pseudocode}
+\small	Entrées : $P, k = \sum_{i=0}^{l-1}k_i 2^i$ avec $k_{l-1}=1$\\
+	Sortie : $kP$
+\begin{minted}[linenos, mathescape=true,fontsize=\footnotesize]{c}
+P0 = P
+P1 = xDBL(P)
+for(int i=l-2; i>=0, i--) {
+  if(k[i]==0){
+    P1 = xADD(P0, P1, P)
+    P0 = xDBL(P0)
+  }
+  else{
+    P0 = xADD(P0, P1, P)
+    P1 = xDBL(P1)
+  }
+}
+return P0
+\end{minted}
+Invariants: $P1 = P0+P$ et après $i$ itérations,
+$\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\end{array}$
