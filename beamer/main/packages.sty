@@ -1,0 +1,41 @@
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsthm}
+\usepackage{float}
+%\usepackage{stackrel}
+\usepackage{cite}
+\usepackage{url}
+
+% Symbols
+\usepackage{nomencl}
+\usepackage[nopostdot, sort=def]{glossaries}
+\newglossarystyle{mylong}{%
+  \setglossarystyle{long}%
+  \renewenvironment{theglossary}%
+     {\begin{longtable}[l]{@{}p{\dimexpr 2cm-\tabcolsep}p{0.8\hsize}}}% <-- change the value here
+     {\end{longtable}}%
+ }
+\newglossary{symbols}{sym}{sbl}{Liste des symboles et abreviations}
+\makenomenclature
+\makeglossaries
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{positioning, decorations.markings}
+\usetikzlibrary{decorations.markings, matrix, calc, arrows}
+\usetikzlibrary{positioning}
+\usepackage{caption, subcaption}
+
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage[utf8]{inputenc}
+\usepackage[top=1 in,bottom=1in, left=1 in, right=1 in]{geometry}
+
+% For Pseudo-code
+\usepackage{minted}
