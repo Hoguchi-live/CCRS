@@ -1,0 +1,2 @@
+\beamer@sectionintoc {1}{Le protocol CRS}{3}{0}{1}
+\beamer@sectionintoc {2}{Algorithmes}{7}{0}{2}

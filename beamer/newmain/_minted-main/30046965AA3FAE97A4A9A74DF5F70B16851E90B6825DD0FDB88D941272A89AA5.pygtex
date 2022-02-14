@@ -1,0 +1,15 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8\relax}]
+\PYG{n}{P0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{P}
+\PYG{n}{P1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{xDBL}\PYG{p}{(}\PYG{n}{P}\PYG{p}{)}
+\PYG{k}{for}\PYG{p}{(}\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{=}\PYG{n}{l}\PYG{l+m+mi}{\PYGZhy{}2}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZgt{}=}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{i}\PYG{o}{\PYGZhy{}\PYGZhy{}}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{  }\PYG{k}{if}\PYG{p}{(}\PYG{n}{k}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{==}\PYG{l+m+mi}{0}\PYG{p}{)\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{P1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{xADD}\PYG{p}{(}\PYG{n}{P0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{P1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{P}\PYG{p}{)}
+\PYG{+w}{    }\PYG{n}{P0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{xDBL}\PYG{p}{(}\PYG{n}{P0}\PYG{p}{)}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{k}{else}\PYG{p}{\PYGZob{}}
+\PYG{+w}{    }\PYG{n}{P0}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{xADD}\PYG{p}{(}\PYG{n}{P0}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{P1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{P}\PYG{p}{)}
+\PYG{+w}{    }\PYG{n}{P1}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{xDBL}\PYG{p}{(}\PYG{n}{P1}\PYG{p}{)}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\PYG{k}{return}\PYG{+w}{ }\PYG{n}{P0}
+\end{Verbatim}

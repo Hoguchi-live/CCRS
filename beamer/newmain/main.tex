@@ -103,6 +103,25 @@
 \end{center}
 \end{frame}
 
+\section{Algorithmes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Torsion
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Points de $l$-torsion}
+	On cherche $P\in E(\FFq)[l] = \ker\phi$. Posons $C = \#E(\FFq) / l$.
+	\begin{itemize}
+		\item Soit $Q\in E(\FFq)$ al\'eatoire.
+		\item Si $P := C\cdot Q \neq O$, on a gagn\'e.
+		\item Sinon on tire un autre $Q$.
+	\end{itemize}
+	Si $\#E(\FFq) = l \cdot p_1 ^{f_1}\cdots p_n^{f_n}$ avec $l\wedge p_i = 1$,
+	\begin{align*}
+		Q &= (e_0, e_1, \cdots, e_n)\in \Z_{l}\times \Z_{p_1^{f_1}}\times \Z_{p_n^{f_n}},\\
+		C\cdot Q &= (\kappa e_0, 0, \cdots, 0) \text{ pour } \kappa\in \FF_l^{*}.
+	\end{align*}
+	Le point $C\cdot Q$ convient avec probabilit\'e $1-1/l$.
+\end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Montgomery Arithmetic
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -142,7 +161,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Montgomery Ladder pseudocode}
 	\small	Entrées : $P, k = \sum_{i=0}^{l-1}k_i 2^i$ avec $k_{l-1}=1$\\
-	Sortie : $kP$ 
+	Sortie : $kP$
 \begin{minted}[linenos, mathescape=true,fontsize=\footnotesize]{c}
 P0 = P
 P1 = xDBL(P)
@@ -158,11 +177,27 @@ for(int i=l-2; i>=0, i--) {
 }
 return P0
 \end{minted}
-Invariants: $P1 = P0+P$ et après $i$ itérations, 
+Invariants: $P1 = P0+P$ et après $i$ itérations,
 $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\end{array}$
 \end{frame}
 
-\subsection{Conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Multi-evaluation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Multi-evaluation}
+	\begin{itemize}
+		\item Probl\`eme:  \'evaluer $P\in\FFq[X]$ en $\alpha_1,\cdots, \alpha_n$.
+		\item Equivalent \`a $P$ mod $(X-\alpha_i)$.
+	\end{itemize}
+	Exemple pour $n=4$: on construit par le bas
+	\begin{center}
+		\includegraphics[scale=0.2]{../figs/tree}
+	\end{center}
+	Puis on r\'eduit $P$ en descendant.\\
+	Complexit\'e: $\mathbf{M}(n)\log n$ si $\text{deg}(P) \sim n$.
+\end{frame}
+
+\section*{Conclusion}
 \begin{frame}
 \end{frame}
 
