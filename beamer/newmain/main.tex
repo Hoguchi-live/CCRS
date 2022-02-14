@@ -103,6 +103,65 @@
 \end{center}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Montgomery Arithmetic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\x}{\textbf{x}}
+\begin{frame}{Arithmétique de Montgomery}
+	\begin{itemize}
+		\item{ Courbe de Montgomery $E_{A,B} : By^2 = x^3+Ax^2 + x$}
+		\item{ $\x\colon (X:Y:Z) \in E_{A,B} \mapsto (X:Z) \in \mathbb{P}^1$}
+		\item{La loi de $E_{A,B}$ induit par {\x} une loi sur $\mathbb{P}^1$}
+		\item[Prop.]{$P,Q\in E$\\ \hspace{-20pt}
+			Si $P\neq Q$ alors\\
+			{\small$\left\{\begin{array}{l}
+					X_{P+Q} = Z_{P-Q}[(X_P-Z_P)(X_Q+Z_Q) + (X_P+Z_P)(X_Q-Z_Q)]^2\\
+					Z_{P+Q} = X_{P-Q}[(X_P-Z_P)(X_Q+Z_Q) - (X_P+Z_P)(X_Q-Z_Q)]^2
+				\end{array}\right.$}\\ \hspace{-20pt}
+			Si $P=Q$ alors\\
+			{\small$\left\{\begin{array}{l}
+					X_{[2]P}=(X_P + Z_P)^2(X_P - Z_P)^2 \\
+					Z_{[2]P}=(4 X_P Z_P)[(X_P - Z_P)^2 + \frac{A+2}{4}(4 X_P Z_P)]
+				\end{array}\right.$}}
+\end{itemize}\end{frame}
+
+\begin{frame}{Arithmétique de Montgomery}
+	\begin{itemize}
+		\item{ Courbe de Montgomery $E_{A,B} : By^2 = x^3+Ax^2 + x$}
+		\item{ $\x\colon (X:Y:Z) \in E_{A,B} \mapsto (X:Z) \in \mathbb{P}^1$}
+		\item{La loi de $E_{A,B}$ induit par {\x} une loi sur $\mathbb{P}^1$}
+		\item{On remote à $E_{A,B}$ en remarquant que $\x(P)=\x(Q)\Leftrightarrow P=\pm Q$}
+		\item{ $\x(P)+\x(Q)$ détermine $\lbrace\x(P \pm Q)\rbrace$}
+		\item{xADD : $(\x(P),\x(Q), \x(P-Q)) \mapsto \x(P+Q)$}
+		\item{xDBL : $\x(P) \mapsto \x(2P)$}
+	\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Montgomery Ladder
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Montgomery Ladder pseudocode}
+	\small	Entrées : $P, k = \sum_{i=0}^{l-1}k_i 2^i$ avec $k_{l-1}=1$\\
+	Sortie : $kP$ 
+\begin{minted}[linenos, mathescape=true,fontsize=\footnotesize]{c}
+P0 = P
+P1 = xDBL(P)
+for(int i=l-2; i>=0, i--) {
+  if(k[i]==0){
+    P1 = xADD(P0, P1, P)
+    P0 = xDBL(P0)
+  }
+  else{
+    P0 = xADD(P0, P1, P)
+    P1 = xDBL(P1)
+  }
+}
+return P0
+\end{minted}
+Invariants: $P1 = P0+P$ et après $i$ itérations, 
+$\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\end{array}$
+\end{frame}
+
 \subsection{Conclusion}
 \begin{frame}
 \end{frame}
