@@ -24,7 +24,7 @@
   \titlepage
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.13]{../figs/isoGraph}
+\includegraphics[scale=0.12]{../figs/isoGraph}
 \end{figure}
 \end{frame}
 
@@ -117,8 +117,8 @@
 	\end{itemize}
 	Si $\#E(\FFq) = l \cdot p_1 ^{f_1}\cdots p_n^{f_n}$ avec $l\wedge p_i = 1$,
 	\begin{align*}
-		Q &= (e_0, e_1, \cdots, e_n)\in \Z_{l}\times \Z_{p_1^{f_1}}\times \Z_{p_n^{f_n}},\\
-		C\cdot Q &= (\kappa e_0, 0, \cdots, 0) \text{ pour } \kappa\in \FF_l^{*}.
+		Q &= (e_0, e_1)\in \Z_{l}\times G, \text{ G abelien et }\#G = C, \\
+		C\cdot Q &= (\kappa e_0, 0) \text{ pour } \kappa\in \FF_l^{*}.
 	\end{align*}
 	Le point $C\cdot Q$ convient avec probabilit\'e $1-1/l$.
 \end{frame}
@@ -236,7 +236,7 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Multi-evaluation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Multi-evaluation}
+\begin{frame}{Multi-\'evaluation}
 	\begin{itemize}
 		\item Probl\`eme:  \'evaluer $P\in\FFq[X]$ en $\alpha_1,\cdots, \alpha_n$.
 		\item Equivalent \`a $P$ mod $(X-\alpha_i)$.
@@ -246,11 +246,57 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 		\includegraphics[scale=0.2]{../figs/tree}
 	\end{center}
 	Puis on r\'eduit $P$ en descendant.\\
-	Complexit\'e: $\mathbf{M}(n)\log n$ si $\text{deg}(P) \sim n$.
+	Complexit\'e: $O(\mathbf{M}(n)\log n)$ si $\text{deg}(P) \sim n$.
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Radical
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Isog\'enies radicales}
+	\begin{itemize}
+		\item Pour $l\in\left\{3, 5, 7\right\}$ .
+		\item Model: $		F = y^2 + (1-c)xy - by - x^2(x-b)$.
+	\end{itemize}
+	On cherche des chaines de $l$-isog\'enies (ici $k$-pas)
+\[
+	E\rightarrow E_1\rightarrow E_2\rightarrow \dots\rightarrow E_{k-1}\rightarrow E_k.
+\]
+	Exemple d'un pas ($l=5$):
+\[
+	b' = \alpha\frac{\alpha^4 + 3\alpha^3 + 4\alpha^2 + 2\alpha + 1 }{\alpha^4 - 3\alpha^3 + 4\alpha^2 - 2\alpha + 1}
+\]
+	Pour $\alpha = \sqrt[5]{b}$.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Resultats
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{résultats expérimentaux}
+	Clef la plus lente: $270$ secondes (\'echange en 540s).
+	\begin{center}
+		\includegraphics[scale=0.22]{../figs/timings}
+	\end{center}
+\end{frame}
+
 
 \section*{Conclusion}
 \begin{frame}
+	\begin{itemize}
+		\item Code v\'erifi\'e avec Valgrind.
+		\item 25\% plus rapide que l'impl\'ementation pr\'ec\'edente, 92\% par rapport \`a l'article de 2018.
+	\end{itemize}
+	Mais
+	\begin{itemize}
+		\item Deux premiers $l$ inutilisables ($\sim 10$ bits).
+		\item Structures trop rigides.
+	\end{itemize}
+	Optimisations potentielles:
+	\begin{itemize}
+		\item Parallelisation GPU/multi-threading pour la multi-\'evaluation.
+		\item Plus de caching.
+		\item Meilleures formules radicales.
+		\item Nouvelle courbe de base.
+	\end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -266,7 +312,7 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 		&= \frac{B(x_Q y_P - x_P y_Q)^2}{x_P x_Q (x_P-x_Q)^2}
 	\end{aligned}\]
 	De même, $x_{P-Q} = \frac{B(x_Q y_P + x_P y_Q)^2}{x_P x_Q (x_P-x_Q)^2}$
-	
+
 	En multipliant ces équations, on obtient
 	\[x_{P+Q} x_{P-Q} (x_P - x_Q)^2 = (x_p x_Q -1)^2\]
 \end{frame}
@@ -281,5 +327,18 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 	\end{array}\]
 	qui ne nécessitent plus que 6 multiplications.
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Demo roots
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Racines $l$-iemes}
+	\begin{itemize}
+		\item $l\in\left\{3, 5, 7\right\}$.
+		\item $p + 1 = 0$ mod $ 2l$.
+		\item On \'ecrit $p+1 = 2lk$ pour un certain $k$.
+		\item Il vient $(x^k)^l = \pm x$.
+	\end{itemize}
+\end{frame}
+
 
 \end{document}
