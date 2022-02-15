@@ -1,0 +1,10 @@
+\frametitle{Algorithme $\sqrt {}$\textit {-Velu}}
+\begin{itemize}
+		\item{$h_S(X) = \prod_{s\in S}(X-\x([s]P))\text{, avec }S=\{1,3, \ldots, \mathnormal{l}-2\}$}
+		\item[Idée.] {Ecrire $S=(I\pm J) \cup K$} avec $\sqrt{\mathnormal{l}/2}\simeq \#I \simeq \#J \simeq \#K$
+		\item{$h_{I\pm J} = h_{I+J} h_{I-J}$}
+		\item{$\x(P), \x(Q), \x(P+Q), \x(P-Q)$ sont fondamentalement reliés.}
+		\item{On exprime $h_{I\pm J}=\text{Res}(h_I, R_J)$ où $R_J\in\FFp[X]$}
+		\item{Les racines de $h_I$ étant connues, ce calcul se ramène à une multi-évaluation
+			\[\text{Res}(h_I, R_J)=\prod_{i\in I}R_J(\x([i]P))\]}
+	\end{itemize}
