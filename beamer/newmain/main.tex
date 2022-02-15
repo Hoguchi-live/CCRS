@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage{subfig}
 \usepackage{macros}
+\usepackage{tikz}
 
 \title{Implémentation du protocole CRS d'échange de clefs à base d'isogénies }
 \author{Hugo Nartz, Cl\'ement Jacquot}
@@ -150,7 +151,7 @@
 		\item{ $\x\colon (X:Y:Z) \in E_{A,B} \mapsto (X:Z) \in \mathbb{P}^1$}
 		\item{La loi de $E_{A,B}$ induit par {\x} une loi sur $\mathbb{P}^1$}
 		\item{On remonte à $E_{A,B}$ en remarquant que $\x(P)=\x(Q)\Leftrightarrow P=\pm Q$}
-		\item{ $\x(P)+\x(Q)$ détermine $\lbrace\x(P \pm Q)\rbrace$}
+		\item{ $\x(P)\pm\x(Q)$ détermine $\lbrace\x(P \pm Q)\rbrace$}
 		\item{xADD : $(\x(P),\x(Q), \x(P-Q)) \mapsto \x(P+Q)$}
 		\item{xDBL : $\x(P) \mapsto \x(2P)$}
 	\end{itemize}
@@ -177,7 +178,32 @@ for(int i=l-2; i>=0, i--) {
 }
 return P0
 \end{minted}
-Invariants: $P1 = P0+P$ et après $i$ itérations,
+\end{frame}
+
+\begin{frame}
+	\textbf{Exemple.} $k=6=\overline{110}^2$\\
+	\begin{center}
+	\begin{tikzpicture}
+\node {$P,2P$} [sibling distance = 3.5cm]
+child {node {$2P, 3P$} [sibling distance = 2cm]
+	child {node {$4P,5P$} 
+		edge from parent node [left, gray] {0}
+	}
+	child {node {$5P,6P$}
+		edge from parent node [right, gray] {1}
+	}
+	edge from parent node [left, gray] {0}} 
+child {node {$3P, 4P$} [sibling distance = 2cm]
+	child {node {$\textcolor{red}{6P},7P$}
+		edge from parent node [left, red] {0}
+	}
+	child {node {$7P,8P$}
+		edge from parent node [right, gray] {1}
+	}
+	edge from parent node [right, red] {1}};
+	\end{tikzpicture}
+	\end{center}
+\textbf{Invariants:} $P1 = P0+P$ et,\\ après $r$ iterations, $i=l-2-r$, 
 $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\end{array}$
 \end{frame}
 
@@ -186,7 +212,7 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Vélu-step}
 \begin{itemize}
-	\item Donné : un point $P$ de l-torsion.
+	\item Donnée : un point $P$ de l-torsion.
 	\item But : effectuer un pas sur le graphe d'isogénies.
 	\item[Prop.]{$\phi:E_A\rightarrow E_{A'}$ isogénie de noyau $\langle P \rangle$.\\
 		On a alors $\boxed{A'=2\frac{1+d}{1-d}}$ où\\
