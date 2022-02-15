@@ -1,2 +1,0 @@
-\beamer@sectionintoc {1}{Le protocole CRS}{2}{0}{1}
-\beamer@sectionintoc {2}{Algorithmes}{6}{0}{2}
