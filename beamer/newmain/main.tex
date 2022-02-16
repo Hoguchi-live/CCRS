@@ -92,6 +92,21 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Graphes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Les $\mathnormal{l}$-graphes}
+	Point de vue en un sommet:
+	\begin{center}
+		\includegraphics[scale=0.2]{../figs/graphs}
+	\end{center}
+	\begin{center}
+	Un $\mathnormal{l}$-pas puis un $\mathnormal{l}'$-pas $\iff$ Un $\mathnormal{l}$-pas puis un $\mathnormal{l}'$-pas
+		\includegraphics[scale=0.2]{../figs/comm}
+	\end{center}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Echange de clefs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{L'\'echange de clefs}
@@ -193,7 +208,7 @@ child {node {$2P, 3P$} [sibling distance = 2cm]
 		edge from parent node [left, gray] {0}
 	}
 	child {node {$5P,6P$}
-		edge from parent node [right, gray] {$\mathnormal{l}$}
+		edge from parent node [right, gray] {$1$}
 	}
 	edge from parent node [left, gray] {0}}
 child {node {$3P, 4P$} [sibling distance = 2cm]
@@ -201,9 +216,9 @@ child {node {$3P, 4P$} [sibling distance = 2cm]
 		edge from parent node [left, red] {0}
 	}
 	child {node {$7P,8P$}
-		edge from parent node [right, gray] { $\mathnormal{l}$}
+		edge from parent node [right, gray] { $1$}
 	}
-	edge from parent node [right, red] {$\mathnormal{l}$}};
+	edge from parent node [right, red] {$1$}};
 	\end{tikzpicture}
 	\end{center}
 \textbf{Invariants:} $P1 = P0+P$ et,\\ après $r$ iterations, $i=\mathnormal{l}-2-r$,
@@ -283,6 +298,25 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Demo roots
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[noframenumbering]{Racines $\mathnormal{l}$-iemes}
+	Pour nous,
+	\[
+		p = 7\prod_{2\leq \mathnormal{l}\leq 380} \mathnormal{l} - 1
+	\]
+	donc pour $l\in\left\{3, 5, 7\right\}$.
+	\[
+		p + 1 = 0 \text{ mod }  2l.
+	\]
+	\begin{itemize}
+		\item Soit $x\in\FFp$.
+		\item On \'ecrit $p+1 = 2lk$ pour un entier $k$.
+		\item Il vient $(x^k)^l = \pm x$.
+	\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Resultats
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{résultats expérimentaux}
@@ -290,6 +324,33 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 	\begin{center}
 		\includegraphics[scale=0.22]{../figs/timings}
 	\end{center}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Resultats
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Optimisation}
+Optimiseur: \textit{GEKKO}.
+\begin{table}[h]
+\begin{tabular}{llllllll}
+\cline{1-1}
+\multicolumn{1}{|l|}{$l$} & 3     & 5     & 7     & 11    & 13    & 17     & $\cdots$   \\ \cline{1-1}
+$r$                       & 1     & 1     & 1     & 1     & 1     & 1      & $\cdots$   \\
+$t$                       & .0013 & .001  & .0013 & .0023 & .0023 & .0046  & $\cdots$   \\
+$\mathbf{M}$              & 3573  & 13830 & 9573  & 5410  & 5410  & 2706   & $\cdots$
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{lllllllll}
+\cline{1-1}
+\multicolumn{1}{|l|}{$l$} & 1013 & 1181 & 31  & 61  & $\cdots$ &  881 & 37   & 1693 \\ \cline{1-1}
+$r$                       & 4    & 4    & 5   & 5   & $\cdots$ &  8   & 9    & 9    \\
+$t$                       & .12  & .18  & .23 & .21 & $\cdots$ &  .67 & 1.12 & 1.25 \\
+$\mathbf{M}$              & 107  & 67   & 54  & 57  & $\cdots$ &  18  & 10   & 9
+\end{tabular}
+\end{table}
 \end{frame}
 
 
@@ -342,17 +403,6 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 	qui ne nécessitent plus que 6 multiplications.
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Demo roots
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[noframenumbering]{Racines $\mathnormal{l}$-iemes}
-	\begin{itemize}
-		\item $l\in\left\{3, 5, 7\right\}$.
-		\item $p + 1 = 0$ mod $ 2l$.
-		\item On \'ecrit $p+1 = 2lk$ pour un certain $k$.
-		\item Il vient $(x^k)^l = \pm x$.
-	\end{itemize}
-\end{frame}
 
 
 \end{document}
