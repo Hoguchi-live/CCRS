@@ -14,4 +14,4 @@ gcc 	../../src/EllipticCurves/memory.c \
 	../../src/Exchange/dh.c \
 	../../src/Exchange/info.c \
 	exchange.c \
-	-g -pg  -O3  $1 $2 -lgmp -lflint -o exchange
+	-O3  $1 $2 -lgmp -lflint -o exchange

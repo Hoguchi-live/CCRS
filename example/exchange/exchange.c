@@ -60,7 +60,7 @@ int main() {
 
 	//// Apply secret keys to base curve to get public keys
 	#ifndef TIMING
-	printf("Computing Alice's public key\n");
+	printf("\nComputing Alice's public key\n");
 	#endif
 	int ret_A = apply_key(&E_A, cfg->E, key_A, cfg);
 	#ifndef TIMING
@@ -71,7 +71,7 @@ int main() {
 
 
 	//// Apply secret key to public keys to get the secret
-	printf("Computing Alice's shared secret\n");
+	printf("\nComputing Alice's shared secret\n");
 	int ret_secret_A = apply_key(&E_secret_A, &E_B, key_A, cfg);
 	printf("Success: %d\n", ret_secret_A);
 	printf("Computing Bob's shared secret\n");
@@ -86,6 +86,7 @@ int main() {
 	MG_j_invariant(&j_inv_B, &E_secret_B);
 	printf("\nBob's shared secret's j-invariant: \n");
 	fq_print_pretty(j_inv_B, *F);
+	printf("\n");
 	#endif
 
 

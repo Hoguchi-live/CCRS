@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.2.11)  16 FEB 2022 14:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2022.2.11)  16 FEB 2022 15:00
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -927,7 +927,8 @@ runsystem(rm main.aex)...executed.
 File: l3backend-pdftex.def 2021-12-14 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count382
 \l__pdf_internal_box=\box91
-) (./main.aux)
+)
+No file main.aux.
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
@@ -948,7 +949,6 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
 LaTeX Font Info:    ... okay on input line 22.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 22.
 LaTeX Font Info:    ... okay on input line 22.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1021,8 +1021,6 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 22.
 LaTeX Info: Redefining \pageref on input line 22.
 LaTeX Info: Redefining \nameref on input line 22.
-
-(./main.out) (./main.out)
 \@outlinefile=\write7
 \openout7 = `main.out'.
 
@@ -1109,28 +1107,27 @@ Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
- (./main.nav)
+
+No file main.nav.
+
 Overfull \hbox (27.52231pt too wide) in paragraph at lines 22--22
  [][][][] 
  []
 
-<../figs/isoGraph.png, id=29, 615.29875pt x 619.31375pt>
+<../figs/isoGraph.png, id=14, 615.29875pt x 619.31375pt>
 File: ../figs/isoGraph.png Graphic file (type png)
 <use ../figs/isoGraph.png>
 Package pdftex.def Info: ../figs/isoGraph.png  used on input line 29.
 (pdftex.def)             Requested size: 73.83266pt x 74.31444pt.
 
-Overfull \vbox (3.38597pt too high) detected at line 29
- []
-
-
 Overfull \hbox (27.52231pt too wide) has occurred while \output is active
  [][][][] 
  []
 
-[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+[1
 
- <../figs/isoGraph.png (PNG copy)>]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <../figs/isoGraph.png (PNG 
+copy)>]
 LaTeX Font Info:    Trying to load font information for U+msa on input line 53.
 
  (/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -1163,7 +1160,7 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 [3
 
 ]
-<../figs/Cycle.jpg, id=134, 493.845pt x 210.7875pt>
+<../figs/Cycle.jpg, id=106, 493.845pt x 210.7875pt>
 File: ../figs/Cycle.jpg Graphic file (type jpg)
 <use ../figs/Cycle.jpg>
 Package pdftex.def Info: ../figs/Cycle.jpg  used on input line 92.
@@ -1176,12 +1173,12 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 [4
 
  <../figs/Cycle.jpg>]
-<../figs/graphs.png, id=166, 543.53062pt x 298.11375pt>
+<../figs/graphs.png, id=135, 543.53062pt x 298.11375pt>
 File: ../figs/graphs.png Graphic file (type png)
 <use ../figs/graphs.png>
 Package pdftex.def Info: ../figs/graphs.png  used on input line 106.
 (pdftex.def)             Requested size: 108.7042pt x 59.62169pt.
-<../figs/comm.png, id=168, 417.05812pt x 365.86688pt>
+<../figs/comm.png, id=137, 417.05812pt x 365.86688pt>
 File: ../figs/comm.png Graphic file (type png)
 <use ../figs/comm.png>
 Package pdftex.def Info: ../figs/comm.png  used on input line 106.
@@ -1194,7 +1191,7 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 [5
 
  <../figs/graphs.png> <../figs/comm.png>]
-<../figs/DH.jpg, id=201, 1206.00563pt x 718.93594pt>
+<../figs/DH.jpg, id=168, 1206.00563pt x 718.93594pt>
 File: ../figs/DH.jpg Graphic file (type jpg)
 <use ../figs/DH.jpg>
 Package pdftex.def Info: ../figs/DH.jpg  used on input line 121.
@@ -1233,7 +1230,15 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
  (./main.vrb
 \openout5 = `main.pyg'.
 
+runsystem(pygmentize -S default -f latex -P commandprefix=PYG > _minted-main/de
+fault.pygstyle)...executed.
+
  (./_minted-main/default.pygstyle)
+runsystem(pygmentize -l c -f latex -P commandprefix=PYG -F tokenmerge -P stripn
+l=False -P mathescape=True -o _minted-main/30046965AA3FAE97A4A9A74DF5F70B16851E
+90B6825DD0FDB88D941272A89AA5.pygtex main.pyg)...executed.
+
+
 (./_minted-main/30046965AA3FAE97A4A9A74DF5F70B16851E90B6825DD0FDB88D941272A89AA
 5.pygtex
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
@@ -1283,19 +1288,19 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 [14
 
 ]
-<../figs/tree.png, id=477, 549.55313pt x 335.75438pt>
+<../figs/tree.png, id=417, 549.55313pt x 335.75438pt>
 File: ../figs/tree.png Graphic file (type png)
 <use ../figs/tree.png>
-Package pdftex.def Info: ../figs/tree.png  used on input line 279.
+Package pdftex.def Info: ../figs/tree.png  used on input line 280.
 (pdftex.def)             Requested size: 109.90868pt x 67.14967pt.
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <10.95> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 279.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 280.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <8> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 279.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 280.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <6> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 279.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 280.
 
 
 Overfull \hbox (27.52231pt too wide) has occurred while \output is active
@@ -1313,13 +1318,13 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 
 ]
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <14.4> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 317.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 318.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <10> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 317.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 318.
 
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <7> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 317.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 318.
 
 
 Overfull \hbox (27.52231pt too wide) has occurred while \output is active
@@ -1329,10 +1334,10 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 [17
 
 ]
-<../figs/timings.png, id=566, 1387.584pt x 752.3307pt>
+<../figs/timings.png, id=498, 1387.584pt x 752.3307pt>
 File: ../figs/timings.png Graphic file (type png)
 <use ../figs/timings.png>
-Package pdftex.def Info: ../figs/timings.png  used on input line 327.
+Package pdftex.def Info: ../figs/timings.png  used on input line 328.
 (pdftex.def)             Requested size: 305.26942pt x 165.51326pt.
 
 Overfull \hbox (27.52231pt too wide) has occurred while \output is active
@@ -1357,7 +1362,7 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 
 ]
 LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <5> not available
-(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 393.
+(Font)              Font shape `OT1/cmss/bx/n' tried instead on input line 394.
 
 
 Overfull \hbox (27.52231pt too wide) has occurred while \output is active
@@ -1374,6 +1379,13 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 [22
 
 ]
+Overfull \hbox (27.52231pt too wide) has occurred while \output is active
+ [][][][] 
+ []
+
+[23
+
+]
 \tf@nav=\write8
 \openout8 = `main.nav'.
 
@@ -1384,43 +1396,46 @@ Overfull \hbox (27.52231pt too wide) has occurred while \output is active
 \openout10 = `main.snm'.
 
  (./main.aux)
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C986F6AB9CCE62AADB11D5B252EF5389;320.
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  C986F6AB9CCE62AADB11D5B252EF5389;320.
 runsystem(rm main.pyg)...executed.
 
  ) 
 Here is how much of TeX's memory you used:
- 30886 strings out of 478353
- 614309 string characters out of 5854635
- 908708 words of memory out of 5000000
- 48334 multiletter control sequences out of 15000+600000
+ 30801 strings out of 478353
+ 613203 string characters out of 5854635
+ 906546 words of memory out of 5000000
+ 48256 multiletter control sequences out of 15000+600000
  419470 words of font info for 84 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,19n,122p,429b,1133s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{Navigation23} has been referenced but does not ex
-ist, replaced by a fixed one
-
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
-i8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/sha
-re/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmssbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pf
-b></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb></usr/share
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr
-/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf-di
-st/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/
-type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (22 pages, 693583 bytes).
+ 128i,16n,122p,429b,1133s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmmi7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/s
+hare/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmss8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmssbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.
+pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb></usr/sha
+re/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy6.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmsy7.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></u
+sr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf-
+dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/font
+s/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (23 pages, 691264 bytes).
 PDF statistics:
- 813 PDF objects out of 1000 (max. 8388607)
- 718 compressed objects within 8 object streams
- 49 named destinations out of 1000 (max. 500000)
- 108 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 758 PDF objects out of 1000 (max. 8388607)
+ 666 compressed objects within 7 object streams
+ 50 named destinations out of 1000 (max. 500000)
+ 84 words of extra memory for PDF output out of 10000 (max. 10000000)
 
