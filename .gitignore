@@ -1,4 +1,5 @@
 docs/
 *vgcore*
 .*
-/tex/main
+/tex/*
+/beamer/*

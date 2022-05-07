@@ -1,0 +1,66 @@
+\hypertarget{setup_8c}{}\doxysection{/home/steaky/git/\+CRS/src/\+Exchange/setup.c File Reference}
+\label{setup_8c}\index{/home/steaky/git/CRS/src/Exchange/setup.c@{/home/steaky/git/CRS/src/Exchange/setup.c}}
+{\ttfamily \#include \char`\"{}setup.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{setup_8c_ab6921259296639b9afff82091280b16d}{lprime\+\_\+init}} (\mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$op)
+\item 
+\mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$ \mbox{\hyperlink{setup_8c_a7cf1c08f00d568ba4102ca31f7befe27}{lprime\+\_\+init\+\_\+}} ()
+\item 
+void \mbox{\hyperlink{setup_8c_a84f32d6cbb19cc82e5b19f410c2999b1}{lprime\+\_\+set}} (\mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$op, fmpz\+\_\+t l, uint type, uint lbound, uint hbound, uint r, uint bkw)
+\item 
+void \mbox{\hyperlink{setup_8c_aed7fe5a4e6e5a258e27e64fb69fa541d}{lprime\+\_\+clear}} (\mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$op)
+\item 
+\mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$ \mbox{\hyperlink{setup_8c_a45ec5563c3aa83c29c3fa32154ad10d4}{cfg\+\_\+init\+\_\+set}} ()
+\item 
+void \mbox{\hyperlink{setup_8c_a0fe1fab7bb6b06648b61840ef65f77bd}{cfg\+\_\+print}} (\mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$cfg)
+\item 
+void \mbox{\hyperlink{setup_8c_a50e03b54202e9cd1994a18e7fa78c37b}{cfg\+\_\+clear}} (\mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$op)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{setup_8c_a50e03b54202e9cd1994a18e7fa78c37b}\label{setup_8c_a50e03b54202e9cd1994a18e7fa78c37b}} 
+\index{setup.c@{setup.c}!cfg\_clear@{cfg\_clear}}
+\index{cfg\_clear@{cfg\_clear}!setup.c@{setup.c}}
+\doxysubsubsection{\texorpdfstring{cfg\_clear()}{cfg\_clear()}}
+{\footnotesize\ttfamily void cfg\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$}]{op }\end{DoxyParamCaption})}
+
+Clears the given configuration, releasing any memory used. It must be reinitialised in order to be used again. \mbox{\Hypertarget{setup_8c_a45ec5563c3aa83c29c3fa32154ad10d4}\label{setup_8c_a45ec5563c3aa83c29c3fa32154ad10d4}} 
+\index{setup.c@{setup.c}!cfg\_init\_set@{cfg\_init\_set}}
+\index{cfg\_init\_set@{cfg\_init\_set}!setup.c@{setup.c}}
+\doxysubsubsection{\texorpdfstring{cfg\_init\_set()}{cfg\_init\_set()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$ cfg\+\_\+init\+\_\+set (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns a pointer to a \mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} config context. Every global parameters are hardcoded here. \mbox{\Hypertarget{setup_8c_a0fe1fab7bb6b06648b61840ef65f77bd}\label{setup_8c_a0fe1fab7bb6b06648b61840ef65f77bd}} 
+\index{setup.c@{setup.c}!cfg\_print@{cfg\_print}}
+\index{cfg\_print@{cfg\_print}!setup.c@{setup.c}}
+\doxysubsubsection{\texorpdfstring{cfg\_print()}{cfg\_print()}}
+{\footnotesize\ttfamily void cfg\+\_\+print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$}]{cfg }\end{DoxyParamCaption})}
+
+Prints a compact representation of the global configuration to stdout. \mbox{\Hypertarget{setup_8c_aed7fe5a4e6e5a258e27e64fb69fa541d}\label{setup_8c_aed7fe5a4e6e5a258e27e64fb69fa541d}} 
+\index{setup.c@{setup.c}!lprime\_clear@{lprime\_clear}}
+\index{lprime\_clear@{lprime\_clear}!setup.c@{setup.c}}
+\doxysubsubsection{\texorpdfstring{lprime\_clear()}{lprime\_clear()}}
+{\footnotesize\ttfamily void lprime\+\_\+clear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$}]{op }\end{DoxyParamCaption})}
+
+Clears the given lprime, releasing any memory used. It must be reinitialised in order to be used again. \mbox{\Hypertarget{setup_8c_ab6921259296639b9afff82091280b16d}\label{setup_8c_ab6921259296639b9afff82091280b16d}} 
+\index{setup.c@{setup.c}!lprime\_init@{lprime\_init}}
+\index{lprime\_init@{lprime\_init}!setup.c@{setup.c}}
+\doxysubsubsection{\texorpdfstring{lprime\_init()}{lprime\_init()}}
+{\footnotesize\ttfamily void lprime\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$}]{op }\end{DoxyParamCaption})}
+
+Initializes op for use. A corresponding call to \mbox{\hyperlink{setup_8c_aed7fe5a4e6e5a258e27e64fb69fa541d}{lprime\+\_\+clear()}} must be made after finishing with the \mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} to free the memory. \mbox{\Hypertarget{setup_8c_a7cf1c08f00d568ba4102ca31f7befe27}\label{setup_8c_a7cf1c08f00d568ba4102ca31f7befe27}} 
+\index{setup.c@{setup.c}!lprime\_init\_@{lprime\_init\_}}
+\index{lprime\_init\_@{lprime\_init\_}!setup.c@{setup.c}}
+\doxysubsubsection{\texorpdfstring{lprime\_init\_()}{lprime\_init\_()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$ lprime\+\_\+init\+\_\+ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Returns a pointer to an initialized \mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}}. \mbox{\Hypertarget{setup_8c_a84f32d6cbb19cc82e5b19f410c2999b1}\label{setup_8c_a84f32d6cbb19cc82e5b19f410c2999b1}} 
+\index{setup.c@{setup.c}!lprime\_set@{lprime\_set}}
+\index{lprime\_set@{lprime\_set}!setup.c@{setup.c}}
+\doxysubsubsection{\texorpdfstring{lprime\_set()}{lprime\_set()}}
+{\footnotesize\ttfamily void lprime\+\_\+set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structlprime__t}{lprime\+\_\+t}} $\ast$}]{op,  }\item[{fmpz\+\_\+t}]{l,  }\item[{uint}]{type,  }\item[{uint}]{lbound,  }\item[{uint}]{hbound,  }\item[{uint}]{r,  }\item[{uint}]{bkw }\end{DoxyParamCaption})}
+
+Sets op to the lprime l with given type (0\+:unused, 1\+:radical, 2\+:velu), bounds, degree and possibility of backward walking. 

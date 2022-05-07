@@ -1,6 +1,6 @@
 \hypertarget{setup_8h_source}{}\doxysection{setup.\+h}
 \label{setup_8h_source}\index{/home/steaky/git/CRS/src/Exchange/setup.h@{/home/steaky/git/CRS/src/Exchange/setup.h}}
-
+\mbox{\hyperlink{setup_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{1 \textcolor{preprocessor}{\#ifndef \_setup\_H\_}}
 \DoxyCodeLine{2 \textcolor{preprocessor}{\#define \_setup\_H\_}}
@@ -30,38 +30,38 @@
 \DoxyCodeLine{26 \textcolor{comment}{*********************************************/}}
 \DoxyCodeLine{27 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structlprime__t}{lprime\_t}}\{}
 \DoxyCodeLine{28 }
-\DoxyCodeLine{29     fmpz\_t l;}
+\DoxyCodeLine{29     fmpz\_t \mbox{\hyperlink{structlprime__t_aa17d015f0ddd60338becfb556b531598}{l}};}
 \DoxyCodeLine{30 }
-\DoxyCodeLine{31     uint type;      \textcolor{comment}{// Unused (0), Radical (1) or Velu (2)}}
-\DoxyCodeLine{32     uint lbound, hbound;    \textcolor{comment}{// Bounds for the walk}}
-\DoxyCodeLine{33     uint r;         \textcolor{comment}{// Working extension degree}}
-\DoxyCodeLine{34     uint bkw;       \textcolor{comment}{// 1 if backward walking possible}}
-\DoxyCodeLine{35 \} \mbox{\hyperlink{structlprime__t}{lprime\_t}} ;}
+\DoxyCodeLine{31     uint \mbox{\hyperlink{structlprime__t_af8afe1d60ebe1002ef162c01114ddf80}{type}};      \textcolor{comment}{// Unused (0), Radical (1) or Velu (2)}}
+\DoxyCodeLine{32     uint \mbox{\hyperlink{structlprime__t_a8b5ddb0dfce65d0987c1d0017727d887}{lbound}}, \mbox{\hyperlink{structlprime__t_a82f719696001bed8c0e87fade3855c0e}{hbound}};    \textcolor{comment}{// Bounds for the walk}}
+\DoxyCodeLine{33     uint \mbox{\hyperlink{structlprime__t_a1798e1d270c31be2cd8eae2c7fe7dfa7}{r}};            \textcolor{comment}{// Working extension degree}}
+\DoxyCodeLine{34     uint \mbox{\hyperlink{structlprime__t_ab340100e7af947aa182c904dc6fc3d8d}{bkw}};        \textcolor{comment}{// 1 if backward walking possible}}
+\DoxyCodeLine{35 \} \mbox{\hyperlink{setup_8h_aa007f954bf5f5d973687287435b31372}{lprime\_t}} ;}
 \DoxyCodeLine{36 }
 \DoxyCodeLine{37 \textcolor{comment}{/*********************************************}}
 \DoxyCodeLine{38 \textcolor{comment}{   Global configuration structure}}
 \DoxyCodeLine{39 \textcolor{comment}{*********************************************/}}
 \DoxyCodeLine{40 \textcolor{keyword}{typedef} \textcolor{keyword}{struct }\mbox{\hyperlink{structcfg__t}{cfg\_t}}\{}
 \DoxyCodeLine{41 }
-\DoxyCodeLine{43     \mbox{\hyperlink{struct_m_g__curve__t}{MG\_curve\_t}} *E;        \textcolor{comment}{//base curve}}
+\DoxyCodeLine{43     \mbox{\hyperlink{struct_m_g__curve__t}{MG\_curve\_t}} *\mbox{\hyperlink{structcfg__t_acfdd48f1f59a742a5b87a48fb98fa27d}{E}};       \textcolor{comment}{//base curve}}
 \DoxyCodeLine{44 }
-\DoxyCodeLine{46     uint nb\_primes;         \textcolor{comment}{// number of l-\/primes used}}
-\DoxyCodeLine{47     \mbox{\hyperlink{structlprime__t}{lprime\_t}} *lprimes;      \textcolor{comment}{// the l-\/primes ordered in an lprime\_t array}}
+\DoxyCodeLine{46     uint \mbox{\hyperlink{structcfg__t_ab22322dff88814edfd197c00f3d0ee79}{nb\_primes}};        \textcolor{comment}{// number of l-\/primes used}}
+\DoxyCodeLine{47     \mbox{\hyperlink{structlprime__t}{lprime\_t}} *\mbox{\hyperlink{structcfg__t_aab774d276f9f7b56fe7b3587366c12aa}{lprimes}};       \textcolor{comment}{// the l-\/primes ordered in an lprime\_t array}}
 \DoxyCodeLine{48 }
-\DoxyCodeLine{50     fq\_ctx\_t *fields;}
+\DoxyCodeLine{50     fq\_ctx\_t *\mbox{\hyperlink{structcfg__t_a4eaa9ee8edbcbb3e252b38eee40696a4}{fields}};}
 \DoxyCodeLine{51 }
-\DoxyCodeLine{53     uint seed;}
-\DoxyCodeLine{54 \} \mbox{\hyperlink{structcfg__t}{cfg\_t}};}
+\DoxyCodeLine{53     uint \mbox{\hyperlink{structcfg__t_abf6a9c219b21d25fb523cc053ea9238e}{seed}};}
+\DoxyCodeLine{54 \} \mbox{\hyperlink{setup_8h_adbae570c297725d7da542c8383e578ff}{cfg\_t}};}
 \DoxyCodeLine{55 }
 \DoxyCodeLine{56 }
-\DoxyCodeLine{57 \textcolor{keywordtype}{void} lprime\_init(\mbox{\hyperlink{structlprime__t}{lprime\_t}} *);}
-\DoxyCodeLine{58 \mbox{\hyperlink{structlprime__t}{lprime\_t}} *lprime\_init\_();}
-\DoxyCodeLine{59 \textcolor{keywordtype}{void} lprime\_set(\mbox{\hyperlink{structlprime__t}{lprime\_t}} *, fmpz\_t, uint, uint, uint, uint, uint);}
-\DoxyCodeLine{60 \textcolor{keywordtype}{void} lprime\_clear(\mbox{\hyperlink{structlprime__t}{lprime\_t}} *);}
+\DoxyCodeLine{57 \textcolor{keywordtype}{void} \mbox{\hyperlink{setup_8h_a2f865e81dda2898cb49e4c59010664dc}{lprime\_init}}(\mbox{\hyperlink{structlprime__t}{lprime\_t}} *);}
+\DoxyCodeLine{58 \mbox{\hyperlink{structlprime__t}{lprime\_t}} *\mbox{\hyperlink{setup_8h_a7cf1c08f00d568ba4102ca31f7befe27}{lprime\_init\_}}();}
+\DoxyCodeLine{59 \textcolor{keywordtype}{void} \mbox{\hyperlink{setup_8h_aa4e4ba380d9fc1c1801142fc5da5dc94}{lprime\_set}}(\mbox{\hyperlink{structlprime__t}{lprime\_t}} *, fmpz\_t, uint, uint, uint, uint, uint);}
+\DoxyCodeLine{60 \textcolor{keywordtype}{void} \mbox{\hyperlink{setup_8h_a0457fe6ff9ce0b63c16aede92716b931}{lprime\_clear}}(\mbox{\hyperlink{structlprime__t}{lprime\_t}} *);}
 \DoxyCodeLine{61 }
-\DoxyCodeLine{62 \mbox{\hyperlink{structcfg__t}{cfg\_t}} *cfg\_init\_set();}
-\DoxyCodeLine{63 \textcolor{keywordtype}{void} cfg\_print(\mbox{\hyperlink{structcfg__t}{cfg\_t}} *);}
-\DoxyCodeLine{64 \textcolor{keywordtype}{void} cfg\_clear(\mbox{\hyperlink{structcfg__t}{cfg\_t}} *);}
+\DoxyCodeLine{62 \mbox{\hyperlink{structcfg__t}{cfg\_t}} *\mbox{\hyperlink{setup_8h_a45ec5563c3aa83c29c3fa32154ad10d4}{cfg\_init\_set}}();}
+\DoxyCodeLine{63 \textcolor{keywordtype}{void} \mbox{\hyperlink{setup_8h_a64b6730d3fc68aab0b0b80c7cad52388}{cfg\_print}}(\mbox{\hyperlink{structcfg__t}{cfg\_t}} *);}
+\DoxyCodeLine{64 \textcolor{keywordtype}{void} \mbox{\hyperlink{setup_8h_a2da85894f71e7cf8b09c28bfababd820}{cfg\_clear}}(\mbox{\hyperlink{structcfg__t}{cfg\_t}} *);}
 \DoxyCodeLine{65 }
 \DoxyCodeLine{66 \textcolor{preprocessor}{\#endif}}
 \DoxyCodeLine{67 }

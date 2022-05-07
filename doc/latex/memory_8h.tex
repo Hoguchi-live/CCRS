@@ -14,8 +14,7 @@ void \mbox{\hyperlink{memory_8h_aee1d5d67980f8b438c78ab2e77c529ce}{SW\+\_\+curve
 \item 
 void \mbox{\hyperlink{memory_8h_a83e0ae31c880acac9962608c30fb7216}{SW\+\_\+curve\+\_\+set\+\_\+si}} (\mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$, const fq\+\_\+ctx\+\_\+t $\ast$, const slong, const slong)
 \item 
-\mbox{\Hypertarget{memory_8h_ad1592a72ff2fafb459d89b376e52fe19}\label{memory_8h_ad1592a72ff2fafb459d89b376e52fe19}} 
-void {\bfseries SW\+\_\+curve\+\_\+set\+\_\+ui} (\mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$, const fq\+\_\+ctx\+\_\+t $\ast$, const ulong, const ulong)
+void \mbox{\hyperlink{memory_8h_ad1592a72ff2fafb459d89b376e52fe19}{SW\+\_\+curve\+\_\+set\+\_\+ui}} (\mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$, const fq\+\_\+ctx\+\_\+t $\ast$, const ulong, const ulong)
 \item 
 int \mbox{\hyperlink{memory_8h_a5828d247629ff5d29d3eb1e6cc15538d}{SW\+\_\+curve\+\_\+set\+\_\+str}} (\mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$, const fq\+\_\+ctx\+\_\+t $\ast$, const char $\ast$, const char $\ast$, int)
 \item 
@@ -196,7 +195,13 @@ See \mbox{\hyperlink{memory_8c_a91c3bb16fe26f2cf4bc368d6813a3a96}{SW\+\_\+curve\
 \doxysubsubsection{\texorpdfstring{SW\_curve\_set\_str()}{SW\_curve\_set\_str()}}
 {\footnotesize\ttfamily int SW\+\_\+curve\+\_\+set\+\_\+str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$}]{E,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{F,  }\item[{const char $\ast$}]{str\+\_\+a,  }\item[{const char $\ast$}]{str\+\_\+b,  }\item[{int}]{b }\end{DoxyParamCaption})}
 
-See \mbox{\hyperlink{memory_8c_a91c3bb16fe26f2cf4bc368d6813a3a96}{SW\+\_\+curve\+\_\+set()}}. Parameters are given as null-\/terminated strings, in base b. The base b can vary between 2 and 62, inclusive. Returns 0 if the string contain valid inputs and −1 otherwise. \mbox{\Hypertarget{memory_8h_a3e6db86d35bc8a6f1c8a662578de04d0}\label{memory_8h_a3e6db86d35bc8a6f1c8a662578de04d0}} 
+See \mbox{\hyperlink{memory_8c_a91c3bb16fe26f2cf4bc368d6813a3a96}{SW\+\_\+curve\+\_\+set()}}. Parameters are given as null-\/terminated strings, in base b. The base b can vary between 2 and 62, inclusive. Returns 0 if the string contain valid inputs and −1 otherwise. \mbox{\Hypertarget{memory_8h_ad1592a72ff2fafb459d89b376e52fe19}\label{memory_8h_ad1592a72ff2fafb459d89b376e52fe19}} 
+\index{memory.h@{memory.h}!SW\_curve\_set\_ui@{SW\_curve\_set\_ui}}
+\index{SW\_curve\_set\_ui@{SW\_curve\_set\_ui}!memory.h@{memory.h}}
+\doxysubsubsection{\texorpdfstring{SW\_curve\_set\_ui()}{SW\_curve\_set\_ui()}}
+{\footnotesize\ttfamily void SW\+\_\+curve\+\_\+set\+\_\+ui (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$}]{,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{,  }\item[{const}]{ulong,  }\item[{const}]{ulong }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{memory_8h_a3e6db86d35bc8a6f1c8a662578de04d0}\label{memory_8h_a3e6db86d35bc8a6f1c8a662578de04d0}} 
 \index{memory.h@{memory.h}!SW\_point\_clear@{SW\_point\_clear}}
 \index{SW\_point\_clear@{SW\_point\_clear}!memory.h@{memory.h}}
 \doxysubsubsection{\texorpdfstring{SW\_point\_clear()}{SW\_point\_clear()}}

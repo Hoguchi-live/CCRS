@@ -1,11 +1,13 @@
 var searchData=
 [
-  ['tn_5fcurve_5fclear_0',['TN_curve_clear',['../memory_8c.html#aadf1f0bdc974812c094cd3acec7161f0',1,'TN_curve_clear(TN_curve_t *E):&#160;memory.c'],['../memory_8h.html#a50e25ae1fb55f18c4194a2b75f1103e2',1,'TN_curve_clear(TN_curve_t *):&#160;memory.c']]],
-  ['tn_5fcurve_5finit_1',['TN_curve_init',['../memory_8c.html#a68d9d5a4c32d5fa18a23a808c65500c1',1,'TN_curve_init(TN_curve_t *E, fmpz_t l, const fq_ctx_t *F):&#160;memory.c'],['../memory_8h.html#a55186bacf8c7fc179ed86e971ac2120c',1,'TN_curve_init(TN_curve_t *, fmpz_t, const fq_ctx_t *):&#160;memory.c']]],
-  ['tn_5fcurve_5fset_2',['TN_curve_set',['../memory_8c.html#aac501c10909000f4b1b93f192a1b9320',1,'TN_curve_set(TN_curve_t *E, const fq_t b, const fq_t c, fmpz_t l, const fq_ctx_t *F):&#160;memory.c'],['../memory_8h.html#a2eec642fd3ca523fb70ab8f98742078b',1,'TN_curve_set(TN_curve_t *, const fq_t, const fq_t, fmpz_t, const fq_ctx_t *):&#160;memory.c']]],
-  ['tn_5fcurve_5fset_5f_3',['TN_curve_set_',['../memory_8c.html#af34dcc04599f1ce19c5ab813ca72f7ad',1,'TN_curve_set_(TN_curve_t *rop, TN_curve_t *op):&#160;memory.c'],['../memory_8h.html#a6ddc2c361803d79cfa9b2b14966faf66',1,'TN_curve_set_(TN_curve_t *, TN_curve_t *):&#160;memory.c']]],
-  ['tn_5fcurve_5fset_5fsi_4',['TN_curve_set_si',['../memory_8c.html#a8a6c551b4342042391f3fff003b74dde',1,'TN_curve_set_si(TN_curve_t *E, const slong b, const slong c, const slong l, const fq_ctx_t *F):&#160;memory.c'],['../memory_8h.html#a47bee04961056e7a659afe9508e82de4',1,'TN_curve_set_si(TN_curve_t *, const slong, const slong, const slong, const fq_ctx_t *):&#160;memory.c']]],
-  ['tn_5fcurve_5fset_5fstr_5',['TN_curve_set_str',['../memory_8c.html#a5ffa669bfa1e37e0a233ce04ab7f3c92',1,'TN_curve_set_str(TN_curve_t *E, const char *str_b, const char *str_c, const char *str_l, int base, const fq_ctx_t *F):&#160;memory.c'],['../memory_8h.html#a474a5adf749203852a944545d25d38ec',1,'TN_curve_set_str(TN_curve_t *, const char *, const char *, const char *, int, const fq_ctx_t *):&#160;memory.c']]],
-  ['tn_5fcurve_5fset_5fui_6',['TN_curve_set_ui',['../memory_8c.html#a9dee607b3315876b00d1c84d4769b65c',1,'memory.c']]],
-  ['tn_5fcurve_5ft_7',['TN_curve_t',['../struct_t_n__curve__t.html',1,'']]]
+  ['key_5f_5ft_0',['key__t',['../structkey____t.html',1,'key__t'],['../keygen_8h.html#a53de615a5c8c87676ae3759caa0fbc9f',1,'key__t():&#160;keygen.h']]],
+  ['key_5fclear_1',['key_clear',['../keygen_8c.html#a3edf5e19c65fddd562ca39f1b353dd5f',1,'key_clear(key__t *key):&#160;keygen.c'],['../keygen_8h.html#a06b919e12c5abbb0c45fc9734ce38c98',1,'key_clear(key__t *):&#160;keygen.c']]],
+  ['key_5finit_2',['key_init',['../keygen_8c.html#a4893b091dee74552381851ea9dc05f8a',1,'key_init(key__t *key, cfg_t *cfg):&#160;keygen.c'],['../keygen_8h.html#adc27578590de2765378fe7fd5e668bf0',1,'key_init(key__t *, cfg_t *):&#160;keygen.c']]],
+  ['key_5finit_5f_3',['key_init_',['../keygen_8c.html#a0ac018a97b2000dbe2f8ac2ce317ed11',1,'key_init_(cfg_t *cfg):&#160;keygen.c'],['../keygen_8h.html#afc90afe5984e46374f55d1d762ce8968',1,'key_init_(cfg_t *):&#160;keygen.c']]],
+  ['key_5fprint_4',['key_print',['../keygen_8c.html#acfa158377e413be063244a72b39fcf9a',1,'key_print(key__t *key):&#160;keygen.c'],['../keygen_8h.html#ac3ee5e1ec649bc82ba666fadbb2a2b6a',1,'key_print(key__t *):&#160;keygen.c']]],
+  ['keygen_5',['keygen',['../keygen_8h.html#aae9259e901329537e93677ddd39da382',1,'keygen(key__t *, cfg_t *, uint, flint_rand_t):&#160;keygen.c'],['../keygen_8c.html#a5c1f239c79b04352f26afbb405af9876',1,'keygen(key__t *key, cfg_t *cfg, uint seed, flint_rand_t state):&#160;keygen.c']]],
+  ['keygen_2ec_6',['keygen.c',['../keygen_8c.html',1,'']]],
+  ['keygen_2eh_7',['keygen.h',['../keygen_8h.html',1,'']]],
+  ['keygen_5f_8',['keygen_',['../keygen_8c.html#a66d1940ef2355e9e36d1982931aa81b6',1,'keygen_(cfg_t *cfg, uint seed, flint_rand_t state):&#160;keygen.c'],['../keygen_8h.html#a55d644a575fab17256b4f6a2c64ab0a2',1,'keygen_(cfg_t *, uint, flint_rand_t):&#160;keygen.c']]],
+  ['kps_9',['KPS',['../velu_8c.html#a6c4421648ab40f36200a51e7629e8469',1,'KPS(MG_point_t *I, MG_point_t *J, MG_point_t *K, MG_point_t P, uint l, uint b, uint bprime, uint lenK):&#160;velu.c'],['../velu_8h.html#a8ee46c411b5b20595818afde430577b9',1,'KPS(MG_point_t *, MG_point_t *, MG_point_t *, MG_point_t, uint, uint, uint, uint):&#160;velu.c']]]
 ];

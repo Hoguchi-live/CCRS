@@ -71,14 +71,14 @@ $(function() {
   <div class="headertitle"><div class="title">keygen.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef _KEYGEN_H_</span></div>
+<a href="keygen_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef _KEYGEN_H_</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define _KEYGEN_H_</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;time.h&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;setup.h&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="setup_8h.html">setup.h</a>&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;gmp.h&gt;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;flint/fmpz.h&gt;</span></div>
@@ -86,22 +86,33 @@ $(function() {
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="structkey____t.html">   14</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="structkey____t.html">key__t</a> {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    uint nb_primes;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <a class="code hl_struct" href="structlprime__t.html">lprime_t</a> *lprimes;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    fmpz_t *steps;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>} <a class="code hl_struct" href="structkey____t.html">key__t</a>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="structkey____t.html#ac0a034d0420901f2cfc123d4a9a40bb1">   16</a></span>    uint <a class="code hl_variable" href="structkey____t.html#ac0a034d0420901f2cfc123d4a9a40bb1">nb_primes</a>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structkey____t.html#a497a6a18d8d7e68c62ef7a81d43d60d9">   17</a></span>    <a class="code hl_struct" href="structlprime__t.html">lprime_t</a> *<a class="code hl_variable" href="structkey____t.html#a497a6a18d8d7e68c62ef7a81d43d60d9">lprimes</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="structkey____t.html#a29bd930ab84fb76993b3302c65f38063">   18</a></span>    fmpz_t *<a class="code hl_variable" href="structkey____t.html#a29bd930ab84fb76993b3302c65f38063">steps</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="keygen_8h.html#a53de615a5c8c87676ae3759caa0fbc9f">   19</a></span>} <a class="code hl_typedef" href="keygen_8h.html#a53de615a5c8c87676ae3759caa0fbc9f">key__t</a>;</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keywordtype">void</span> key_init(<a class="code hl_struct" href="structkey____t.html">key__t</a> *, <a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><a class="code hl_struct" href="structkey____t.html">key__t</a> *key_init_(<a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keywordtype">void</span> keygen(<a class="code hl_struct" href="structkey____t.html">key__t</a> *, <a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *, uint, flint_rand_t);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><a class="code hl_struct" href="structkey____t.html">key__t</a> *keygen_(<a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *, uint, flint_rand_t);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keywordtype">void</span> key_clear(<a class="code hl_struct" href="structkey____t.html">key__t</a> *);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keywordtype">void</span> <a class="code hl_function" href="keygen_8h.html#adc27578590de2765378fe7fd5e668bf0">key_init</a>(<a class="code hl_struct" href="structkey____t.html">key__t</a> *, <a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><a class="code hl_struct" href="structkey____t.html">key__t</a> *<a class="code hl_function" href="keygen_8h.html#afc90afe5984e46374f55d1d762ce8968">key_init_</a>(<a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keywordtype">void</span> <a class="code hl_function" href="keygen_8h.html#aae9259e901329537e93677ddd39da382">keygen</a>(<a class="code hl_struct" href="structkey____t.html">key__t</a> *, <a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *, uint, flint_rand_t);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><a class="code hl_struct" href="structkey____t.html">key__t</a> *<a class="code hl_function" href="keygen_8h.html#a55d644a575fab17256b4f6a2c64ab0a2">keygen_</a>(<a class="code hl_struct" href="structcfg__t.html">cfg_t</a> *, uint, flint_rand_t);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keywordtype">void</span> <a class="code hl_function" href="keygen_8h.html#a06b919e12c5abbb0c45fc9734ce38c98">key_clear</a>(<a class="code hl_struct" href="structkey____t.html">key__t</a> *);</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keywordtype">void</span> key_print(<a class="code hl_struct" href="structkey____t.html">key__t</a> *);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keywordtype">void</span> <a class="code hl_function" href="keygen_8h.html#ac3ee5e1ec649bc82ba666fadbb2a2b6a">key_print</a>(<a class="code hl_struct" href="structkey____t.html">key__t</a> *);</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="ttc" id="akeygen_8h_html_a06b919e12c5abbb0c45fc9734ce38c98"><div class="ttname"><a href="keygen_8h.html#a06b919e12c5abbb0c45fc9734ce38c98">key_clear</a></div><div class="ttdeci">void key_clear(key__t *)</div><div class="ttdef"><b>Definition:</b> keygen.c:97</div></div>
+<div class="ttc" id="akeygen_8h_html_a53de615a5c8c87676ae3759caa0fbc9f"><div class="ttname"><a href="keygen_8h.html#a53de615a5c8c87676ae3759caa0fbc9f">key__t</a></div><div class="ttdeci">struct key__t key__t</div></div>
+<div class="ttc" id="akeygen_8h_html_a55d644a575fab17256b4f6a2c64ab0a2"><div class="ttname"><a href="keygen_8h.html#a55d644a575fab17256b4f6a2c64ab0a2">keygen_</a></div><div class="ttdeci">key__t * keygen_(cfg_t *, uint, flint_rand_t)</div><div class="ttdef"><b>Definition:</b> keygen.c:87</div></div>
+<div class="ttc" id="akeygen_8h_html_aae9259e901329537e93677ddd39da382"><div class="ttname"><a href="keygen_8h.html#aae9259e901329537e93677ddd39da382">keygen</a></div><div class="ttdeci">void keygen(key__t *, cfg_t *, uint, flint_rand_t)</div><div class="ttdef"><b>Definition:</b> keygen.c:32</div></div>
+<div class="ttc" id="akeygen_8h_html_ac3ee5e1ec649bc82ba666fadbb2a2b6a"><div class="ttname"><a href="keygen_8h.html#ac3ee5e1ec649bc82ba666fadbb2a2b6a">key_print</a></div><div class="ttdeci">void key_print(key__t *)</div><div class="ttdef"><b>Definition:</b> keygen.c:110</div></div>
+<div class="ttc" id="akeygen_8h_html_adc27578590de2765378fe7fd5e668bf0"><div class="ttname"><a href="keygen_8h.html#adc27578590de2765378fe7fd5e668bf0">key_init</a></div><div class="ttdeci">void key_init(key__t *, cfg_t *)</div><div class="ttdef"><b>Definition:</b> keygen.c:7</div></div>
+<div class="ttc" id="akeygen_8h_html_afc90afe5984e46374f55d1d762ce8968"><div class="ttname"><a href="keygen_8h.html#afc90afe5984e46374f55d1d762ce8968">key_init_</a></div><div class="ttdeci">key__t * key_init_(cfg_t *)</div><div class="ttdef"><b>Definition:</b> keygen.c:21</div></div>
+<div class="ttc" id="asetup_8h_html"><div class="ttname"><a href="setup_8h.html">setup.h</a></div></div>
 <div class="ttc" id="astructcfg__t_html"><div class="ttname"><a href="structcfg__t.html">cfg_t</a></div><div class="ttdef"><b>Definition:</b> setup.h:40</div></div>
 <div class="ttc" id="astructkey____t_html"><div class="ttname"><a href="structkey____t.html">key__t</a></div><div class="ttdef"><b>Definition:</b> keygen.h:14</div></div>
+<div class="ttc" id="astructkey____t_html_a29bd930ab84fb76993b3302c65f38063"><div class="ttname"><a href="structkey____t.html#a29bd930ab84fb76993b3302c65f38063">key__t::steps</a></div><div class="ttdeci">fmpz_t * steps</div><div class="ttdef"><b>Definition:</b> keygen.h:18</div></div>
+<div class="ttc" id="astructkey____t_html_a497a6a18d8d7e68c62ef7a81d43d60d9"><div class="ttname"><a href="structkey____t.html#a497a6a18d8d7e68c62ef7a81d43d60d9">key__t::lprimes</a></div><div class="ttdeci">lprime_t * lprimes</div><div class="ttdef"><b>Definition:</b> keygen.h:17</div></div>
+<div class="ttc" id="astructkey____t_html_ac0a034d0420901f2cfc123d4a9a40bb1"><div class="ttname"><a href="structkey____t.html#ac0a034d0420901f2cfc123d4a9a40bb1">key__t::nb_primes</a></div><div class="ttdeci">uint nb_primes</div><div class="ttdef"><b>Definition:</b> keygen.h:16</div></div>
 <div class="ttc" id="astructlprime__t_html"><div class="ttname"><a href="structlprime__t.html">lprime_t</a></div><div class="ttdef"><b>Definition:</b> setup.h:27</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

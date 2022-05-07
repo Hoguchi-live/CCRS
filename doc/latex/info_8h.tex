@@ -1,0 +1,41 @@
+\hypertarget{info_8h}{}\doxysection{/home/steaky/git/\+CRS/src/\+Exchange/info.h File Reference}
+\label{info_8h}\index{/home/steaky/git/CRS/src/Exchange/info.h@{/home/steaky/git/CRS/src/Exchange/info.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Elliptic\+Curves/models.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Exchange/keygen.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Exchange/setup.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$gmp.\+h$>$}\newline
+{\ttfamily \#include $<$flint/fmpz.\+h$>$}\newline
+{\ttfamily \#include $<$flint/fq.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{info_8h_a9eafe051996ce8cae5b82f3424655451}{print\+\_\+verbose\+\_\+walk}} (uint, fmpz\+\_\+t, fmpz\+\_\+t, int, int)
+\item 
+void \mbox{\hyperlink{info_8h_aa407dcbaa63472461b67ded8c9fcb931}{print\+\_\+verbose\+\_\+walk\+\_\+total\+\_\+time}} (int)
+\item 
+void \mbox{\hyperlink{info_8h_adf0df032420e760b3e9075b1fc713484}{print\+\_\+timing\+\_\+json}} (fmpz\+\_\+t, float)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{info_8h_adf0df032420e760b3e9075b1fc713484}\label{info_8h_adf0df032420e760b3e9075b1fc713484}} 
+\index{info.h@{info.h}!print\_timing\_json@{print\_timing\_json}}
+\index{print\_timing\_json@{print\_timing\_json}!info.h@{info.h}}
+\doxysubsubsection{\texorpdfstring{print\_timing\_json()}{print\_timing\_json()}}
+{\footnotesize\ttfamily void print\+\_\+timing\+\_\+json (\begin{DoxyParamCaption}\item[{fmpz\+\_\+t}]{l,  }\item[{float}]{msec }\end{DoxyParamCaption})}
+
+Formats the timing results of the walk in a json-\/friendly output. \mbox{\Hypertarget{info_8h_a9eafe051996ce8cae5b82f3424655451}\label{info_8h_a9eafe051996ce8cae5b82f3424655451}} 
+\index{info.h@{info.h}!print\_verbose\_walk@{print\_verbose\_walk}}
+\index{print\_verbose\_walk@{print\_verbose\_walk}!info.h@{info.h}}
+\doxysubsubsection{\texorpdfstring{print\_verbose\_walk()}{print\_verbose\_walk()}}
+{\footnotesize\ttfamily void print\+\_\+verbose\+\_\+walk (\begin{DoxyParamCaption}\item[{uint}]{type,  }\item[{fmpz\+\_\+t}]{l,  }\item[{fmpz\+\_\+t}]{k,  }\item[{int}]{ec,  }\item[{int}]{msec }\end{DoxyParamCaption})}
+
+Prints information related to a walk on an l-\/isogeny graph. \mbox{\Hypertarget{info_8h_aa407dcbaa63472461b67ded8c9fcb931}\label{info_8h_aa407dcbaa63472461b67ded8c9fcb931}} 
+\index{info.h@{info.h}!print\_verbose\_walk\_total\_time@{print\_verbose\_walk\_total\_time}}
+\index{print\_verbose\_walk\_total\_time@{print\_verbose\_walk\_total\_time}!info.h@{info.h}}
+\doxysubsubsection{\texorpdfstring{print\_verbose\_walk\_total\_time()}{print\_verbose\_walk\_total\_time()}}
+{\footnotesize\ttfamily void print\+\_\+verbose\+\_\+walk\+\_\+total\+\_\+time (\begin{DoxyParamCaption}\item[{int}]{total\+\_\+time }\end{DoxyParamCaption})}
+
+Prints the total walk time in seconds. 

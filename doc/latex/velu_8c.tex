@@ -1,0 +1,50 @@
+\hypertarget{velu_8c}{}\doxysection{/home/steaky/git/\+CRS/src/\+Isogeny/velu.c File Reference}
+\label{velu_8c}\index{/home/steaky/git/CRS/src/Isogeny/velu.c@{/home/steaky/git/CRS/src/Isogeny/velu.c}}
+{\ttfamily \#include \char`\"{}velu.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{velu_8c_a08a2668e2ea44982f7e439f4f80eb47b}{\+\_\+init\+\_\+lengths}} (uint $\ast$b, uint $\ast$bprime, uint $\ast$lenK, uint l)
+\item 
+void \mbox{\hyperlink{velu_8c_a6c4421648ab40f36200a51e7629e8469}{KPS}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$I, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$J, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$K, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} P, uint l, uint b, uint bprime, uint lenK)
+\item 
+void \mbox{\hyperlink{velu_8c_ae7f0e11bc660fa507d1b78f63cabfe61}{x\+ISOG}} (fq\+\_\+t $\ast$A2, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} P, uint l, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} I\mbox{[}$\,$\mbox{]}, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} J\mbox{[}$\,$\mbox{]}, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} K\mbox{[}$\,$\mbox{]}, uint b, uint bprime, uint lenK)
+\item 
+void \mbox{\hyperlink{velu_8c_acf63245ee05301b35cbc84c7f502c562}{\+\_\+\+F0p\+F1p\+F2\+\_\+\+F0m\+F1p\+F2}} (fq\+\_\+poly\+\_\+t $\ast$rop1, fq\+\_\+poly\+\_\+t $\ast$rop2, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} P, const fq\+\_\+ctx\+\_\+t ctx)
+\item 
+void \mbox{\hyperlink{velu_8c_a4a5c37997e4dda6dba369460cf198720}{isogeny\+\_\+from\+\_\+torsion}} (fq\+\_\+t $\ast$A2, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} P, uint l)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{velu_8c_acf63245ee05301b35cbc84c7f502c562}\label{velu_8c_acf63245ee05301b35cbc84c7f502c562}} 
+\index{velu.c@{velu.c}!\_F0pF1pF2\_F0mF1pF2@{\_F0pF1pF2\_F0mF1pF2}}
+\index{\_F0pF1pF2\_F0mF1pF2@{\_F0pF1pF2\_F0mF1pF2}!velu.c@{velu.c}}
+\doxysubsubsection{\texorpdfstring{\_F0pF1pF2\_F0mF1pF2()}{\_F0pF1pF2\_F0mF1pF2()}}
+{\footnotesize\ttfamily void \+\_\+\+F0p\+F1p\+F2\+\_\+\+F0m\+F1p\+F2 (\begin{DoxyParamCaption}\item[{fq\+\_\+poly\+\_\+t $\ast$}]{rop1,  }\item[{fq\+\_\+poly\+\_\+t $\ast$}]{rop2,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{P,  }\item[{const fq\+\_\+ctx\+\_\+t}]{ctx }\end{DoxyParamCaption})}
+
+Auxiliary function for x\+ISOG. The two polynomials rop1 and rop2 are computed concurrently to remove unnecessary duplicate computations. \mbox{\Hypertarget{velu_8c_a08a2668e2ea44982f7e439f4f80eb47b}\label{velu_8c_a08a2668e2ea44982f7e439f4f80eb47b}} 
+\index{velu.c@{velu.c}!\_init\_lengths@{\_init\_lengths}}
+\index{\_init\_lengths@{\_init\_lengths}!velu.c@{velu.c}}
+\doxysubsubsection{\texorpdfstring{\_init\_lengths()}{\_init\_lengths()}}
+{\footnotesize\ttfamily void \+\_\+init\+\_\+lengths (\begin{DoxyParamCaption}\item[{uint $\ast$}]{b,  }\item[{uint $\ast$}]{bprime,  }\item[{uint $\ast$}]{lenK,  }\item[{uint}]{l }\end{DoxyParamCaption})}
+
+Computes the lengths b, b\textquotesingle{}, lenK of the three KPS arrays. \mbox{\Hypertarget{velu_8c_a4a5c37997e4dda6dba369460cf198720}\label{velu_8c_a4a5c37997e4dda6dba369460cf198720}} 
+\index{velu.c@{velu.c}!isogeny\_from\_torsion@{isogeny\_from\_torsion}}
+\index{isogeny\_from\_torsion@{isogeny\_from\_torsion}!velu.c@{velu.c}}
+\doxysubsubsection{\texorpdfstring{isogeny\_from\_torsion()}{isogeny\_from\_torsion()}}
+{\footnotesize\ttfamily void isogeny\+\_\+from\+\_\+torsion (\begin{DoxyParamCaption}\item[{fq\+\_\+t $\ast$}]{A2,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{P,  }\item[{uint}]{l }\end{DoxyParamCaption})}
+
+Wrapper for x\+ISOG and KPS. Computes Vélu Step curve parameter A2 from the l-\/torsion point P. A2 must be initialized. \mbox{\Hypertarget{velu_8c_a6c4421648ab40f36200a51e7629e8469}\label{velu_8c_a6c4421648ab40f36200a51e7629e8469}} 
+\index{velu.c@{velu.c}!KPS@{KPS}}
+\index{KPS@{KPS}!velu.c@{velu.c}}
+\doxysubsubsection{\texorpdfstring{KPS()}{KPS()}}
+{\footnotesize\ttfamily void KPS (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{I,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{J,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{K,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{P,  }\item[{uint}]{l,  }\item[{uint}]{b,  }\item[{uint}]{bprime,  }\item[{uint}]{lenK }\end{DoxyParamCaption})}
+
+Fills the arrays I,J,K with the multiples of P required by x\+ISOG \mbox{\Hypertarget{velu_8c_ae7f0e11bc660fa507d1b78f63cabfe61}\label{velu_8c_ae7f0e11bc660fa507d1b78f63cabfe61}} 
+\index{velu.c@{velu.c}!xISOG@{xISOG}}
+\index{xISOG@{xISOG}!velu.c@{velu.c}}
+\doxysubsubsection{\texorpdfstring{xISOG()}{xISOG()}}
+{\footnotesize\ttfamily void x\+ISOG (\begin{DoxyParamCaption}\item[{fq\+\_\+t $\ast$}]{A2,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{P,  }\item[{uint}]{l,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{I\mbox{[}$\,$\mbox{]},  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{J\mbox{[}$\,$\mbox{]},  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{K\mbox{[}$\,$\mbox{]},  }\item[{uint}]{b,  }\item[{uint}]{bprime,  }\item[{uint}]{lenK }\end{DoxyParamCaption})}
+
+Sets A2 to the geometry parameter of a degree l \mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} isogenous to the base curve. I,J,K must be pre-\/computed via KPS. A2 must be initialized. NORMALIZE

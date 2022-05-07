@@ -1,0 +1,30 @@
+\hypertarget{dh_8h}{}\doxysection{/home/steaky/git/\+CRS/src/\+Exchange/dh.h File Reference}
+\label{dh_8h}\index{/home/steaky/git/CRS/src/Exchange/dh.h@{/home/steaky/git/CRS/src/Exchange/dh.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Elliptic\+Curves/arithmetic.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Elliptic\+Curves/models.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Elliptic\+Curves/memory.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Isogeny/walk.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Exchange/keygen.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Exchange/setup.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../../src/\+Exchange/info.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$gmp.\+h$>$}\newline
+{\ttfamily \#include $<$flint/fmpz.\+h$>$}\newline
+{\ttfamily \#include $<$flint/fq.\+h$>$}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{dh_8h_a584de185ef44d7fdff8216d7712358c0}{apply\+\_\+key}} (\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$, \mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$, \mbox{\hyperlink{structkey____t}{key\+\_\+\+\_\+t}} $\ast$, \mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{dh_8h_a584de185ef44d7fdff8216d7712358c0}\label{dh_8h_a584de185ef44d7fdff8216d7712358c0}} 
+\index{dh.h@{dh.h}!apply\_key@{apply\_key}}
+\index{apply\_key@{apply\_key}!dh.h@{dh.h}}
+\doxysubsubsection{\texorpdfstring{apply\_key()}{apply\_key()}}
+{\footnotesize\ttfamily int apply\+\_\+key (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{op,  }\item[{\mbox{\hyperlink{structkey____t}{key\+\_\+\+\_\+t}} $\ast$}]{key,  }\item[{\mbox{\hyperlink{structcfg__t}{cfg\+\_\+t}} $\ast$}]{cfg }\end{DoxyParamCaption})}
+
+Walk in the isogeny graph starting from op following the path given by the key. The curve rop is set to the endpoint of this walk. rop must be initialized. The l-\/primes are ordered according to their working extension. That way we just change the extension degree when needed. Returns 1 if successful and 0 if an error occured during a walk. 

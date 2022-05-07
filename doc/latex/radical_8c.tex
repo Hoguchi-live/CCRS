@@ -1,0 +1,50 @@
+\hypertarget{radical_8c}{}\doxysection{/home/steaky/git/\+CRS/src/\+Isogeny/radical.c File Reference}
+\label{radical_8c}\index{/home/steaky/git/CRS/src/Isogeny/radical.c@{/home/steaky/git/CRS/src/Isogeny/radical.c}}
+{\ttfamily \#include \char`\"{}radical.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{radical_8c_a9d80e064710751349e50de5ed78472a9}{fq\+\_\+nth\+\_\+root\+\_\+trick}} (fq\+\_\+t rop, fq\+\_\+t op, fmpz\+\_\+t l, const fq\+\_\+ctx\+\_\+t F)
+\item 
+void \mbox{\hyperlink{radical_8c_ab90b26fac989284288d235295587ccf2}{fq\+\_\+nth\+\_\+root\+\_\+trick\+\_\+ui}} (fq\+\_\+t rop, fq\+\_\+t op, slong l, const fq\+\_\+ctx\+\_\+t F)
+\item 
+void \mbox{\hyperlink{radical_8c_a7f1ee096e38e260db3be5deb2b7c96ce}{radical\+\_\+isogeny\+\_\+3}} (\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$rop, \mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$op, fmpz\+\_\+t k)
+\item 
+void \mbox{\hyperlink{radical_8c_af588ed408ab79d83d9bc894bceed810d}{radical\+\_\+isogeny\+\_\+5}} (\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$rop, \mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$op, fmpz\+\_\+t k)
+\item 
+void \mbox{\hyperlink{radical_8c_a59a954f95dcc71adf257bf76e30679d0}{radical\+\_\+isogeny\+\_\+7}} (\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$rop, \mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$op, fmpz\+\_\+t k)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{radical_8c_a9d80e064710751349e50de5ed78472a9}\label{radical_8c_a9d80e064710751349e50de5ed78472a9}} 
+\index{radical.c@{radical.c}!fq\_nth\_root\_trick@{fq\_nth\_root\_trick}}
+\index{fq\_nth\_root\_trick@{fq\_nth\_root\_trick}!radical.c@{radical.c}}
+\doxysubsubsection{\texorpdfstring{fq\_nth\_root\_trick()}{fq\_nth\_root\_trick()}}
+{\footnotesize\ttfamily void fq\+\_\+nth\+\_\+root\+\_\+trick (\begin{DoxyParamCaption}\item[{fq\+\_\+t}]{rop,  }\item[{fq\+\_\+t}]{op,  }\item[{fmpz\+\_\+t}]{l,  }\item[{const fq\+\_\+ctx\+\_\+t}]{F }\end{DoxyParamCaption})}
+
+Extract n-\/th root of op using the following trick\+: we always have op $^\wedge$ (p + 1) = op $^\wedge$ 2 and assuming p + 1 = 2$\ast$l$\ast$k for some natural number k, we get (op $^\wedge$ e)$^\wedge$l = +/-\/ op for e = (p + 1) / (2 $\ast$ l). We get rid of the +/-\/ sign by testing via fast exponentiation. A NAS condition for this to work is p + 1 = 0 \% 2 $\ast$ l. This is about 1000 times faster than bruteforcing roots of X$^\wedge$l -\/ op. \mbox{\Hypertarget{radical_8c_ab90b26fac989284288d235295587ccf2}\label{radical_8c_ab90b26fac989284288d235295587ccf2}} 
+\index{radical.c@{radical.c}!fq\_nth\_root\_trick\_ui@{fq\_nth\_root\_trick\_ui}}
+\index{fq\_nth\_root\_trick\_ui@{fq\_nth\_root\_trick\_ui}!radical.c@{radical.c}}
+\doxysubsubsection{\texorpdfstring{fq\_nth\_root\_trick\_ui()}{fq\_nth\_root\_trick\_ui()}}
+{\footnotesize\ttfamily void fq\+\_\+nth\+\_\+root\+\_\+trick\+\_\+ui (\begin{DoxyParamCaption}\item[{fq\+\_\+t}]{rop,  }\item[{fq\+\_\+t}]{op,  }\item[{slong}]{l,  }\item[{const fq\+\_\+ctx\+\_\+t}]{F }\end{DoxyParamCaption})}
+
+Unsigned int wrapper for fq\+\_\+nth\+\_\+root\+\_\+trick \mbox{\Hypertarget{radical_8c_a7f1ee096e38e260db3be5deb2b7c96ce}\label{radical_8c_a7f1ee096e38e260db3be5deb2b7c96ce}} 
+\index{radical.c@{radical.c}!radical\_isogeny\_3@{radical\_isogeny\_3}}
+\index{radical\_isogeny\_3@{radical\_isogeny\_3}!radical.c@{radical.c}}
+\doxysubsubsection{\texorpdfstring{radical\_isogeny\_3()}{radical\_isogeny\_3()}}
+{\footnotesize\ttfamily void radical\+\_\+isogeny\+\_\+3 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{op,  }\item[{fmpz\+\_\+t}]{k }\end{DoxyParamCaption})}
+
+Sets rop as the target curve of k steps starting from op in the 3-\/isogeny graph \mbox{\Hypertarget{radical_8c_af588ed408ab79d83d9bc894bceed810d}\label{radical_8c_af588ed408ab79d83d9bc894bceed810d}} 
+\index{radical.c@{radical.c}!radical\_isogeny\_5@{radical\_isogeny\_5}}
+\index{radical\_isogeny\_5@{radical\_isogeny\_5}!radical.c@{radical.c}}
+\doxysubsubsection{\texorpdfstring{radical\_isogeny\_5()}{radical\_isogeny\_5()}}
+{\footnotesize\ttfamily void radical\+\_\+isogeny\+\_\+5 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{op,  }\item[{fmpz\+\_\+t}]{k }\end{DoxyParamCaption})}
+
+Sets rop as the target curve of k steps starting from op in the 5-\/isogeny graph \mbox{\Hypertarget{radical_8c_a59a954f95dcc71adf257bf76e30679d0}\label{radical_8c_a59a954f95dcc71adf257bf76e30679d0}} 
+\index{radical.c@{radical.c}!radical\_isogeny\_7@{radical\_isogeny\_7}}
+\index{radical\_isogeny\_7@{radical\_isogeny\_7}!radical.c@{radical.c}}
+\doxysubsubsection{\texorpdfstring{radical\_isogeny\_7()}{radical\_isogeny\_7()}}
+{\footnotesize\ttfamily void radical\+\_\+isogeny\+\_\+7 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{op,  }\item[{fmpz\+\_\+t}]{k }\end{DoxyParamCaption})}
+
+Sets rop as the target curve of k steps starting from op in the 7-\/isogeny graph 

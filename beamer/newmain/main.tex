@@ -9,7 +9,7 @@
 
 \title{Implémentation du protocole CRS d'échange de clefs à base d'isogénies }
 \author{Hugo Nartz, Cl\'ement Jacquot}
-\date{16 F\'evrier 2022}
+\date{16 f\'evrier 2022}
 
 %Page number
 \expandafter\def\expandafter\insertshorttitle\expandafter{%
@@ -100,7 +100,7 @@
 		\includegraphics[scale=0.2]{../figs/graphs}
 	\end{center}
 	\begin{center}
-	Un $\mathnormal{l}$-pas puis un $\mathnormal{l}'$-pas $\iff$ Un $\mathnormal{l}$-pas puis un $\mathnormal{l}'$-pas
+	Un $\mathnormal{l}$-pas puis un $\mathnormal{l}'$-pas $\iff$ Un $\mathnormal{l}'$-pas puis un $\mathnormal{l}$-pas
 		\includegraphics[scale=0.2]{../figs/comm}
 	\end{center}
 \end{frame}
@@ -259,7 +259,7 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 		$I = \lbrace 8, 24, 40, 56, 72, 88 \rbrace $\\
 		$J = \lbrace1, 3, 5, 7 \rbrace $\\
 		$K = \lbrace 97, 99 \rbrace $\\
-		
+
 		\[\begin{array}{rcccl}
 			I\pm J =& \{8\}\pm J & \cup & \{24\}\pm J & \cup \ldots \\
 			=&  {\scriptstyle \lbrace 1, 3, 5, 7, 9, 11, 13, 15\rbrace } & \cup &  {\scriptstyle \lbrace 17, 19, 21, 23, 25, 27, 29, 31\rbrace } & \cup \ldots
@@ -347,7 +347,7 @@ $\begin{array}{l}P0 = \lfloor k/2^i\rfloor P \\ P1 = \lfloor k/2^i + 1\rfloor P\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Resultats
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Optimisation}
+\begin{frame}{Optimisation des bornes sur les pas}
 Optimiseur: \textit{GEKKO}.
 \begin{table}[h]
 \begin{tabular}{llllllll}

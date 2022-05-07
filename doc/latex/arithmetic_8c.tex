@@ -1,0 +1,240 @@
+\hypertarget{arithmetic_8c}{}\doxysection{/home/steaky/git/\+CRS/src/\+Elliptic\+Curves/arithmetic.c File Reference}
+\label{arithmetic_8c}\index{/home/steaky/git/CRS/src/EllipticCurves/arithmetic.c@{/home/steaky/git/CRS/src/EllipticCurves/arithmetic.c}}
+{\ttfamily \#include \char`\"{}arithmetic.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a6ab55083c4ca235150c4c0ca7e76fcfa}{MG\+\_\+curve\+\_\+update\+\_\+field}} (\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$rop, \mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$op, const fq\+\_\+ctx\+\_\+t $\ast$L)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a6297becadef6335d2c921a4fb7381e38}{MG\+\_\+curve\+\_\+update\+\_\+field\+\_\+}} (\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$op, const fq\+\_\+ctx\+\_\+t $\ast$L)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a424f5553815928738061fc470252bfb3}{SW\+\_\+j\+\_\+invariant}} (fq\+\_\+t $\ast$output, \mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$E)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a1aece0df5cb61de6638e8986451432cc}{MG\+\_\+j\+\_\+invariant}} (fq\+\_\+t $\ast$output, \mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$E)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a9fd021c2ba11448e7a1f13313538d4f0}{TN\+\_\+j\+\_\+invariant}} (fq\+\_\+t $\ast$rop, \mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$E)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a50df4662ad8b54542e6fef3a0c813f09}{SW\+\_\+point\+\_\+isinfinity}} (bool $\ast$output, \mbox{\hyperlink{struct_s_w__point__t}{SW\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a392ba5f2b6d450017d7227e7154f353f}{MG\+\_\+point\+\_\+isinfinity}} (bool $\ast$output, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+int \mbox{\hyperlink{arithmetic_8c_a9976585f10582500816bcf7483a1de99}{SW\+\_\+point\+\_\+isvalid}} (bool $\ast$output, \mbox{\hyperlink{struct_s_w__point__t}{SW\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+int \mbox{\hyperlink{arithmetic_8c_aa6d89d0400aa344c67f774431645cd15}{MG\+\_\+point\+\_\+isvalid}} (bool $\ast$output, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a69f771e26745e4f36d1b7808bd91f338}{MG\+\_\+point\+\_\+isinfty}} (bool $\ast$output, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+bool \mbox{\hyperlink{arithmetic_8c_a7c94035e19d7a68528f4064e386e6c96}{MG\+\_\+point\+\_\+isinfty\+\_\+}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a71162aa7daeedd7e139ea00c94bdb0bd}{MG\+\_\+point\+\_\+normalize}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a434523f4495e815fe6117ffcc17e21c6}{SW\+\_\+point\+\_\+rand\+\_\+ninfty}} (\mbox{\hyperlink{struct_s_w__point__t}{SW\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a30854d1b1f021e313b704d67e5bcf356}{MG\+\_\+point\+\_\+rand\+\_\+ninfty}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P, flint\+\_\+rand\+\_\+t state)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a801252439eee791f5c85770ef3ea5ef2}{MG\+\_\+point\+\_\+rand\+\_\+ninfty\+\_\+nsquare}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P, flint\+\_\+rand\+\_\+t state)
+\item 
+int \mbox{\hyperlink{arithmetic_8c_a0a5fb404546d6648001dda3cb01671e0}{MG\+\_\+curve\+\_\+normalize}} (\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$E)
+\item 
+int \mbox{\hyperlink{arithmetic_8c_a0b4b30ec526676a9ee36a3ecc54fbb6f}{MG\+\_\+rec\+\_\+y}} (fq\+\_\+t rop, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a4ae8c11e0bed77609c5533eceb5bad6f}{MG\+\_\+x\+ADD}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$output, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} P, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} Q, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} D)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a8b88d5a40605b890e3817a882ac05962}{MG\+\_\+x\+DBL}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$output, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} P)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a8d452671372aa958cc4680cbaf907524}{MG\+\_\+x\+DBL\+\_\+const}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$output, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} P, const fq\+\_\+t dbl\+\_\+const)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a46959af32877a9ec2ffb2997ae3d5b6b}{MG\+\_\+ladder\+\_\+iter\+\_\+}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$rop, fmpz\+\_\+t k, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$op)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a0710b2d95e4a83f3e23686f6ace1aa56}{MG\+\_\+curve\+\_\+trace}} (fmpz\+\_\+t rop)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_af86ff6cf212821382343e2e3593bff86}{MG\+\_\+curve\+\_\+card\+\_\+base}} (fmpz\+\_\+t rop, \mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$E)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_a7d57af9ac3a346a6513f612f9c318365}{MG\+\_\+curve\+\_\+card\+\_\+ext}} (fmpz\+\_\+t rop, \mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$E, fmpz\+\_\+t r)
+\item 
+int \mbox{\hyperlink{arithmetic_8c_abc76e6669f3c11eb72b6cf0f36cbbd9a}{MG\+\_\+curve\+\_\+rand\+\_\+torsion}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P, fmpz\+\_\+t l, fmpz\+\_\+t card)
+\item 
+int \mbox{\hyperlink{arithmetic_8c_ad34085aca3f42cdb53e384abbccc39c4}{MG\+\_\+curve\+\_\+rand\+\_\+torsion\+\_\+}} (\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P, fmpz\+\_\+t l, fmpz\+\_\+t card)
+\item 
+void \mbox{\hyperlink{arithmetic_8c_addd661bb10ba94a46a98d68df77bd29b}{MG\+\_\+get\+\_\+\+TN}} (\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$rop, \mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$op, \mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$P, fmpz\+\_\+t l)
+\item 
+int \mbox{\hyperlink{arithmetic_8c_a99dda675136abbe601cf69f478c0a244}{TN\+\_\+get\+\_\+\+MG}} (\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$rop, \mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$op)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{arithmetic_8c_af86ff6cf212821382343e2e3593bff86}\label{arithmetic_8c_af86ff6cf212821382343e2e3593bff86}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_card\_base@{MG\_curve\_card\_base}}
+\index{MG\_curve\_card\_base@{MG\_curve\_card\_base}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_card\_base()}{MG\_curve\_card\_base()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+card\+\_\+base (\begin{DoxyParamCaption}\item[{fmpz\+\_\+t}]{rop,  }\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+Sets rop to the cardinal of E(\+F\+\_\+p) where p is the caracteristic of the base field. rop must be initialized. \mbox{\Hypertarget{arithmetic_8c_a7d57af9ac3a346a6513f612f9c318365}\label{arithmetic_8c_a7d57af9ac3a346a6513f612f9c318365}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_card\_ext@{MG\_curve\_card\_ext}}
+\index{MG\_curve\_card\_ext@{MG\_curve\_card\_ext}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_card\_ext()}{MG\_curve\_card\_ext()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+card\+\_\+ext (\begin{DoxyParamCaption}\item[{fmpz\+\_\+t}]{rop,  }\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{E,  }\item[{fmpz\+\_\+t}]{r }\end{DoxyParamCaption})}
+
+Sets rop to the cardinal of E(\+F\+\_\+p$^\wedge$r) where p is the caracteristic of the base field. rop must be initialized. r must be positive and greater than 1. ref\+: \href{https://perso.univ-rennes1.fr/christophe.ritzenthaler/cours/elliptic-curve-course.pdf}{\texttt{ https\+://perso.\+univ-\/rennes1.\+fr/christophe.\+ritzenthaler/cours/elliptic-\/curve-\/course.\+pdf}} page 11. TODO\+: Work with q instead of p, problem with quad twist? Remove E in parameters, p is constant. r should be an int. \mbox{\Hypertarget{arithmetic_8c_a0a5fb404546d6648001dda3cb01671e0}\label{arithmetic_8c_a0a5fb404546d6648001dda3cb01671e0}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_normalize@{MG\_curve\_normalize}}
+\index{MG\_curve\_normalize@{MG\_curve\_normalize}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_normalize()}{MG\_curve\_normalize()}}
+{\footnotesize\ttfamily int MG\+\_\+curve\+\_\+normalize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+Try to set B to 1, return 1 if successful, 0 otherwise. This is possible if and only if B admits a square root in the base field. \mbox{\Hypertarget{arithmetic_8c_abc76e6669f3c11eb72b6cf0f36cbbd9a}\label{arithmetic_8c_abc76e6669f3c11eb72b6cf0f36cbbd9a}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_rand\_torsion@{MG\_curve\_rand\_torsion}}
+\index{MG\_curve\_rand\_torsion@{MG\_curve\_rand\_torsion}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_rand\_torsion()}{MG\_curve\_rand\_torsion()}}
+{\footnotesize\ttfamily int MG\+\_\+curve\+\_\+rand\+\_\+torsion (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P,  }\item[{fmpz\+\_\+t}]{l,  }\item[{fmpz\+\_\+t}]{card }\end{DoxyParamCaption})}
+
+Sets P to a random l-\/torsion point on the underlying curve and returns 1. The point P will be strictly in E(\+F\+\_\+q$^\wedge$r).
+
+not implemented yet\+: If r \% 2 == 0, the x-\/coordinate of P will be in F\+\_\+q$^\wedge$r//2 (x-\/only arithmetics). Variable card holds the cardinal of E(\+F\+\_\+q) and can be computed using MG\+\_\+curve\+\_\+card. TODO\+: card will be hardcoded and held in a struct. Returns 0 in case of failure (no such point on E). \mbox{\Hypertarget{arithmetic_8c_ad34085aca3f42cdb53e384abbccc39c4}\label{arithmetic_8c_ad34085aca3f42cdb53e384abbccc39c4}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_rand\_torsion\_@{MG\_curve\_rand\_torsion\_}}
+\index{MG\_curve\_rand\_torsion\_@{MG\_curve\_rand\_torsion\_}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_rand\_torsion\_()}{MG\_curve\_rand\_torsion\_()}}
+{\footnotesize\ttfamily int MG\+\_\+curve\+\_\+rand\+\_\+torsion\+\_\+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P,  }\item[{fmpz\+\_\+t}]{l,  }\item[{fmpz\+\_\+t}]{card }\end{DoxyParamCaption})}
+
+WIP\+: only for degree two reduction Sets P to a random l-\/torsion point on the underlying curve and returns 1. The point P will be strictly in E(\+F\+\_\+q$^\wedge$r).
+
+not implemented yet\+: If r \% 2 == 0, the x-\/coordinate of P will be in F\+\_\+q$^\wedge$r//2 (x-\/only arithmetics). Variable card holds the cardinal of E(\+F\+\_\+q) and can be computed using MG\+\_\+curve\+\_\+card. TODO\+: card will be hardcoded and held in a struct. Returns 0 in case of failure (no such point on E). \mbox{\Hypertarget{arithmetic_8c_a0710b2d95e4a83f3e23686f6ace1aa56}\label{arithmetic_8c_a0710b2d95e4a83f3e23686f6ace1aa56}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_trace@{MG\_curve\_trace}}
+\index{MG\_curve\_trace@{MG\_curve\_trace}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_trace()}{MG\_curve\_trace()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+trace (\begin{DoxyParamCaption}\item[{fmpz\+\_\+t}]{rop }\end{DoxyParamCaption})}
+
+Sets rop to the frobenius\textquotesingle{} trace for the CRS base curve. rop must be initialized. One should call PARI to turn this into a real function. \mbox{\Hypertarget{arithmetic_8c_a6ab55083c4ca235150c4c0ca7e76fcfa}\label{arithmetic_8c_a6ab55083c4ca235150c4c0ca7e76fcfa}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_update\_field@{MG\_curve\_update\_field}}
+\index{MG\_curve\_update\_field@{MG\_curve\_update\_field}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_update\_field()}{MG\_curve\_update\_field()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+update\+\_\+field (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{op,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{L }\end{DoxyParamCaption})}
+
+Embed elliptic curve E\textquotesingle{}s base field in F\+\_\+p$^\wedge$r if possible rop must be initialized over L. \mbox{\Hypertarget{arithmetic_8c_a6297becadef6335d2c921a4fb7381e38}\label{arithmetic_8c_a6297becadef6335d2c921a4fb7381e38}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_curve\_update\_field\_@{MG\_curve\_update\_field\_}}
+\index{MG\_curve\_update\_field\_@{MG\_curve\_update\_field\_}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_curve\_update\_field\_()}{MG\_curve\_update\_field\_()}}
+{\footnotesize\ttfamily void MG\+\_\+curve\+\_\+update\+\_\+field\+\_\+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{op,  }\item[{const fq\+\_\+ctx\+\_\+t $\ast$}]{L }\end{DoxyParamCaption})}
+
+Inline version of the function MG\+\_\+curve\+\_\+update\+\_\+field. \mbox{\Hypertarget{arithmetic_8c_addd661bb10ba94a46a98d68df77bd29b}\label{arithmetic_8c_addd661bb10ba94a46a98d68df77bd29b}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_get\_TN@{MG\_get\_TN}}
+\index{MG\_get\_TN@{MG\_get\_TN}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_get\_TN()}{MG\_get\_TN()}}
+{\footnotesize\ttfamily void MG\+\_\+get\+\_\+\+TN (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{op,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P,  }\item[{fmpz\+\_\+t}]{l }\end{DoxyParamCaption})}
+
+Sets rop to the Tate-\/normal form of op relative to point P rop must be initialized. TODO\+: Check torsion \mbox{\Hypertarget{arithmetic_8c_a1aece0df5cb61de6638e8986451432cc}\label{arithmetic_8c_a1aece0df5cb61de6638e8986451432cc}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_j\_invariant@{MG\_j\_invariant}}
+\index{MG\_j\_invariant@{MG\_j\_invariant}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_j\_invariant()}{MG\_j\_invariant()}}
+{\footnotesize\ttfamily void MG\+\_\+j\+\_\+invariant (\begin{DoxyParamCaption}\item[{fq\+\_\+t $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+Sets output to the j-\/invariant of Montgomery curve E. \mbox{\Hypertarget{arithmetic_8c_a46959af32877a9ec2ffb2997ae3d5b6b}\label{arithmetic_8c_a46959af32877a9ec2ffb2997ae3d5b6b}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_ladder\_iter\_@{MG\_ladder\_iter\_}}
+\index{MG\_ladder\_iter\_@{MG\_ladder\_iter\_}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_ladder\_iter\_()}{MG\_ladder\_iter\_()}}
+{\footnotesize\ttfamily void MG\+\_\+ladder\+\_\+iter\+\_\+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{rop,  }\item[{fmpz\+\_\+t}]{k,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{op }\end{DoxyParamCaption})}
+
+Sets rop to the k times $\ast$op using the montgomery ladder double-\/and-\/add type procedure. rop must be initialized. \mbox{\Hypertarget{arithmetic_8c_a392ba5f2b6d450017d7227e7154f353f}\label{arithmetic_8c_a392ba5f2b6d450017d7227e7154f353f}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_point\_isinfinity@{MG\_point\_isinfinity}}
+\index{MG\_point\_isinfinity@{MG\_point\_isinfinity}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_point\_isinfinity()}{MG\_point\_isinfinity()}}
+{\footnotesize\ttfamily void MG\+\_\+point\+\_\+isinfinity (\begin{DoxyParamCaption}\item[{bool $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Sets output to 1 if point P=(1, 0) and 0 otherwise. Warning\+: this does not check whether P is a valid projective point or not. \mbox{\Hypertarget{arithmetic_8c_a69f771e26745e4f36d1b7808bd91f338}\label{arithmetic_8c_a69f771e26745e4f36d1b7808bd91f338}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_point\_isinfty@{MG\_point\_isinfty}}
+\index{MG\_point\_isinfty@{MG\_point\_isinfty}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_point\_isinfty()}{MG\_point\_isinfty()}}
+{\footnotesize\ttfamily void MG\+\_\+point\+\_\+isinfty (\begin{DoxyParamCaption}\item[{bool $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Sets output to 1 if P is the point at infinity, 0 otherwise. \mbox{\Hypertarget{arithmetic_8c_a7c94035e19d7a68528f4064e386e6c96}\label{arithmetic_8c_a7c94035e19d7a68528f4064e386e6c96}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_point\_isinfty\_@{MG\_point\_isinfty\_}}
+\index{MG\_point\_isinfty\_@{MG\_point\_isinfty\_}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_point\_isinfty\_()}{MG\_point\_isinfty\_()}}
+{\footnotesize\ttfamily bool MG\+\_\+point\+\_\+isinfty\+\_\+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Returns 1 if P is the point at infinity, 0 otherwise. \mbox{\Hypertarget{arithmetic_8c_aa6d89d0400aa344c67f774431645cd15}\label{arithmetic_8c_aa6d89d0400aa344c67f774431645cd15}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_point\_isvalid@{MG\_point\_isvalid}}
+\index{MG\_point\_isvalid@{MG\_point\_isvalid}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_point\_isvalid()}{MG\_point\_isvalid()}}
+{\footnotesize\ttfamily int MG\+\_\+point\+\_\+isvalid (\begin{DoxyParamCaption}\item[{bool $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+TODO\+: try by square root to determine if point is in predefined extension. Returns -\/1 if P is not a projective point. If it is, sets output to 1 if point P belongs to the underlying curve and 0 otherwise. Finally returns 0. \mbox{\Hypertarget{arithmetic_8c_a71162aa7daeedd7e139ea00c94bdb0bd}\label{arithmetic_8c_a71162aa7daeedd7e139ea00c94bdb0bd}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_point\_normalize@{MG\_point\_normalize}}
+\index{MG\_point\_normalize@{MG\_point\_normalize}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_point\_normalize()}{MG\_point\_normalize()}}
+{\footnotesize\ttfamily void MG\+\_\+point\+\_\+normalize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Normalizes point coordinate to (X/Z, 1) or (1, 0) if P is at infinity. \mbox{\Hypertarget{arithmetic_8c_a30854d1b1f021e313b704d67e5bcf356}\label{arithmetic_8c_a30854d1b1f021e313b704d67e5bcf356}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_point\_rand\_ninfty@{MG\_point\_rand\_ninfty}}
+\index{MG\_point\_rand\_ninfty@{MG\_point\_rand\_ninfty}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_point\_rand\_ninfty()}{MG\_point\_rand\_ninfty()}}
+{\footnotesize\ttfamily void MG\+\_\+point\+\_\+rand\+\_\+ninfty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P,  }\item[{flint\+\_\+rand\+\_\+t}]{state }\end{DoxyParamCaption})}
+
+Returns a non-\/infinity random point on the underlying curve. P must be initialized. \mbox{\Hypertarget{arithmetic_8c_a801252439eee791f5c85770ef3ea5ef2}\label{arithmetic_8c_a801252439eee791f5c85770ef3ea5ef2}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_point\_rand\_ninfty\_nsquare@{MG\_point\_rand\_ninfty\_nsquare}}
+\index{MG\_point\_rand\_ninfty\_nsquare@{MG\_point\_rand\_ninfty\_nsquare}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_point\_rand\_ninfty\_nsquare()}{MG\_point\_rand\_ninfty\_nsquare()}}
+{\footnotesize\ttfamily void MG\+\_\+point\+\_\+rand\+\_\+ninfty\+\_\+nsquare (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P,  }\item[{flint\+\_\+rand\+\_\+t}]{state }\end{DoxyParamCaption})}
+
+Same as MG\+\_\+point\+\_\+rand\+\_\+ninfty but forcing y to be in Fq$^\wedge$2 \textbackslash{} Fq. The only thing that changes in the algorithm is ret == 0 ---\texorpdfstring{$>$}{>} ret == 1 as we want a non-\/square this time. \mbox{\Hypertarget{arithmetic_8c_a0b4b30ec526676a9ee36a3ecc54fbb6f}\label{arithmetic_8c_a0b4b30ec526676a9ee36a3ecc54fbb6f}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_rec\_y@{MG\_rec\_y}}
+\index{MG\_rec\_y@{MG\_rec\_y}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_rec\_y()}{MG\_rec\_y()}}
+{\footnotesize\ttfamily int MG\+\_\+rec\+\_\+y (\begin{DoxyParamCaption}\item[{fq\+\_\+t}]{rop,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Bruteforce recovery of a possible y-\/coordinate of P into rop. Returns 1 if successful, 0 otherwise. \mbox{\Hypertarget{arithmetic_8c_a4ae8c11e0bed77609c5533eceb5bad6f}\label{arithmetic_8c_a4ae8c11e0bed77609c5533eceb5bad6f}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_xADD@{MG\_xADD}}
+\index{MG\_xADD@{MG\_xADD}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_xADD()}{MG\_xADD()}}
+{\footnotesize\ttfamily void MG\+\_\+x\+ADD (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{P,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{Q,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{D }\end{DoxyParamCaption})}
+
+Sets output to P+Q if D = P-\/Q output must be initialized. \mbox{\Hypertarget{arithmetic_8c_a8b88d5a40605b890e3817a882ac05962}\label{arithmetic_8c_a8b88d5a40605b890e3817a882ac05962}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_xDBL@{MG\_xDBL}}
+\index{MG\_xDBL@{MG\_xDBL}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_xDBL()}{MG\_xDBL()}}
+{\footnotesize\ttfamily void MG\+\_\+x\+DBL (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{P }\end{DoxyParamCaption})}
+
+Sets output to 2 times P output must be initialized. \mbox{\Hypertarget{arithmetic_8c_a8d452671372aa958cc4680cbaf907524}\label{arithmetic_8c_a8d452671372aa958cc4680cbaf907524}} 
+\index{arithmetic.c@{arithmetic.c}!MG\_xDBL\_const@{MG\_xDBL\_const}}
+\index{MG\_xDBL\_const@{MG\_xDBL\_const}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{MG\_xDBL\_const()}{MG\_xDBL\_const()}}
+{\footnotesize\ttfamily void MG\+\_\+x\+DBL\+\_\+const (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}} $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_m_g__point__t}{MG\+\_\+point\+\_\+t}}}]{P,  }\item[{const fq\+\_\+t}]{dbl\+\_\+const }\end{DoxyParamCaption})}
+
+Same as MG\+\_\+x\+DBL but the curve specific doubling constant (A+2)/4 needs to be precomputed output must be initialized. \mbox{\Hypertarget{arithmetic_8c_a424f5553815928738061fc470252bfb3}\label{arithmetic_8c_a424f5553815928738061fc470252bfb3}} 
+\index{arithmetic.c@{arithmetic.c}!SW\_j\_invariant@{SW\_j\_invariant}}
+\index{SW\_j\_invariant@{SW\_j\_invariant}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{SW\_j\_invariant()}{SW\_j\_invariant()}}
+{\footnotesize\ttfamily void SW\+\_\+j\+\_\+invariant (\begin{DoxyParamCaption}\item[{fq\+\_\+t $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_s_w__curve__t}{SW\+\_\+curve\+\_\+t}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+Sets output to the j-\/invariant of short Weierstrass curve E. \mbox{\Hypertarget{arithmetic_8c_a50df4662ad8b54542e6fef3a0c813f09}\label{arithmetic_8c_a50df4662ad8b54542e6fef3a0c813f09}} 
+\index{arithmetic.c@{arithmetic.c}!SW\_point\_isinfinity@{SW\_point\_isinfinity}}
+\index{SW\_point\_isinfinity@{SW\_point\_isinfinity}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{SW\_point\_isinfinity()}{SW\_point\_isinfinity()}}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+isinfinity (\begin{DoxyParamCaption}\item[{bool $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_s_w__point__t}{SW\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Sets output to 1 if point P=\mbox{[}0, 1, 0\mbox{]} and 0 otherwise. Warning\+: this does not check whether P is a valid projective point or not. \mbox{\Hypertarget{arithmetic_8c_a9976585f10582500816bcf7483a1de99}\label{arithmetic_8c_a9976585f10582500816bcf7483a1de99}} 
+\index{arithmetic.c@{arithmetic.c}!SW\_point\_isvalid@{SW\_point\_isvalid}}
+\index{SW\_point\_isvalid@{SW\_point\_isvalid}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{SW\_point\_isvalid()}{SW\_point\_isvalid()}}
+{\footnotesize\ttfamily int SW\+\_\+point\+\_\+isvalid (\begin{DoxyParamCaption}\item[{bool $\ast$}]{output,  }\item[{\mbox{\hyperlink{struct_s_w__point__t}{SW\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Returns -\/1 if P is not a projective point. If it is, sets output to 1 if point P belongs to the underlying curve and 0 otherwise. Finally returns 0. \mbox{\Hypertarget{arithmetic_8c_a434523f4495e815fe6117ffcc17e21c6}\label{arithmetic_8c_a434523f4495e815fe6117ffcc17e21c6}} 
+\index{arithmetic.c@{arithmetic.c}!SW\_point\_rand\_ninfty@{SW\_point\_rand\_ninfty}}
+\index{SW\_point\_rand\_ninfty@{SW\_point\_rand\_ninfty}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{SW\_point\_rand\_ninfty()}{SW\_point\_rand\_ninfty()}}
+{\footnotesize\ttfamily void SW\+\_\+point\+\_\+rand\+\_\+ninfty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_s_w__point__t}{SW\+\_\+point\+\_\+t}} $\ast$}]{P }\end{DoxyParamCaption})}
+
+Returns a non-\/infinity random point on the underlying curve. P must be initialized. \mbox{\Hypertarget{arithmetic_8c_a99dda675136abbe601cf69f478c0a244}\label{arithmetic_8c_a99dda675136abbe601cf69f478c0a244}} 
+\index{arithmetic.c@{arithmetic.c}!TN\_get\_MG@{TN\_get\_MG}}
+\index{TN\_get\_MG@{TN\_get\_MG}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{TN\_get\_MG()}{TN\_get\_MG()}}
+{\footnotesize\ttfamily int TN\+\_\+get\+\_\+\+MG (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_m_g__curve__t}{MG\+\_\+curve\+\_\+t}} $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{op }\end{DoxyParamCaption})}
+
+Sets rop to the Montgomery form of op Returns 1 if successful, 0 otherwise. rop must be initialized. TODO\+: Check torsion Check if this factor is of degree 1, ITC leave 0 (non-\/root)
+
+If successful, create A = c2 = (3x + b2)/alpha\mbox{\Hypertarget{arithmetic_8c_a9fd021c2ba11448e7a1f13313538d4f0}\label{arithmetic_8c_a9fd021c2ba11448e7a1f13313538d4f0}} 
+\index{arithmetic.c@{arithmetic.c}!TN\_j\_invariant@{TN\_j\_invariant}}
+\index{TN\_j\_invariant@{TN\_j\_invariant}!arithmetic.c@{arithmetic.c}}
+\doxysubsubsection{\texorpdfstring{TN\_j\_invariant()}{TN\_j\_invariant()}}
+{\footnotesize\ttfamily void TN\+\_\+j\+\_\+invariant (\begin{DoxyParamCaption}\item[{fq\+\_\+t $\ast$}]{rop,  }\item[{\mbox{\hyperlink{struct_t_n__curve__t}{TN\+\_\+curve\+\_\+t}} $\ast$}]{E }\end{DoxyParamCaption})}
+
+Sets output to the j-\/invariant of Tate normal curve E. 

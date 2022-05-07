@@ -7,5 +7,4 @@
 		\item{On exprime $h_{I\pm J}=\text{Res}(h_I, R_J)$ où $R_J\in\FFp[X]$}
 		\item{Les racines de $h_I$ étant connues, ce calcul se ramène à une multi-évaluation
 			\[\text{Res}(h_I, R_J)=\prod_{i\in I}R_J(\x([i]P))\]}
-	\end{itemize}$\begin{array}{rcccl}
-\end{array}$
+	\end{itemize}
