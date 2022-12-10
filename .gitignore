@@ -1,9 +1,9 @@
 # LaTeX
-doc/*
+doc/
 *vgcore*
 .*
-/tex/*
-/beamer/*
+tex/
+beamer/
 
 ##### C
 
